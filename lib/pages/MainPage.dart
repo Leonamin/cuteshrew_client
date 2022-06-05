@@ -1,7 +1,11 @@
 import 'package:cuteshrew/model/Post.dart';
+import 'package:cuteshrew/pages/CommunityPage.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
+  static const String route = '/main';
+
   const MainPage({Key? key}) : super(key: key);
 
   @override
@@ -13,7 +17,6 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _requestCommunities();
   }
@@ -32,15 +35,13 @@ class _MainPageState extends State<MainPage> {
       fontSize: 20,
     );
 
-    var generalCommunityTitle = GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/general');
+    var generalCommunityTitle = TextSpan(
+      text: "자유게시판",
+      style: communityTitleStyle,
+      recognizer: TapGestureRecognizer()
+      ..onTap = () {
+        Navigator.pushNamed(context, CommunityPage.route);
       },
-      child: Text(
-        "자유게시판",
-        style: communityTitleStyle,
-        textAlign: TextAlign.left,
-      ),
     );
 
     var generalCommunityList = ListView.separated(
@@ -69,11 +70,11 @@ class _MainPageState extends State<MainPage> {
       ),
       body: Container(
         padding: const EdgeInsets.all(8),
-        width: 500,
+        alignment: Alignment.topCenter,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
               padding: const EdgeInsets.only(bottom: 10),
-              child: generalCommunityTitle),
+              child: RichText(text: generalCommunityTitle,)),
           SizedBox(
             height: 200,
             child: generalCommunityList,

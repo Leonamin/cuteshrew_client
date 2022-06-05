@@ -35,8 +35,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
-  #Literlly
+  # html editor for Flutter
   html_editor_enhanced: ^2.5.0
+  responsive_framework: ^0.2.0
+  flutter_html: ^0.8.2
 
 dev_dependencies:
   flutter_test:
