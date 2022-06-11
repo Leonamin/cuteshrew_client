@@ -3,7 +3,9 @@ import 'package:cuteshrew/model/Post.dart';
 class Community {
   final int communityId;
   final String communityName;
-  List<Post>? latestPostingList;
+  final String communityShowName;
+  List<Post> latestPostingList;
 
-  Community(this.communityId, this.communityName, this.latestPostingList);
+  Community(this.communityId, this.communityShowName, this.communityName,
+      this.latestPostingList);
 }
