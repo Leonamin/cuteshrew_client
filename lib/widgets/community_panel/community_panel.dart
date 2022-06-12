@@ -38,34 +38,43 @@ class CommunityPanel extends StatelessWidget {
 
 Widget panel_item_builder(List<Post> posts) {
   return ConstrainedBox(
-    constraints: new BoxConstraints(minHeight: 35, maxHeight: 150),
-    child: ListView.builder(
-      scrollDirection: Axis.vertical,
-      // padding: const EdgeInsets.only(left: 8, right: 8),
-      itemCount: posts.length > 10 ? 10 : posts.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-          height: 30,
-          // color: Colors.white,
-          // color: Colors.amber,
-          child: Row(children: [
-            //FIXME Right Overflow 발생하므로 제한 필요
-            //그리고 드래그하면 개별적으로 드래그가 유지되기 때문에 각 뷰에다가 직접 터치를 해야 드래그가 사라짐
-            Flexible(
-              child: SelectableText(
-                posts[index].title,
-                toolbarOptions: ToolbarOptions(
-                    copy: true, selectAll: true, cut: false, paste: false),
-                maxLines: 1,
-                style: TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                ),
+      constraints: new BoxConstraints(minHeight: 300, maxHeight: 300),
+      child: ListView.separated(
+          scrollDirection: Axis.vertical,
+          itemCount: posts.length > 10 ? 10 : posts.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
+              height: 30,
+              // color: Colors.white,
+              // color: Colors.amber,
+              child: Column(
+                children: [
+                  Row(children: [
+                    //FIXME Right Overflow 발생하므로 제한 필요
+                    //그리고 드래그하면 개별적으로 드래그가 유지되기 때문에 각 뷰에다가 직접 터치를 해야 드래그가 사라짐
+                    Flexible(
+                      child: SelectableText(
+                        posts[index].title,
+                        toolbarOptions: ToolbarOptions(
+                            copy: true,
+                            selectAll: true,
+                            cut: false,
+                            paste: false),
+                        maxLines: 1,
+                        style: TextStyle(
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                    Flexible(child: Icon(Icons.comment)),
+                  ]),
+                ],
               ),
-            ),
-            Flexible(child: Icon(Icons.comment))
-          ]),
-        );
-      },
-    ),
-  );
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) {
+            return Divider(
+              thickness: 1,
+            );
+          }));
 }
