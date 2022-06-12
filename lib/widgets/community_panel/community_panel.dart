@@ -3,7 +3,7 @@ import 'package:cuteshrew/model/Post.dart';
 import 'package:flutter/material.dart';
 
 class CommunityPanel extends StatefulWidget {
-  final Community community_info;
+  final List<Community> community_info;
   CommunityPanel({Key? key, required this.community_info}) : super(key: key);
 
   @override
@@ -19,7 +19,7 @@ class _CommunityPanelState extends State<CommunityPanel> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            widget.community_info.communityName,
+            widget.community_info[0].communityName,
             style: TextStyle(
                 fontSize: 30, fontWeight: FontWeight.w800, height: 0.9),
             overflow: TextOverflow.ellipsis,
@@ -29,7 +29,7 @@ class _CommunityPanelState extends State<CommunityPanel> {
             thickness: 3,
             color: Colors.grey,
           ),
-          panel_item_builder(widget.community_info.latestPostingList)
+          panel_item_builder(widget.community_info[0].latestPostingList)
         ],
       ),
     );
