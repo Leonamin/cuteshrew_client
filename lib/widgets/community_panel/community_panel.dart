@@ -1,5 +1,8 @@
 import 'package:cuteshrew/model/Community.dart';
 import 'package:cuteshrew/model/Post.dart';
+import 'package:cuteshrew/pages/community_page.dart';
+import 'package:cuteshrew/widgets/community_title/community_title.dart';
+import 'package:cuteshrew/widgets/posting_item/posting_item.dart';
 import 'package:flutter/material.dart';
 
 class CommunityPanel extends StatelessWidget {
@@ -14,17 +17,16 @@ class CommunityPanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SelectableText(
-            community_info[0].communityShowName,
-            style: TextStyle(
-                overflow: TextOverflow.ellipsis,
-                fontSize: 30,
-                fontWeight: FontWeight.w800,
-                height: 0.9),
-            toolbarOptions: ToolbarOptions(
-                copy: true, selectAll: true, cut: false, paste: false),
-            maxLines: 1,
-          ),
+          CommunityTitle(
+              title: community_info[0].communityShowName,
+              onClick: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => CommunityPage(
+                //           community_name: community_info[0].communityName)),
+                // );
+              }),
           Divider(
             thickness: 3,
             color: Colors.grey,
@@ -44,33 +46,13 @@ Widget panel_item_builder(List<Post> posts) {
           itemCount: posts.length > 10 ? 10 : posts.length,
           itemBuilder: (BuildContext context, int index) {
             return Container(
-              height: 30,
-              // color: Colors.white,
-              // color: Colors.amber,
-              child: Column(
-                children: [
-                  Row(children: [
-                    //FIXME Right Overflow 발생하므로 제한 필요
-                    //그리고 드래그하면 개별적으로 드래그가 유지되기 때문에 각 뷰에다가 직접 터치를 해야 드래그가 사라짐
-                    Flexible(
-                      child: SelectableText(
-                        posts[index].title,
-                        toolbarOptions: ToolbarOptions(
-                            copy: true,
-                            selectAll: true,
-                            cut: false,
-                            paste: false),
-                        maxLines: 1,
-                        style: TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                    Flexible(child: Icon(Icons.comment)),
-                  ]),
-                ],
-              ),
-            );
+                height: 30,
+                // color: Colors.white,
+                // color: Colors.amber,
+                child: PostingItem(
+                  title: posts[index].title,
+                  onClick: () {},
+                ));
           },
           separatorBuilder: (BuildContext context, int index) {
             return Divider(
