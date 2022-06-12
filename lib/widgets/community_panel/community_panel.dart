@@ -2,15 +2,11 @@ import 'package:cuteshrew/model/Community.dart';
 import 'package:cuteshrew/model/Post.dart';
 import 'package:flutter/material.dart';
 
-class CommunityPanel extends StatefulWidget {
+class CommunityPanel extends StatelessWidget {
   final List<Community> community_info;
-  CommunityPanel({Key? key, required this.community_info}) : super(key: key);
+  const CommunityPanel({Key? key, required this.community_info})
+      : super(key: key);
 
-  @override
-  State<CommunityPanel> createState() => _CommunityPanelState();
-}
-
-class _CommunityPanelState extends State<CommunityPanel> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,7 +15,7 @@ class _CommunityPanelState extends State<CommunityPanel> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SelectableText(
-            widget.community_info[0].communityShowName,
+            community_info[0].communityShowName,
             style: TextStyle(
                 overflow: TextOverflow.ellipsis,
                 fontSize: 30,
@@ -33,7 +29,7 @@ class _CommunityPanelState extends State<CommunityPanel> {
             thickness: 3,
             color: Colors.grey,
           ),
-          panel_item_builder(widget.community_info[0].latestPostingList)
+          panel_item_builder(community_info[0].latestPostingList)
         ],
       ),
     );
