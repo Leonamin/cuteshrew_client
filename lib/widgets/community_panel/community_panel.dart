@@ -20,12 +20,12 @@ class CommunityPanel extends StatelessWidget {
           CommunityTitle(
               title: community_info[0].communityShowName,
               onClick: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //       builder: (context) => CommunityPage(
-                //           community_name: community_info[0].communityName)),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CommunityPage(
+                          community_name: community_info[0].communityName)),
+                );
               }),
           Divider(
             thickness: 3,
