@@ -18,11 +18,15 @@ class _CommunityPanelState extends State<CommunityPanel> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            widget.community_info[0].communityName,
+          SelectableText(
+            widget.community_info[0].communityShowName,
             style: TextStyle(
-                fontSize: 30, fontWeight: FontWeight.w800, height: 0.9),
-            overflow: TextOverflow.ellipsis,
+                overflow: TextOverflow.ellipsis,
+                fontSize: 30,
+                fontWeight: FontWeight.w800,
+                height: 0.9),
+            toolbarOptions: ToolbarOptions(
+                copy: true, selectAll: true, cut: false, paste: false),
             maxLines: 1,
           ),
           Divider(
@@ -41,20 +45,28 @@ Widget panel_item_builder(List<Post> posts) {
     constraints: new BoxConstraints(minHeight: 35, maxHeight: 150),
     child: ListView.builder(
       scrollDirection: Axis.vertical,
-      padding: const EdgeInsets.only(left: 8, right: 8),
+      // padding: const EdgeInsets.only(left: 8, right: 8),
       itemCount: posts.length > 10 ? 10 : posts.length,
       itemBuilder: (BuildContext context, int index) {
         return Container(
           height: 30,
           // color: Colors.white,
-          color: Colors.amber,
+          // color: Colors.amber,
           child: Row(children: [
-            Text(
-              posts[index].title,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
+            //FIXME Right Overflow 발생하므로 제한 필요
+            //그리고 드래그하면 개별적으로 드래그가 유지되기 때문에 각 뷰에다가 직접 터치를 해야 드래그가 사라짐
+            Flexible(
+              child: SelectableText(
+                posts[index].title,
+                toolbarOptions: ToolbarOptions(
+                    copy: true, selectAll: true, cut: false, paste: false),
+                maxLines: 1,
+                style: TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ),
-            Icon(Icons.comment)
+            Flexible(child: Icon(Icons.comment))
           ]),
         );
       },
