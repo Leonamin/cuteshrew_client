@@ -1,4 +1,5 @@
 import 'package:cuteshrew/model/Post.dart';
+import 'package:cuteshrew/widgets/posting_item/posting_item.dart';
 import 'package:flutter/material.dart';
 
 class PostingPanel extends StatelessWidget {
@@ -7,31 +8,22 @@ class PostingPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: new BoxConstraints(minHeight: 500, maxHeight: 500),
-      child: ListView.separated(
-          itemCount: posts.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
+    return ListView.separated(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: posts.length,
+        itemBuilder: (BuildContext context, int index) {
+          return SizedBox(
               height: 30,
-              child: Flexible(
-                child: SelectableText(
-                  posts[index].title,
-                  toolbarOptions: ToolbarOptions(
-                      copy: true, selectAll: true, cut: false, paste: false),
-                  maxLines: 1,
-                  style: TextStyle(
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ),
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return Divider(
-              thickness: 1,
-            );
-          }),
-    );
+              child: PostingItem(
+                title: posts[index].title,
+                onClick: () {},
+              ));
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return const Divider(
+            thickness: 1,
+          );
+        });
   }
 }
