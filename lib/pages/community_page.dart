@@ -1,34 +1,18 @@
-import 'dart:convert';
-
 import 'package:cuteshrew/model/Community.dart';
-import 'package:cuteshrew/model/Post.dart';
+import 'package:cuteshrew/network/http_service.dart';
 import 'package:cuteshrew/widgets/centered_view/centered_view.dart';
 import 'package:cuteshrew/widgets/main_navigation_bar/main_navigation_bar.dart';
 import 'package:cuteshrew/widgets/posting_panel/posting_panel.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
-class CommunityPage extends StatefulWidget {
-  final String community_name;
-
-  CommunityPage({Key? key, required String this.community_name})
+class CommunityPage extends StatelessWidget {
+  final String communityName;
+  const CommunityPage({Key? key, required this.communityName})
       : super(key: key);
 
   @override
-  State<CommunityPage> createState() => _CommunityPageState();
-}
-
-class _CommunityPageState extends State<CommunityPage> {
-  late Future<Community> community;
-
-  @override
-  void initState() {
-    super.initState();
-    community = fetchCommunity(widget.community_name);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    HttpService httpService = HttpService();
     return Scaffold(
       backgroundColor: Colors.white,
       body: CenteredView(
@@ -43,7 +27,7 @@ class _CommunityPageState extends State<CommunityPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               FutureBuilder<Community>(
-                  future: community,
+                  future: httpService.getCommunity(communityName),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       //FIXME 제발 높이가 넘는거 좀 어캐해결하냐 사이트 전체 스크롤 없나
@@ -76,16 +60,5 @@ class _CommunityPageState extends State<CommunityPage> {
         child: Icon(Icons.note_add),
       ),
     );
-  }
-}
-
-Future<Community> fetchCommunity(community_name) async {
-  final response = await http
-      .get(Uri.parse("http://cuteshrew.xyz/community/" + community_name));
-
-  if (response.statusCode == 200) {
-    return Community.fromJson(json.decode(utf8.decode(response.bodyBytes)));
-  } else {
-    throw Exception('Failed to load post');
   }
 }

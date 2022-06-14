@@ -6,7 +6,7 @@ import 'package:cuteshrew/widgets/posting_item/posting_item.dart';
 import 'package:flutter/material.dart';
 
 class CommunityPanel extends StatelessWidget {
-  final List<Community> community_info;
+  final Community community_info;
   const CommunityPanel({Key? key, required this.community_info})
       : super(key: key);
 
@@ -18,20 +18,20 @@ class CommunityPanel extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CommunityTitle(
-              title: community_info[0].communityShowName,
+              title: community_info.communityShowName,
               onClick: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => CommunityPage(
-                          community_name: community_info[0].communityName)),
+                          communityName: community_info.communityName)),
                 );
               }),
           Divider(
             thickness: 3,
             color: Colors.grey,
           ),
-          panel_item_builder(community_info[0].latestPostingList)
+          panel_item_builder(community_info.latestPostingList)
         ],
       ),
     );
