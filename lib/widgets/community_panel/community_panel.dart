@@ -1,5 +1,4 @@
-import 'package:cuteshrew/model/Community.dart';
-import 'package:cuteshrew/model/Post.dart';
+import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/pages/community_page.dart';
 import 'package:cuteshrew/widgets/community_title/community_title.dart';
 import 'package:cuteshrew/widgets/posting_item/posting_item.dart';

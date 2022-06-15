@@ -1,4 +1,4 @@
-import 'package:cuteshrew/model/Community.dart';
+import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/network/http_service.dart';
 import 'package:cuteshrew/widgets/main_navigation_bar/main_navigation_bar.dart';
 import 'package:cuteshrew/widgets/posting_panel/posting_panel.dart';

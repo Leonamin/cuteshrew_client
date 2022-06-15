@@ -1,4 +1,4 @@
-import 'package:cuteshrew/model/Post.dart';
+import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/widgets/posting_item/posting_item.dart';
 import 'package:flutter/material.dart';
 
