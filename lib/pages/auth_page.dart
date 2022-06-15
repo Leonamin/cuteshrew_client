@@ -1,3 +1,5 @@
+import 'package:cuteshrew/model/models.dart';
+import 'package:cuteshrew/network/http_service.dart';
 import 'package:cuteshrew/strings/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,7 +54,14 @@ class _AuthWidgetState extends State<AuthWidget> {
       backgroundColor: Colors.white54,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(_cornerRadius)));
+
   bool isRegister = false;
+
+  // Network
+  HttpService httpService = HttpService();
+  // late Future<String> signin;
+
+  bool isLoginFailed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +89,14 @@ class _AuthWidgetState extends State<AuthWidget> {
                     ),
                     ButtonBar(
                       children: [
+                        AnimatedContainer(
+                            height: isLoginFailed ? 60 : 0,
+                            duration: _duration,
+                            curve: _curve,
+                            child: Text("로그인 실패 데스우")),
+                        const SizedBox(
+                          height: _textFormInterval,
+                        ),
                         TextButton(
                           onPressed: () {
                             setState(() {
@@ -155,6 +172,12 @@ class _AuthWidgetState extends State<AuthWidget> {
                     TextButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
+                          httpService
+                              .postLogin(_nicknameController.text,
+                                  _passwordController.text)
+                              .then((result) {
+                            print(result.accessToken);
+                          });
                           print("빰빠ㅃ암니아민아ㅣㅁ나이");
                         } else {
                           print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!");

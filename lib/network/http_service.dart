@@ -7,6 +7,7 @@ class HttpService {
   final String baseUrl = "http://cuteshrew.xyz";
   // final String baseUrl = "http://127.0.0.1"; //debug
   final String communityUrl = "/community";
+  final String loginUrl = "/login";
 
   Future<List<Community>> getMainPage() async {
     Response response = await get(Uri.parse(baseUrl + communityUrl));
@@ -45,6 +46,26 @@ class HttpService {
       return PostDetail.fromJson(json.decode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception('Failed to load $communityName page');
+    }
+  }
+
+  Future<LoginToken> postLogin(nickname, password) async {
+    Map data = {'username': nickname, 'password': password};
+    // Map data = Login(nickname, password).toMap();
+    String encodedBody = data.keys.map((key) => "$key=${data[key]}").join("&");
+
+    final response = await post(Uri.parse("$baseUrl$loginUrl"),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        encoding: Encoding.getByName('utf-8'),
+        body: encodedBody);
+    // body: 'username=$nickname&password=$password');
+
+    if (response.statusCode == 200) {
+      return LoginToken.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+    } else {
+      throw Exception('Failed to login');
     }
   }
 }
