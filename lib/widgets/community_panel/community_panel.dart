@@ -1,5 +1,6 @@
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/pages/community_page.dart';
+import 'package:cuteshrew/pages/posting_page.dart';
 import 'package:cuteshrew/widgets/community_title/community_title.dart';
 import 'package:cuteshrew/widgets/posting_item/posting_item.dart';
 import 'package:flutter/material.dart';
@@ -22,22 +23,23 @@ class CommunityPanel extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => CommunityPage(
-                          communityName: community_info.communityName)),
+                      builder: (context) =>
+                          CommunityPage(community: community_info)),
                 );
               }),
           Divider(
             thickness: 3,
             color: Colors.grey,
           ),
-          panel_item_builder(community_info.latestPostingList)
+          panel_item_builder(community_info)
         ],
       ),
     );
   }
 }
 
-Widget panel_item_builder(List<Post> posts) {
+Widget panel_item_builder(Community community) {
+  List<Post> posts = community.latestPostingList;
   return ConstrainedBox(
       constraints: new BoxConstraints(minHeight: 300, maxHeight: 300),
       child: ListView.separated(
@@ -50,7 +52,15 @@ Widget panel_item_builder(List<Post> posts) {
                 // color: Colors.amber,
                 child: PostingItem(
                   title: posts[index].title,
-                  onClick: () {},
+                  onClick: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PostingPage(
+                              communityInfo: community,
+                              postId: posts[index].postId)),
+                    );
+                  },
                 ));
           },
           separatorBuilder: (BuildContext context, int index) {

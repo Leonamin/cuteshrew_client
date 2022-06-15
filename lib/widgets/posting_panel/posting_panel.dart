@@ -1,10 +1,13 @@
 import 'package:cuteshrew/model/models.dart';
+import 'package:cuteshrew/pages/posting_page.dart';
 import 'package:cuteshrew/widgets/posting_item/posting_item.dart';
 import 'package:flutter/material.dart';
 
 class PostingPanel extends StatelessWidget {
+  final Community community;
   final List<Post> posts;
-  const PostingPanel({Key? key, required this.posts}) : super(key: key);
+  const PostingPanel({Key? key, required this.community, required this.posts})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +20,15 @@ class PostingPanel extends StatelessWidget {
               height: 30,
               child: PostingItem(
                 title: posts[index].title,
-                onClick: () {},
+                onClick: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PostingPage(
+                            communityInfo: community,
+                            postId: posts[index].postId)),
+                  );
+                },
               ));
         },
         separatorBuilder: (BuildContext context, int index) {

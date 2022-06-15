@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cuteshrew/model/Community.dart';
+import 'package:cuteshrew/model/models.dart';
 import 'package:http/http.dart';
 
 class HttpService {
@@ -32,6 +32,17 @@ class HttpService {
 
     if (response.statusCode == 200) {
       return Community.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+    } else {
+      throw Exception('Failed to load $communityName page');
+    }
+  }
+
+  Future<PostDetail> getPosting(communityName, postId) async {
+    final response =
+        await get(Uri.parse("$baseUrl$communityUrl/$communityName/$postId"));
+
+    if (response.statusCode == 200) {
+      return PostDetail.fromJson(json.decode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception('Failed to load $communityName page');
     }

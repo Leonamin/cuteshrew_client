@@ -1,25 +1,27 @@
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/network/http_service.dart';
 import 'package:cuteshrew/widgets/main_navigation_bar/main_navigation_bar.dart';
-import 'package:cuteshrew/widgets/posting_panel/posting_panel.dart';
 import 'package:flutter/material.dart';
 
-class CommunityPage extends StatelessWidget {
-  final Community community;
-  const CommunityPage({Key? key, required this.community}) : super(key: key);
+class PostingPage extends StatelessWidget {
+  final Community communityInfo;
+  final int postId;
+  const PostingPage(
+      {Key? key, required this.communityInfo, required this.postId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     HttpService httpService = HttpService();
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: ListView(
         children: [
           const MainNavigationBar(),
-          FutureBuilder<Community>(
-              future: httpService.getCommunity(community.communityName),
-              builder: (context, snapshot) {
+          FutureBuilder(
+              future:
+                  httpService.getPosting(communityInfo.communityName, postId),
+              builder: ((context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,25 +34,17 @@ class CommunityPage extends StatelessWidget {
                                 fontSize: 30,
                                 fontWeight: FontWeight.w800,
                                 height: 0.9),
-                            (snapshot.data as Community).communityShowName),
+                            communityInfo.communityShowName),
                       ),
-                      PostingPanel(
-                          community: community,
-                          posts:
-                              (snapshot.data as Community).latestPostingList),
+                      Text((snapshot.data as PostDetail).body)
                     ],
                   );
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
                 }
-
                 return const CircularProgressIndicator();
-              }),
+              }))
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.note_add),
       ),
     );
   }
