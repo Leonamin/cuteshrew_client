@@ -1,3 +1,4 @@
+import 'package:cuteshrew/pages/auth_page.dart';
 import 'package:flutter/material.dart';
 
 class MainNavigationBar extends StatelessWidget {
@@ -18,7 +19,12 @@ class MainNavigationBar extends StatelessWidget {
           children: [
             _NavBarIcon(Icons.shuffle, _onShufflePressed),
             _NavBarIcon(Icons.category, _onCategoryPressed),
-            _NavBarIcon(Icons.login, _onLoginPressed),
+            _NavBarIcon(Icons.login, () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AuthWidget()),
+              );
+            }),
           ],
         )
       ]),
