@@ -71,7 +71,7 @@ class _AuthWidgetState extends State<AuthWidget> {
   Widget build(BuildContext context) {
     return Material(
       child: Container(
-        color: Colors.indigo,
+        color: Colors.white,
         // decoration: BoxDecoration(
         //   image: DecorationImage(
         //       image: AssetImage(

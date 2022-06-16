@@ -3,6 +3,7 @@ import 'package:cuteshrew/network/http_service.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
 import 'package:cuteshrew/widgets/main_navigation_bar/main_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 
 class PostingPage extends StatelessWidget {
@@ -40,7 +41,9 @@ class PostingPage extends StatelessWidget {
                                   height: 0.9),
                               communityInfo.communityShowName),
                         ),
-                        Text((snapshot.data as PostDetail).body)
+                        Html(
+                          data: (snapshot.data as PostDetail).body,
+                        )
                       ],
                     );
                   } else if (snapshot.hasError) {
