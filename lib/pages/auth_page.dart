@@ -184,17 +184,14 @@ class _AuthWidgetState extends State<AuthWidget> {
                               var result = await httpService.postLogin(
                                   _nicknameController.text,
                                   _passwordController.text);
+                              context.read<LoginProvider>().setToken(result);
+                              Navigator.pop(context);
                             } on Exception {
                               setState(() {
                                 isLoginFailed = true;
                               });
                             }
                           }
-
-                          // context
-                          //     .read<LoginProvider>()
-                          //     .setToken(result.accessToken);
-                          // Navigator.pop(context);
                         },
                         style: flatButtonStyle,
                         child: Text(

@@ -25,8 +25,8 @@ class MainNavigationBar extends StatelessWidget {
               _NavBarIcon(Icons.shuffle, _onShufflePressed),
               _NavBarIcon(Icons.category, _onCategoryPressed),
               // context.watch<Counts>().count.toString()
-              (context.select((LoginProvider login) => login.accessToken))
-                      .isEmpty
+              ((context.select((LoginProvider login) => login.loginToken)) ==
+                      null)
                   ? _NavBarIcon(Icons.login, () {
                       Navigator.push(
                         context,

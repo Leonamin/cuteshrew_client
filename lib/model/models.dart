@@ -22,6 +22,18 @@ class PostDetail {
   }
 }
 
+class PostCreate {
+  String title;
+  String body;
+
+  PostCreate({required this.title, required this.body});
+
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'body': body,
+      };
+}
+
 class Community {
   final String communityName;
   final String communityShowName;

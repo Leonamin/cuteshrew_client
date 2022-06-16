@@ -68,4 +68,21 @@ class HttpService {
       throw Exception('Failed to login');
     }
   }
+
+  Future<String> uploadPosting(
+      String communityName, LoginToken token, PostCreate posting) async {
+    final response =
+        await post(Uri.parse("$baseUrl$communityUrl/$communityName"),
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "${token.tokenType} ${token.accessToken}"
+            },
+            encoding: Encoding.getByName('utf-8'),
+            body: jsonEncode(posting.toJson()));
+    if (response.statusCode == 200) {
+      return "Success";
+    } else {
+      throw Exception('Failed to login');
+    }
+  }
 }

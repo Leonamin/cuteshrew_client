@@ -1,10 +1,11 @@
+import 'package:cuteshrew/model/models.dart';
 import 'package:flutter/widgets.dart';
 
 class LoginProvider with ChangeNotifier {
   String _nickname = "";
   String get userNickname => _nickname;
-  String _accessToken = "";
-  String get accessToken => _accessToken;
+  LoginToken? _loginToken = null;
+  LoginToken? get loginToken => _loginToken;
 
   // TODO 유저 클래스 + 토큰 혹은 유저 안에 토큰 넣자
   void setUserId(String name) {
@@ -17,13 +18,13 @@ class LoginProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setToken(String token) {
-    _accessToken = token;
+  void setToken(LoginToken token) {
+    _loginToken = token;
     notifyListeners();
   }
 
   void removeToken() {
-    _accessToken = "";
+    _loginToken = null;
     notifyListeners();
   }
 }
