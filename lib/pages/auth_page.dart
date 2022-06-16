@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/network/http_service.dart';
+import 'package:cuteshrew/provider/login_provider.dart';
 import 'package:cuteshrew/strings/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class AuthPage extends Page {
   static const pageNmae = 'AuthPage';
@@ -77,130 +81,140 @@ class _AuthWidgetState extends State<AuthWidget> {
         // ),
         child: Scaffold(
             backgroundColor: Colors.transparent,
-            body: SafeArea(
-              child: Form(
-                key: _formKey,
-                child: ListView(
-                  reverse: true,
-                  padding: const EdgeInsets.all(16),
-                  children: [
-                    const SizedBox(
-                      height: _textFormInterval,
-                    ),
-                    ButtonBar(
-                      children: [
-                        AnimatedContainer(
-                            height: isLoginFailed ? 60 : 0,
-                            duration: _duration,
-                            curve: _curve,
-                            child: Text("로그인 실패 데스우")),
-                        const SizedBox(
-                          height: _textFormInterval,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              isRegister = false;
-                              _formKey.currentState?.reset();
-                            });
-                          },
-                          child: Text(
-                            Strings.login,
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: isRegister
-                                    ? FontWeight.w400
-                                    : FontWeight.w600,
-                                color: isRegister
-                                    ? Colors.black38
-                                    : Colors.black87),
+            body: ChangeNotifierProvider(
+              create: (BuildContext context) => LoginProvider(),
+              child: SafeArea(
+                child: Form(
+                  key: _formKey,
+                  child: ListView(
+                    reverse: true,
+                    padding: const EdgeInsets.all(16),
+                    children: [
+                      const SizedBox(
+                        height: _textFormInterval,
+                      ),
+                      ButtonBar(
+                        children: [
+                          AnimatedContainer(
+                              height: isLoginFailed ? 60 : 0,
+                              duration: _duration,
+                              curve: _curve,
+                              child: Text("로그인 실패 데스우")),
+                          const SizedBox(
+                            height: _textFormInterval,
                           ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              isRegister = true;
-                              _formKey.currentState?.reset();
-                            });
-                          },
-                          child: Text(
-                            Strings.register,
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: isRegister
-                                    ? FontWeight.w600
-                                    : FontWeight.w400,
-                                color: isRegister
-                                    ? Colors.black87
-                                    : Colors.black38),
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                isRegister = false;
+                                isLoginFailed = false;
+                                _formKey.currentState?.reset();
+                              });
+                            },
+                            child: Text(
+                              Strings.login,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: isRegister
+                                      ? FontWeight.w400
+                                      : FontWeight.w600,
+                                  color: isRegister
+                                      ? Colors.black38
+                                      : Colors.black87),
+                            ),
                           ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: _textFormInterval,
-                    ),
-                    _buildTextFormField(
-                        Strings.labelNickname, _nicknameController),
-                    const SizedBox(
-                      height: _textFormInterval,
-                    ),
-                    AnimatedContainer(
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                isRegister = true;
+                                isLoginFailed = false;
+                                _formKey.currentState?.reset();
+                              });
+                            },
+                            child: Text(
+                              Strings.register,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: isRegister
+                                      ? FontWeight.w600
+                                      : FontWeight.w400,
+                                  color: isRegister
+                                      ? Colors.black87
+                                      : Colors.black38),
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: _textFormInterval,
+                      ),
+                      _buildTextFormField(
+                          Strings.labelNickname, _nicknameController),
+                      const SizedBox(
+                        height: _textFormInterval,
+                      ),
+                      AnimatedContainer(
+                          height: isRegister ? 60 : 0,
+                          duration: _duration,
+                          curve: _curve,
+                          child: _buildTextFormField(
+                              Strings.labelEmail, _emailController)),
+                      const SizedBox(
+                        height: _textFormInterval,
+                      ),
+                      _buildTextFormField(
+                          Strings.labelPassword, _passwordController),
+                      const SizedBox(
+                        height: _textFormInterval,
+                      ),
+                      AnimatedContainer(
                         height: isRegister ? 60 : 0,
                         duration: _duration,
                         curve: _curve,
                         child: _buildTextFormField(
-                            Strings.labelEmail, _emailController)),
-                    const SizedBox(
-                      height: _textFormInterval,
-                    ),
-                    _buildTextFormField(
-                        Strings.labelPassword, _passwordController),
-                    const SizedBox(
-                      height: _textFormInterval,
-                    ),
-                    AnimatedContainer(
-                      height: isRegister ? 60 : 0,
-                      duration: _duration,
-                      curve: _curve,
-                      child: _buildTextFormField(
-                          Strings.labelCPassword, _cPasswordController),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          httpService
-                              .postLogin(_nicknameController.text,
-                                  _passwordController.text)
-                              .then((result) {
-                            print(result.accessToken);
-                          });
-                          print("빰빠ㅃ암니아민아ㅣㅁ나이");
-                        } else {
-                          print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!");
-                        }
-                      },
-                      style: flatButtonStyle,
-                      child: Text(
-                        isRegister ? Strings.register : Strings.login,
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.w500),
+                            Strings.labelCPassword, _cPasswordController),
                       ),
-                    ),
-                    const Divider(
-                      height: 33,
-                      thickness: 1,
-                      color: Colors.white,
-                      indent: 16,
-                      endIndent: 16,
-                    ),
-                    const SizedBox(
-                      height: _textFormInterval * 8,
-                    ),
-                  ].reversed.toList(),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            try {
+                              var result = await httpService.postLogin(
+                                  _nicknameController.text,
+                                  _passwordController.text);
+                            } on Exception {
+                              setState(() {
+                                isLoginFailed = true;
+                              });
+                            }
+                          }
+
+                          // context
+                          //     .read<LoginProvider>()
+                          //     .setToken(result.accessToken);
+                          // Navigator.pop(context);
+                        },
+                        style: flatButtonStyle,
+                        child: Text(
+                          isRegister ? Strings.register : Strings.login,
+                          style: const TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      const Divider(
+                        height: 33,
+                        thickness: 1,
+                        color: Colors.white,
+                        indent: 16,
+                        endIndent: 16,
+                      ),
+                      const SizedBox(
+                        height: _textFormInterval * 8,
+                      ),
+                    ].reversed.toList(),
+                  ),
                 ),
               ),
             )),

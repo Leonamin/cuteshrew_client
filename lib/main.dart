@@ -1,10 +1,19 @@
+import 'package:cuteshrew/provider/login_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'pages/home_page.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (_) => LoginProvider(),
+      )
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

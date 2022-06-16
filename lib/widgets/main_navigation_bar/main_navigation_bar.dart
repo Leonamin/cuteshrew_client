@@ -1,33 +1,45 @@
 import 'package:cuteshrew/pages/auth_page.dart';
+import 'package:cuteshrew/provider/login_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MainNavigationBar extends StatelessWidget {
   const MainNavigationBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        SizedBox(
-          height: 80,
-          width: 150,
-          child: Image.asset('assets/images/logo.jpg'),
-        ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _NavBarIcon(Icons.shuffle, _onShufflePressed),
-            _NavBarIcon(Icons.category, _onCategoryPressed),
-            _NavBarIcon(Icons.login, () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AuthWidget()),
-              );
-            }),
-          ],
-        )
-      ]),
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => LoginProvider(),
+      child: Container(
+        height: 100,
+        child:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          SizedBox(
+            height: 80,
+            width: 150,
+            child: Image.asset('assets/images/logo.jpg'),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _NavBarIcon(Icons.shuffle, _onShufflePressed),
+              _NavBarIcon(Icons.category, _onCategoryPressed),
+              // context.watch<Counts>().count.toString()
+              (context.select((LoginProvider login) => login.accessToken))
+                      .isEmpty
+                  ? _NavBarIcon(Icons.login, () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AuthWidget()),
+                      );
+                    })
+                  : _NavBarIcon(Icons.logout, () {
+                      context.read<LoginProvider>().removeToken();
+                    }),
+            ],
+          )
+        ]),
+      ),
     );
   }
 }
