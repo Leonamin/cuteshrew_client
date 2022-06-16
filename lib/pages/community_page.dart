@@ -1,5 +1,6 @@
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/network/http_service.dart';
+import 'package:cuteshrew/pages/post_editor_page.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
 import 'package:cuteshrew/widgets/main_navigation_bar/main_navigation_bar.dart';
 import 'package:cuteshrew/widgets/posting_panel/posting_panel.dart';
@@ -52,15 +53,19 @@ class CommunityPage extends StatelessWidget {
                 }),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            if (token != null) {
-              httpService.uploadPosting(community.communityName, token,
-                  PostCreate(title: "테스트 업로드", body: "이 내용을 테스트에염"));
-            }
-          },
-          child: const Icon(Icons.note_add),
-        ),
+        floatingActionButton: (token != null)
+            ? FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            PostEditorPage(community: community)),
+                  );
+                },
+                child: const Icon(Icons.note_add),
+              )
+            : null,
       ),
     );
   }

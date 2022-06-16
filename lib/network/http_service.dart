@@ -69,7 +69,7 @@ class HttpService {
     }
   }
 
-  Future<String> uploadPosting(
+  Future<bool> uploadPosting(
       String communityName, LoginToken token, PostCreate posting) async {
     final response =
         await post(Uri.parse("$baseUrl$communityUrl/$communityName"),
@@ -79,8 +79,8 @@ class HttpService {
             },
             encoding: Encoding.getByName('utf-8'),
             body: jsonEncode(posting.toJson()));
-    if (response.statusCode == 200) {
-      return "Success";
+    if (response.statusCode == 201) {
+      return true;
     } else {
       throw Exception('Failed to login');
     }

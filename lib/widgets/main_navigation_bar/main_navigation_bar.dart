@@ -1,4 +1,5 @@
 import 'package:cuteshrew/pages/auth_page.dart';
+import 'package:cuteshrew/pages/home_page.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,14 @@ class MainNavigationBar extends StatelessWidget {
           SizedBox(
             height: 80,
             width: 150,
-            child: Image.asset('assets/images/logo.jpg'),
+            child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                },
+                child: Image.asset('assets/images/logo.jpg')),
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
