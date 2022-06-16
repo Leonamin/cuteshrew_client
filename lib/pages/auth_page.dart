@@ -65,7 +65,8 @@ class _AuthWidgetState extends State<AuthWidget> {
   HttpService httpService = HttpService();
   // late Future<String> signin;
 
-  bool isLoginFailed = false;
+  bool isAlarmOccurred = false;
+  String alarmComment = "";
 
   @override
   Widget build(BuildContext context) {
@@ -96,10 +97,10 @@ class _AuthWidgetState extends State<AuthWidget> {
                       ButtonBar(
                         children: [
                           AnimatedContainer(
-                              height: isLoginFailed ? 60 : 0,
+                              height: isAlarmOccurred ? 60 : 0,
                               duration: _duration,
                               curve: _curve,
-                              child: Text("로그인 실패 데스우")),
+                              child: Text(alarmComment)),
                           const SizedBox(
                             height: _textFormInterval,
                           ),
@@ -107,7 +108,8 @@ class _AuthWidgetState extends State<AuthWidget> {
                             onPressed: () {
                               setState(() {
                                 isRegister = false;
-                                isLoginFailed = false;
+                                isAlarmOccurred = false;
+                                alarmComment = "";
                                 _formKey.currentState?.reset();
                               });
                             },
@@ -127,7 +129,8 @@ class _AuthWidgetState extends State<AuthWidget> {
                             onPressed: () {
                               setState(() {
                                 isRegister = true;
-                                isLoginFailed = false;
+                                isAlarmOccurred = false;
+                                alarmComment = "";
                                 _formKey.currentState?.reset();
                               });
                             },
@@ -180,15 +183,30 @@ class _AuthWidgetState extends State<AuthWidget> {
                       TextButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            try {
-                              var result = await httpService.postLogin(
-                                  _nicknameController.text,
-                                  _passwordController.text);
-                              context.read<LoginProvider>().setToken(result);
-                              Navigator.pop(context);
-                            } on Exception {
+                            if (!isRegister) {
+                              try {
+                                var result = await httpService.postLogin(
+                                    _nicknameController.text,
+                                    _passwordController.text);
+                                context.read<LoginProvider>().setToken(result);
+                                Navigator.pop(context);
+                              } on Exception {
+                                setState(() {
+                                  isAlarmOccurred = true;
+                                  alarmComment = "로그인 실패했는데여?";
+                                });
+                              }
+                            } else {
+                              var result = await httpService.postSignin(
+                                  UserCreate(
+                                      _nicknameController.text,
+                                      _emailController.text,
+                                      _passwordController.text));
+
                               setState(() {
-                                isLoginFailed = true;
+                                isAlarmOccurred = true;
+                                alarmComment =
+                                    result ? "회원가입 성공이요" : "회원가입 실패요";
                               });
                             }
                           }

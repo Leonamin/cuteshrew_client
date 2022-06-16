@@ -8,6 +8,7 @@ class HttpService {
   // final String baseUrl = "http://127.0.0.1"; //debug
   final String communityUrl = "/community";
   final String loginUrl = "/login";
+  final String userUrl = "/user/general";
 
   Future<List<Community>> getMainPage() async {
     Response response = await get(Uri.parse(baseUrl + communityUrl));
@@ -66,6 +67,21 @@ class HttpService {
       return LoginToken.fromJson(json.decode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception('Failed to login');
+    }
+  }
+
+  Future<bool> postSignin(UserCreate user) async {
+    final response = await post(Uri.parse("$baseUrl$userUrl"),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        encoding: Encoding.getByName('utf-8'),
+        body: jsonEncode(user.toMap()));
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
     }
   }
 

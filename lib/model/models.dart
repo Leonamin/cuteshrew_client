@@ -76,3 +76,15 @@ class Login {
     return {'username': username, 'password': password};
   }
 }
+
+class UserCreate {
+  final String nickname;
+  final String email;
+  final String password;
+
+  UserCreate(this.nickname, this.email, this.password);
+
+  Map toMap() {
+    return {'nickname': nickname, 'email': email, 'password': password};
+  }
+}
