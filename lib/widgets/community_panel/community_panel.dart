@@ -14,33 +14,30 @@ class CommunityPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blue,
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(_paddingItem),
-            child: CommunityTitle(
-                title: communityInfo.communityShowName,
-                onClick: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            CommunityPage(community: communityInfo)),
-                  );
-                }),
-          ),
-          const Divider(
-            thickness: 3,
-            color: Colors.grey,
-            indent: _paddingItem,
-            endIndent: _paddingItem,
-          ),
-          Container(color: Colors.red, child: _buildPanelItem(communityInfo))
-        ],
-      ),
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(_paddingItem),
+          child: CommunityTitle(
+              title: communityInfo.communityShowName,
+              onClick: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CommunityPage(community: communityInfo)),
+                );
+              }),
+        ),
+        const Divider(
+          thickness: 3,
+          color: Colors.grey,
+          indent: _paddingItem,
+          endIndent: _paddingItem,
+        ),
+        _buildPanelItem(communityInfo)
+      ],
     );
   }
 
