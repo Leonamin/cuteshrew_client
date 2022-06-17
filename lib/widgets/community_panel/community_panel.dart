@@ -6,66 +6,72 @@ import 'package:cuteshrew/widgets/posting_item/posting_item.dart';
 import 'package:flutter/material.dart';
 
 class CommunityPanel extends StatelessWidget {
-  final Community community_info;
-  const CommunityPanel({Key? key, required this.community_info})
+  final Community communityInfo;
+  const CommunityPanel({Key? key, required this.communityInfo})
       : super(key: key);
+
+  static const double _paddingItem = 10.0;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
+      color: Colors.blue,
+      child: ListView(
+        shrinkWrap: true,
         children: [
-          CommunityTitle(
-              title: community_info.communityShowName,
-              onClick: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          CommunityPage(community: community_info)),
-                );
-              }),
-          Divider(
+          Padding(
+            padding: const EdgeInsets.all(_paddingItem),
+            child: CommunityTitle(
+                title: communityInfo.communityShowName,
+                onClick: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            CommunityPage(community: communityInfo)),
+                  );
+                }),
+          ),
+          const Divider(
             thickness: 3,
             color: Colors.grey,
+            indent: _paddingItem,
+            endIndent: _paddingItem,
           ),
-          panel_item_builder(community_info)
+          Container(color: Colors.red, child: _buildPanelItem(communityInfo))
         ],
       ),
     );
   }
-}
 
-Widget panel_item_builder(Community community) {
-  List<Post> posts = community.latestPostingList;
-  return ConstrainedBox(
-      constraints: new BoxConstraints(minHeight: 300, maxHeight: 300),
-      child: ListView.separated(
-          scrollDirection: Axis.vertical,
-          itemCount: posts.length > 10 ? 10 : posts.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-                height: 30,
-                // color: Colors.white,
-                // color: Colors.amber,
-                child: PostingItem(
-                  title: posts[index].title,
-                  onClick: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PostingPage(
-                              communityInfo: community,
-                              postId: posts[index].postId)),
-                    );
-                  },
-                ));
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return Divider(
-              thickness: 1,
-            );
-          }));
+  Widget _buildPanelItem(Community community) {
+    List<Post> posts = community.latestPostingList;
+    return ListView.separated(
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        itemCount: posts.length > 10 ? 10 : posts.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+              height: 30,
+              child: PostingItem(
+                title: posts[index].title,
+                onClick: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PostingPage(
+                            communityInfo: community,
+                            postId: posts[index].postId)),
+                  );
+                },
+              ));
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return const Divider(
+            thickness: 1,
+            indent: _paddingItem,
+            endIndent: _paddingItem,
+          );
+        });
+  }
 }

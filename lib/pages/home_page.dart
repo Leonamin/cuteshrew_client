@@ -4,36 +4,53 @@ import 'package:cuteshrew/widgets/main_navigation_bar/main_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:cuteshrew/network/http_service.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List<Community>? _communities = null;
+
+  HttpService httpService = HttpService();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    httpService.getMainPage().then((value) {
+      setState(() {
+        _communities = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    HttpService httpService = HttpService();
     return Scaffold(
       backgroundColor: Colors.white,
-      body: ListView(
-        children: [
-          const MainNavigationBar(),
-          const SizedBox(
-            height: 70,
-          ),
-          FutureBuilder<List<Community>>(
-            future: httpService.getMainPage(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                List<Community> communityInfo =
-                    snapshot.data as List<Community>;
-                return CommunityPanel(community_info: communityInfo[0]);
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-
-              return const CircularProgressIndicator();
-            },
-          )
-        ],
-      ),
+      body: ListView(children: [
+        const MainNavigationBar(),
+        // const SizedBox(
+        //   height: 70,
+        // ),
+        (_communities == null)
+            ? const CircularProgressIndicator()
+            : GridView.builder(
+                shrinkWrap: true,
+                itemCount: _communities!.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1 / 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  return CommunityPanel(communityInfo: _communities![index]);
+                }),
+      ]),
     );
   }
 }
