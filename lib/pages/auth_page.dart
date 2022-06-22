@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/network/http_service.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
@@ -9,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class AuthPage extends Page {
-  static const pageNmae = 'AuthPage';
+  static const pageName = '/auth';
   @override
   Route createRoute(BuildContext context) {
     return MaterialPageRoute(

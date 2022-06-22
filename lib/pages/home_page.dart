@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/widgets/community_panel/community_panel.dart';
 import 'package:cuteshrew/widgets/main_navigation_bar/main_navigation_bar.dart';
@@ -8,6 +6,8 @@ import 'package:cuteshrew/network/http_service.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class HomePage extends StatefulWidget {
+  static const pageName = '/home';
+
   HomePage({Key? key}) : super(key: key);
 
   @override

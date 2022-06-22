@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CommunityPage extends StatelessWidget {
+  static const pageName = '/community';
   final Community community;
   const CommunityPage({Key? key, required this.community}) : super(key: key);
 

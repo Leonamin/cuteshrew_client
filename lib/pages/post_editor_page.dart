@@ -11,6 +11,8 @@ import 'package:provider/provider.dart';
 //Assertion failed: file:///C:/flutter/packages/flutter/lib/src/services/hardware_keyboard.dart:444:16
 
 class PostEditorPage extends StatelessWidget {
+  static const pageName = '/write';
+
   final Community community;
 
   PostEditorPage({Key? key, required this.community}) : super(key: key);

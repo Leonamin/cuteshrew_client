@@ -7,6 +7,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 
 class PostingPage extends StatelessWidget {
+  static const pageName = '/post';
+
   final Community communityInfo;
   final int postId;
   const PostingPage(
