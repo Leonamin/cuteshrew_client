@@ -9,13 +9,16 @@ import 'package:provider/provider.dart';
 
 class CommunityPage extends StatelessWidget {
   static const pageName = '/community';
-  final Community community;
-  const CommunityPage({Key? key, required this.community}) : super(key: key);
+  final Map<String, Community> _arguments;
+
+  const CommunityPage(this._arguments, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     HttpService httpService = HttpService();
     var token = context.select((LoginProvider login) => login.loginToken);
+    Community communityInfo = _arguments['communityInfo'] as Community;
+
     return ChangeNotifierProvider(
       create: (BuildContext context) => LoginProvider(),
       child: Scaffold(
@@ -24,7 +27,7 @@ class CommunityPage extends StatelessWidget {
           children: [
             const MainNavigationBar(),
             FutureBuilder<Community>(
-                future: httpService.getCommunity(community.communityName),
+                future: httpService.getCommunity(communityInfo.communityName),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return Column(
@@ -41,7 +44,7 @@ class CommunityPage extends StatelessWidget {
                               (snapshot.data as Community).communityShowName),
                         ),
                         PostingPanel(
-                            community: community,
+                            community: communityInfo,
                             posts:
                                 (snapshot.data as Community).latestPostingList),
                       ],
@@ -61,7 +64,7 @@ class CommunityPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            PostEditorPage(community: community)),
+                            PostEditorPage({'communityInfo': communityInfo})),
                   );
                 },
                 child: const Icon(Icons.note_add),

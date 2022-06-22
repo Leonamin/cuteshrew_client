@@ -12,10 +12,9 @@ import 'package:provider/provider.dart';
 
 class PostEditorPage extends StatelessWidget {
   static const pageName = '/write';
+  final Map<String, Community> _arguments;
 
-  final Community community;
-
-  PostEditorPage({Key? key, required this.community}) : super(key: key);
+  PostEditorPage(this._arguments, {Key? key}) : super(key: key);
 
   final int _titleLengthLimit = 255;
 
@@ -32,7 +31,7 @@ class PostEditorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     HttpService httpService = HttpService();
     var token = context.select((LoginProvider login) => login.loginToken);
-
+    Community communityInfo = _arguments['communityInfo'] as Community;
     return ChangeNotifierProvider(
       create: (BuildContext context) => LoginProvider(),
       child: Scaffold(
@@ -62,7 +61,7 @@ class PostEditorPage extends StatelessWidget {
             var bodyHtml = await _bodyController.getText();
             if (token != null) {
               httpService
-                  .uploadPosting(community.communityName, token,
+                  .uploadPosting(communityInfo.communityName, token,
                       PostCreate(title: _titleController.text, body: bodyHtml))
                   .then((value) => {
                         if (value) {Navigator.pop(context)}

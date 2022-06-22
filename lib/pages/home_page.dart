@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Community>? _communities = null;
+  List<Community>? _communities;
 
   HttpService httpService = HttpService();
 

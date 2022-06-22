@@ -26,7 +26,7 @@ class CommunityPanel extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          CommunityPage(community: communityInfo)),
+                          CommunityPage({'communityInfo': communityInfo})),
                 );
               }),
         ),
@@ -56,9 +56,10 @@ class CommunityPanel extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => PostingPage(
-                            communityInfo: community,
-                            postId: posts[index].postId)),
+                        builder: (context) => PostingPage({
+                              'communityInfo': community,
+                              'postId': posts[index].postId
+                            })),
                   );
                 },
               ));

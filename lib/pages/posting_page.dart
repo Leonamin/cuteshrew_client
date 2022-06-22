@@ -9,15 +9,15 @@ import 'package:provider/provider.dart';
 class PostingPage extends StatelessWidget {
   static const pageName = '/post';
 
-  final Community communityInfo;
-  final int postId;
-  const PostingPage(
-      {Key? key, required this.communityInfo, required this.postId})
-      : super(key: key);
+  final Map<String, dynamic> _arguments;
+
+  const PostingPage(this._arguments, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     HttpService httpService = HttpService();
+    Community communityInfo = _arguments['communityInfo'] as Community;
+    int postId = _arguments['postId'] as int;
     return Scaffold(
       backgroundColor: Colors.white,
       body: ChangeNotifierProvider(
