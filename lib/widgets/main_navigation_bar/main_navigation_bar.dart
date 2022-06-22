@@ -25,7 +25,7 @@ class MainNavigationBar extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => HomePage()),
                   );
                 },
-                child: Image.asset('assets/images/logo.jpg')),
+                child: Image.asset('assets/images/logo.png')),
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
