@@ -101,4 +101,21 @@ class HttpService {
       throw Exception('Failed to login');
     }
   }
+
+  Future<bool> updatePosting(String communityName, LoginToken token, int postId,
+      PostCreate posting) async {
+    final response =
+        await put(Uri.parse("$baseUrl$communityUrl/$communityName/$postId"),
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "${token.tokenType} ${token.accessToken}"
+            },
+            encoding: Encoding.getByName('utf-8'),
+            body: jsonEncode(posting.toJson()));
+    if (response.statusCode == 202) {
+      return true;
+    } else {
+      throw Exception('Failed to update page ${response.body}');
+    }
+  }
 }

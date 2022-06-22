@@ -10,9 +10,13 @@ import 'package:provider/provider.dart';
 // FIXME
 //Assertion failed: file:///C:/flutter/packages/flutter/lib/src/services/hardware_keyboard.dart:444:16
 
+// arguments
+// communityInfo: Community 포스팅 업로드시 커뮤니티 구분에 사용
+// postInfo: PostDetail[Optional] 포스팅 수정시 내용 가져오기
+// isModity: bool[Optional] 포스팅 새로작성, 수정인지 구분
 class PostEditorPage extends StatelessWidget {
   static const pageName = '/write';
-  final Map<String, Community> _arguments;
+  final Map<String, dynamic> _arguments;
 
   PostEditorPage(this._arguments, {Key? key}) : super(key: key);
 
@@ -32,50 +36,64 @@ class PostEditorPage extends StatelessWidget {
     HttpService httpService = HttpService();
     var token = context.select((LoginProvider login) => login.loginToken);
     Community communityInfo = _arguments['communityInfo'] as Community;
-    return ChangeNotifierProvider(
-      create: (BuildContext context) => LoginProvider(),
-      child: Scaffold(
-        body: ListView(
-          children: [
-            MainNavigationBar(),
-            SizedBox(
-              height: 16,
+    bool isModify = _arguments['isModify'] != null ? true : false;
+    PostDetail postInfo = (isModify)
+        ? _arguments['postDetail'] as PostDetail
+        : PostDetail(postId: 0, title: "", body: "");
+    _titleController.text = postInfo.title;
+    return Scaffold(
+      body: ListView(
+        children: [
+          const MainNavigationBar(),
+          const SizedBox(
+            height: 16,
+          ),
+          _buildTextFormField("제목", _titleController),
+          const SizedBox(
+            height: 8,
+          ),
+          HtmlEditor(
+            controller: _bodyController, //required
+            htmlEditorOptions:
+                HtmlEditorOptions(hint: "내용 입력점", initialText: postInfo.body),
+            otherOptions: const OtherOptions(
+              height: 400,
             ),
-            _buildTextFormField("제목", _titleController),
-            SizedBox(
-              height: 8,
-            ),
-            HtmlEditor(
-              controller: _bodyController, //required
-              htmlEditorOptions: HtmlEditorOptions(
-                hint: "내용 입력점",
-              ),
-              otherOptions: OtherOptions(
-                height: 400,
-              ),
-            )
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            var bodyHtml = await _bodyController.getText();
-            if (token != null) {
+          )
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          var bodyHtml = await _bodyController.getText();
+          if (token != null) {
+            if (!isModify) {
               httpService
                   .uploadPosting(communityInfo.communityName, token,
                       PostCreate(title: _titleController.text, body: bodyHtml))
                   .then((value) => {
                         if (value) {Navigator.pop(context)}
                       });
+            } else {
+              httpService
+                  .updatePosting(
+                      communityInfo.communityName,
+                      token,
+                      postInfo.postId,
+                      PostCreate(title: _titleController.text, body: bodyHtml))
+                  .then((value) => {
+                        if (value) {Navigator.pop(context)}
+                      });
             }
-          },
-          child: const Icon(Icons.note_add),
-        ),
+          }
+        },
+        child: const Icon(Icons.note_add),
       ),
     );
   }
 
   TextFormField _buildTextFormField(
-      String labelText, TextEditingController controller) {
+      String labelText, TextEditingController controller,
+      {String title = ""}) {
     return TextFormField(
       inputFormatters: [LengthLimitingTextInputFormatter(_titleLengthLimit)],
       cursorColor: Colors.white,
