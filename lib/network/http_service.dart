@@ -115,7 +115,26 @@ class HttpService {
     if (response.statusCode == 202) {
       return true;
     } else {
-      throw Exception('Failed to update page ${response.body}');
+      return false;
+      // throw Exception('Failed to update post ${response.body}');
+    }
+  }
+
+  Future<bool> deletePosting(
+      String communityName, LoginToken token, int postId) async {
+    final response = await delete(
+      Uri.parse("$baseUrl$communityUrl/$communityName/$postId"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "${token.tokenType} ${token.accessToken}"
+      },
+    );
+
+    if (response.statusCode == 204) {
+      return true;
+    } else {
+      return false;
+      // throw Exception('Failed to delete post ${response.body}');
     }
   }
 }
