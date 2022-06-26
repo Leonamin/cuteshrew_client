@@ -18,10 +18,16 @@ class CommunityPage extends StatefulWidget {
 }
 
 class _CommunityPageState extends State<CommunityPage> {
+  int _currentPageNum = 1;
+  int _pagePerCount = 15;
+  int _maxPageButtons = 1;
+  late Community _currentCommunity;
+
   @override
   Widget build(BuildContext context) {
     HttpService httpService = HttpService();
-    var token = context.select((LoginProvider login) => login.loginToken);
+    LoginToken? token =
+        context.select((LoginProvider login) => login.loginToken);
     Community communityInfo = widget._arguments['communityInfo'] as Community;
 
     return Scaffold(
@@ -30,7 +36,8 @@ class _CommunityPageState extends State<CommunityPage> {
         children: [
           const MainNavigationBar(),
           FutureBuilder<Community>(
-              future: httpService.getCommunity(communityInfo.communityName),
+              future: httpService.getCommunity(
+                  communityInfo.communityName, _currentPageNum, _pagePerCount),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return Column(

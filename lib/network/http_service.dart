@@ -4,14 +4,21 @@ import 'package:cuteshrew/model/models.dart';
 import 'package:http/http.dart';
 
 class HttpService {
-  final String baseUrl = "http://cuteshrew.xyz";
-  // final String baseUrl = "http://127.0.0.1"; //debug
+  final String baseUrl = "cuteshrew.xyz";
+  // final String baseUrl = "127.0.0.1"; //debug
   final String communityUrl = "/community";
   final String loginUrl = "/login";
   final String userUrl = "/user/general";
+  final String pageUrl = '/page';
+
+  final String queryCountPerPage = 'count_per_page';
+
+  var makeQuery = ((String q, String v) => {q: v});
 
   Future<List<Community>> getMainPage() async {
-    Response response = await get(Uri.parse(baseUrl + communityUrl));
+    final url = Uri.http(baseUrl, communityUrl);
+
+    Response response = await get(url);
 
     if (response.statusCode == 200) {
       // Iterable l = json.decode(response.body);
@@ -28,9 +35,13 @@ class HttpService {
     }
   }
 
-  Future<Community> getCommunity(communityName) async {
-    final response =
-        await get(Uri.parse("$baseUrl$communityUrl/$communityName"));
+  Future<Community> getCommunity(communityName, pageNum, postingCount) async {
+    final url = Uri.http(
+        baseUrl,
+        "$communityUrl/$communityName$pageUrl/$pageNum",
+        makeQuery(queryCountPerPage, postingCount.toString()));
+
+    final response = await get(url);
 
     if (response.statusCode == 200) {
       return Community.fromJson(json.decode(utf8.decode(response.bodyBytes)));
@@ -40,8 +51,12 @@ class HttpService {
   }
 
   Future<PostDetail> getPosting(communityName, postId) async {
-    final response =
-        await get(Uri.parse("$baseUrl$communityUrl/$communityName/$postId"));
+    final url = Uri.http(
+      baseUrl,
+      "$communityUrl/$communityName/$postId",
+    );
+
+    final response = await get(url);
 
     if (response.statusCode == 200) {
       return PostDetail.fromJson(json.decode(utf8.decode(response.bodyBytes)));
@@ -52,16 +67,19 @@ class HttpService {
 
   Future<LoginToken> postLogin(nickname, password) async {
     Map data = {'username': nickname, 'password': password};
-    // Map data = Login(nickname, password).toMap();
     String encodedBody = data.keys.map((key) => "$key=${data[key]}").join("&");
 
-    final response = await post(Uri.parse("$baseUrl$loginUrl"),
+    final url = Uri.http(
+      baseUrl,
+      loginUrl,
+    );
+
+    final response = await post(url,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
         encoding: Encoding.getByName('utf-8'),
         body: encodedBody);
-    // body: 'username=$nickname&password=$password');
 
     if (response.statusCode == 200) {
       return LoginToken.fromJson(json.decode(utf8.decode(response.bodyBytes)));
@@ -71,7 +89,9 @@ class HttpService {
   }
 
   Future<bool> postSignin(UserCreate user) async {
-    final response = await post(Uri.parse("$baseUrl$userUrl"),
+    final url = Uri.http(baseUrl, userUrl);
+
+    final response = await post(url,
         headers: {
           "Content-Type": "application/json",
         },
@@ -87,14 +107,15 @@ class HttpService {
 
   Future<bool> uploadPosting(
       String communityName, LoginToken token, PostCreate posting) async {
-    final response =
-        await post(Uri.parse("$baseUrl$communityUrl/$communityName"),
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": "${token.tokenType} ${token.accessToken}"
-            },
-            encoding: Encoding.getByName('utf-8'),
-            body: jsonEncode(posting.toJson()));
+    final url = Uri.http(baseUrl, '$communityUrl/$communityName');
+
+    final response = await post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "${token.tokenType} ${token.accessToken}"
+        },
+        encoding: Encoding.getByName('utf-8'),
+        body: jsonEncode(posting.toJson()));
     if (response.statusCode == 201) {
       return true;
     } else {
@@ -104,14 +125,14 @@ class HttpService {
 
   Future<bool> updatePosting(String communityName, LoginToken token, int postId,
       PostCreate posting) async {
-    final response =
-        await put(Uri.parse("$baseUrl$communityUrl/$communityName/$postId"),
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": "${token.tokenType} ${token.accessToken}"
-            },
-            encoding: Encoding.getByName('utf-8'),
-            body: jsonEncode(posting.toJson()));
+    final url = Uri.http(baseUrl, '$communityUrl/$communityName/$postId');
+    final response = await put(url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "${token.tokenType} ${token.accessToken}"
+        },
+        encoding: Encoding.getByName('utf-8'),
+        body: jsonEncode(posting.toJson()));
     if (response.statusCode == 202) {
       return true;
     } else {
@@ -122,8 +143,9 @@ class HttpService {
 
   Future<bool> deletePosting(
       String communityName, LoginToken token, int postId) async {
+    final url = Uri.http(baseUrl, '$communityUrl/$communityName/$postId');
     final response = await delete(
-      Uri.parse("$baseUrl$communityUrl/$communityName/$postId"),
+      url,
       headers: {
         "Content-Type": "application/json",
         "Authorization": "${token.tokenType} ${token.accessToken}"
