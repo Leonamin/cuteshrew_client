@@ -30,9 +30,14 @@ class CommunityPage extends StatefulWidget {
 //FIXME https://stackoverflow.com/questions/49874272/how-to-navigate-to-other-page-without-animation-flutter 이거를 사용해야할 때
 class _CommunityPageState extends State<CommunityPage> {
   HttpService httpService = HttpService();
-  int _currentPageNum = 1;
+
+  int _currentPageNum = 0;
   int _pagePerCount = 15;
-  int _maxPage = 1;
+  int _maxPage = 0;
+
+  // uses only calculating range in n - k ~ n + k
+  final int _pageRange = 4;
+
   Community? _currentCommunity;
   List<ButtonProperties> _pageButtonList = [];
 
@@ -52,7 +57,10 @@ class _CommunityPageState extends State<CommunityPage> {
         _currentCommunity = value;
         _maxPage = _currentCommunity!.postingsCount ~/ _pagePerCount + 1;
 
+        // 10 units
         // 1~10 11~20 21~30 ... max 1 ~ max
+
+        /*
         int maxSelectablePage = (((_currentPageNum - 1) ~/ 10) + 1) * 10;
         int minSelectablePage = maxSelectablePage - 9;
         (maxSelectablePage > _maxPage) ? maxSelectablePage = _maxPage : null;
@@ -60,11 +68,35 @@ class _CommunityPageState extends State<CommunityPage> {
         _pageButtonList = List<ButtonProperties>.generate(
             maxSelectablePage - minSelectablePage + 1,
             (index) => ButtonProperties(page: minSelectablePage + index));
+            */
         // print(
         //     "posting count = ${_currentCommunity!.postingsCount} min = $minSelectablePage max = $maxSelectablePage");
         // for (var i in _pageButtonList) {
         //   print(i.page);
         // }
+
+        int minSelectablePage = _currentPageNum - _pageRange;
+        int maxSelectablePage = _currentPageNum + _pageRange;
+
+        // range in n - k ~ n + k
+        //if set to under 0, index start from 0 when _currentPageNum = 4
+        if (_currentPageNum - _pageRange <= 0) {
+          minSelectablePage = 1;
+          maxSelectablePage = 1 + (2 * _pageRange);
+        }
+        if (_currentPageNum + _pageRange > _maxPage) {
+          minSelectablePage = _maxPage - (2 * _pageRange);
+          maxSelectablePage = _maxPage;
+        }
+        if (_currentPageNum - _pageRange <= 0 &&
+            _currentPageNum + _pageRange > _maxPage) {
+          minSelectablePage = 1;
+          maxSelectablePage = _maxPage;
+        }
+
+        _pageButtonList = List<ButtonProperties>.generate(
+            maxSelectablePage - minSelectablePage + 1,
+            (index) => ButtonProperties(page: minSelectablePage + index));
       });
     });
   }
