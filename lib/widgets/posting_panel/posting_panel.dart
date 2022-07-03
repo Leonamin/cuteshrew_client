@@ -1,7 +1,9 @@
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/pages/posting_page.dart';
+import 'package:cuteshrew/provider/page_notifier.dart';
 import 'package:cuteshrew/widgets/posting_item/posting_item.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PostingPanel extends StatelessWidget {
   final Community community;
@@ -21,14 +23,19 @@ class PostingPanel extends StatelessWidget {
               child: PostingItem(
                 title: posts[index].title,
                 onClick: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PostingPage({
-                              'communityInfo': community,
-                              'postId': posts[index].postId
-                            })),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => PostingPage({
+                  //             'communityInfo': community,
+                  //             'postId': posts[index].postId
+                  //           })),
+                  // );
+                  Provider.of<PageNotifier>(context, listen: false).goToPage(
+                      PostingPage.pageName, {
+                    'communityInfo': community,
+                    'postId': posts[index].postId
+                  });
                 },
               ));
         },

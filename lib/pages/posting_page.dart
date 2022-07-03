@@ -3,6 +3,7 @@ import 'package:cuteshrew/network/http_service.dart';
 import 'package:cuteshrew/pages/community_page.dart';
 import 'package:cuteshrew/pages/post_editor_page.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
+import 'package:cuteshrew/provider/page_notifier.dart';
 import 'package:cuteshrew/strings/strings.dart';
 import 'package:cuteshrew/widgets/main_navigation_bar/main_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -142,12 +143,16 @@ class _PostingPageState extends State<PostingPage> {
                     .then((value) => {
                           if (value)
                             {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CommunityPage(
-                                        {'communityInfo': _communityInfo})),
-                              )
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => CommunityPage(
+                              //           {'communityInfo': _communityInfo})),
+                              // )
+                              Provider.of<PageNotifier>(context, listen: false)
+                                  .goToPage(CommunityPage.pageName, {
+                                'communityInfo': _communityInfo,
+                              })
                             }
                           else
                             {

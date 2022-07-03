@@ -1,6 +1,7 @@
 import 'package:cuteshrew/pages/auth_page.dart';
 import 'package:cuteshrew/pages/home_page.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
+import 'package:cuteshrew/provider/page_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,10 +18,12 @@ class MainNavigationBar extends StatelessWidget {
           width: 150,
           child: InkWell(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => HomePage()),
+                // );
+                Provider.of<PageNotifier>(context, listen: false)
+                    .goToPage(HomePage.pageName);
               },
               child: Image.asset('assets/images/logo.png')),
         ),
@@ -33,10 +36,12 @@ class MainNavigationBar extends StatelessWidget {
             ((context.select((LoginProvider login) => login.loginToken)) ==
                     null)
                 ? _NavBarIcon(Icons.login, () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AuthWidget()),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => AuthWidget()),
+                    // );
+                    Provider.of<PageNotifier>(context, listen: false)
+                        .goToPage(AuthPage.pageName);
                   })
                 : _NavBarIcon(Icons.logout, () {
                     context.read<LoginProvider>().removeToken();

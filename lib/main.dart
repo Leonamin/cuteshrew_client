@@ -48,7 +48,38 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: HomePage(),
+      home: Consumer<PageNotifier>(
+        builder: (context, pageNotifier, child) {
+          return Navigator(
+            pages: [
+              MaterialPage(
+                  key: const ValueKey(HomePage.pageName), child: HomePage()),
+              if (pageNotifier.currentPage == CommunityPage.pageName)
+                MaterialPage(
+                    key: const ValueKey(CommunityPage.pageName),
+                    child: CommunityPage(
+                        pageNotifier.args as Map<String, Community>)),
+              if (pageNotifier.currentPage == PostEditorPage.pageName)
+                MaterialPage(
+                    key: const ValueKey(PostEditorPage.pageName),
+                    child: PostEditorPage(
+                        pageNotifier.args as Map<String, dynamic>)),
+              if (pageNotifier.currentPage == PostingPage.pageName)
+                MaterialPage(
+                    key: const ValueKey(PostingPage.pageName),
+                    child:
+                        PostingPage(pageNotifier.args as Map<String, dynamic>)),
+              if (pageNotifier.currentPage == AuthPage.pageName) AuthPage(),
+            ],
+            onPopPage: (route, result) {
+              if (!route.didPop(result)) {
+                return false;
+              }
+              return true;
+            },
+          );
+        },
+      ),
     );
   }
 }
