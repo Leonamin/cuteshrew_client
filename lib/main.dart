@@ -1,16 +1,25 @@
+import 'package:cuteshrew/model/models.dart';
+import 'package:cuteshrew/pages/auth_page.dart';
+import 'package:cuteshrew/pages/community_page.dart';
+import 'package:cuteshrew/pages/post_editor_page.dart';
+import 'package:cuteshrew/pages/posting_page.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
+import 'package:cuteshrew/provider/page_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/home_page.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 void main() {
+  usePathUrlStrategy();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
         create: (_) => LoginProvider(),
-      )
+      ),
+      ChangeNotifierProvider(create: (_) => PageNotifier())
     ],
     child: const MyApp(),
   ));
