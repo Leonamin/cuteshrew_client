@@ -39,7 +39,7 @@ class MainNavigationBar extends StatelessWidget {
                     );
                   })
                 : _NavBarIcon(Icons.logout, () {
-                    context.read<LoginProvider>().removeToken();
+                    context.read<LoginProvider>().logout();
                   }),
           ],
         )

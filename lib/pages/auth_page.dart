@@ -182,18 +182,29 @@ class _AuthWidgetState extends State<AuthWidget> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             if (!isRegister) {
-                              try {
-                                var result = await httpService.postLogin(
-                                    _nicknameController.text,
-                                    _passwordController.text);
-                                context.read<LoginProvider>().setToken(result);
-                                Navigator.pop(context);
-                              } on Exception {
-                                setState(() {
-                                  isAlarmOccurred = true;
-                                  alarmComment = "로그인 실패했는데여?";
-                                });
-                              }
+                              // try {
+                              //   var result = await httpService.postLogin(
+                              //       _nicknameController.text,
+                              //       _passwordController.text);
+                              //   context.read<LoginProvider>().setToken(result);
+
+                              //   Navigator.pop(context);
+                              // } on Exception {
+                              // setState(() {
+                              //   isAlarmOccurred = true;
+                              //   alarmComment = "로그인 실패했는데여?";
+                              // });
+                              // }
+                              context
+                                  .read<LoginProvider>()
+                                  .login(_nicknameController.text,
+                                      _passwordController.text)
+                                  .then((value) => value
+                                      ? Navigator.pop(context)
+                                      : setState(() {
+                                          isAlarmOccurred = true;
+                                          alarmComment = "로그인 실패했는데여?";
+                                        }));
                             } else {
                               var result = await httpService.postSignin(
                                   UserCreate(
