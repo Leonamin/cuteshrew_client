@@ -5,12 +5,12 @@ import 'package:flutter/widgets.dart';
 enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
 
 class LoginProvider with ChangeNotifier {
-  String _nickname = "";
+  String? _nickname;
   LoginToken? _loginToken;
   Status _status = Status.Uninitialized;
   final HttpService _httpService = HttpService();
 
-  String get userNickname => _nickname;
+  String? get userNickname => _nickname;
   LoginToken? get loginToken => _loginToken;
   Status get status => _status;
 
@@ -21,7 +21,7 @@ class LoginProvider with ChangeNotifier {
   }
 
   void deleteUserId() {
-    _nickname = "";
+    _nickname = null;
     notifyListeners();
   }
 
@@ -50,7 +50,7 @@ class LoginProvider with ChangeNotifier {
   }
 
   bool logout() {
-    _nickname = "";
+    _nickname = null;
     _loginToken = null;
     _status = Status.Unauthenticated;
     notifyListeners();
