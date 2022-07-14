@@ -1,3 +1,4 @@
+import 'package:cuteshrew/helpers/local_navigator.dart';
 import 'package:flutter/material.dart';
 
 class SmallMainScreen extends StatelessWidget {
@@ -7,6 +8,6 @@ class SmallMainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Container());
+        child: localNavigator());
   }
 }
