@@ -1,6 +1,6 @@
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/pages/posting_page.dart';
-import 'package:cuteshrew/widgets/posting_item/posting_item.dart';
+import 'package:cuteshrew/widgets/posting_item.dart';
 import 'package:flutter/material.dart';
 
 class PostingPanel extends StatelessWidget {

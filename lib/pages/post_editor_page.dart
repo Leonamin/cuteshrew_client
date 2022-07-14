@@ -1,7 +1,7 @@
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/network/http_service.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
-import 'package:cuteshrew/widgets/main_navigation_bar/main_navigation_bar.dart';
+import 'package:cuteshrew/widgets/main_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';

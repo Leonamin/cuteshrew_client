@@ -6,23 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-class AuthPage extends Page {
-  static const pageName = '/auth';
-  @override
-  Route createRoute(BuildContext context) {
-    return MaterialPageRoute(
-        settings: this, builder: (context) => AuthWidget());
-  }
-}
-
-class AuthWidget extends StatefulWidget {
-  AuthWidget({Key? key}) : super(key: key);
+class AuthPage extends StatefulWidget {
+  AuthPage({Key? key}) : super(key: key);
 
   @override
-  State<AuthWidget> createState() => _AuthWidgetState();
+  State<AuthPage> createState() => _AuthWidgetState();
 }
 
-class _AuthWidgetState extends State<AuthWidget> {
+class _AuthWidgetState extends State<AuthPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // UI setting values

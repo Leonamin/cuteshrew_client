@@ -35,7 +35,7 @@ class MainNavigationBar extends StatelessWidget {
                 ? _NavBarIcon(Icons.login, () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AuthWidget()),
+                      MaterialPageRoute(builder: (context) => AuthPage()),
                     );
                   })
                 : _NavBarIcon(Icons.logout, () {

@@ -2,8 +2,8 @@ import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/network/http_service.dart';
 import 'package:cuteshrew/pages/post_editor_page.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
-import 'package:cuteshrew/widgets/main_navigation_bar/main_navigation_bar.dart';
-import 'package:cuteshrew/widgets/posting_panel/posting_panel.dart';
+import 'package:cuteshrew/widgets/main_navigation_bar.dart';
+import 'package:cuteshrew/widgets/posting_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
