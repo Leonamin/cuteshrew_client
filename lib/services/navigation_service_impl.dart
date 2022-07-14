@@ -2,8 +2,7 @@ import 'package:cuteshrew/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 
 class NavigationServiceImpl implements NavigationService {
-  static final GlobalKey<NavigatorState> navigatorKey =
-      GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   get key => navigatorKey;
