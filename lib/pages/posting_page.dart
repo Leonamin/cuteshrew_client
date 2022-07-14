@@ -4,7 +4,6 @@ import 'package:cuteshrew/pages/community_page.dart';
 import 'package:cuteshrew/pages/post_editor_page.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
 import 'package:cuteshrew/strings/strings.dart';
-import 'package:cuteshrew/widgets/main_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +40,6 @@ class _PostingPageState extends State<PostingPage> {
       backgroundColor: Colors.white,
       body: ListView(
         children: [
-          const MainNavigationBar(),
           FutureBuilder(
               future:
                   httpService.getPosting(_communityInfo.communityName, _postId),
