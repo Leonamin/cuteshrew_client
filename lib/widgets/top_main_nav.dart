@@ -82,9 +82,17 @@ AppBar topMainNavigationBar(
             width: 24,
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              context.read<LoginProvider>().status != Status.Authenticated
+                  ? locator<NavigationService>()
+                      .pushNamed(AuthenticationPageRoute)
+                  : context.read<LoginProvider>().logout();
+            },
             child: CustomText(
-              text: context.read<LoginProvider>().userNickname ?? Strings.login,
+              text:
+                  context.watch<LoginProvider>().status != Status.Authenticated
+                      ? Strings.login
+                      : Strings.logout,
               color: lightGrey,
             ),
           ),
@@ -99,7 +107,7 @@ AppBar topMainNavigationBar(
                 margin: const EdgeInsets.all(2),
                 child: CircleAvatar(
                   backgroundColor: light,
-                  child: (context.read<LoginProvider>().status ==
+                  child: (context.watch<LoginProvider>().status ==
                           Status.Authenticated)
                       ? const Icon(
                           Icons.person_outline,

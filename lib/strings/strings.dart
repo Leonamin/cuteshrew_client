@@ -9,6 +9,7 @@ class Strings {
   // auth_page
   ///////////////////////////////////////////
   static const String login = "로그인";
+  static const String logout = "로그아웃";
   static const String register = "회원가입";
 
   static const String labelEmail = "이메일 주소";
