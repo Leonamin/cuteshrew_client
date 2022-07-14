@@ -1,10 +1,12 @@
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/network/http_service.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
+import 'package:cuteshrew/service_locator.dart';
 import 'package:cuteshrew/strings/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:cuteshrew/services/navigation_service.dart';
 
 class AuthPage extends StatefulWidget {
   AuthPage({Key? key}) : super(key: key);
@@ -191,7 +193,7 @@ class _AuthWidgetState extends State<AuthPage> {
                                   .login(_nicknameController.text,
                                       _passwordController.text)
                                   .then((value) => value
-                                      ? Navigator.pop(context)
+                                      ? locator<NavigationService>().pop()
                                       : setState(() {
                                           isAlarmOccurred = true;
                                           alarmComment = "로그인 실패했는데여?";

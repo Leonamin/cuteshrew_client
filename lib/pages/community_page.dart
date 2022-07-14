@@ -2,9 +2,12 @@ import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/network/http_service.dart';
 import 'package:cuteshrew/pages/post_editor_page.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
+import 'package:cuteshrew/routing/routes.dart';
+import 'package:cuteshrew/service_locator.dart';
 import 'package:cuteshrew/widgets/posting_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cuteshrew/services/navigation_service.dart';
 
 class ButtonProperties {
   int page;
@@ -149,17 +152,12 @@ class _CommunityPageState extends State<CommunityPage> {
                                                     ? Colors.blue
                                                     : Colors.cyan)),
                                     onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                CommunityPage({
-                                                  'communityInfo':
-                                                      _currentCommunity,
-                                                  'page': _pageButtonList[index]
-                                                      .page
-                                                })),
-                                      );
+                                      locator<NavigationService>().pushNamed(
+                                          CommunityPageRoute,
+                                          arguments: {
+                                            'communityInfo': _currentCommunity,
+                                            'page': _pageButtonList[index].page
+                                          });
                                     },
                                     child: Text(
                                         '${_pageButtonList[index].page}',
@@ -175,12 +173,8 @@ class _CommunityPageState extends State<CommunityPage> {
       floatingActionButton: (token != null && _currentCommunity != null)
           ? FloatingActionButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          PostEditorPage({'communityInfo': _currentCommunity})),
-                );
+                locator<NavigationService>().pushNamed(PostEditorPageRoute,
+                    arguments: {'communityInfo': _currentCommunity});
               },
               child: const Icon(Icons.note_add),
             )

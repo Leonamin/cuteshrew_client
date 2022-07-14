@@ -1,10 +1,12 @@
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/network/http_service.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
+import 'package:cuteshrew/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:provider/provider.dart';
+import 'package:cuteshrew/services/navigation_service.dart';
 
 // FIXME
 //Assertion failed: file:///C:/flutter/packages/flutter/lib/src/services/hardware_keyboard.dart:444:16
@@ -69,7 +71,7 @@ class PostEditorPage extends StatelessWidget {
                   .uploadPosting(communityInfo.communityName, token,
                       PostCreate(title: _titleController.text, body: bodyHtml))
                   .then((value) => {
-                        if (value) {Navigator.pop(context)}
+                        if (value) {locator<NavigationService>().pop()}
                       });
             } else {
               httpService
@@ -79,7 +81,7 @@ class PostEditorPage extends StatelessWidget {
                       postInfo.postId,
                       PostCreate(title: _titleController.text, body: bodyHtml))
                   .then((value) => {
-                        if (value) {Navigator.pop(context)}
+                        if (value) {locator<NavigationService>().pop()}
                       });
             }
           }

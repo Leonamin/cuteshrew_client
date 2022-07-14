@@ -1,9 +1,12 @@
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/pages/community_page.dart';
 import 'package:cuteshrew/pages/posting_page.dart';
+import 'package:cuteshrew/routing/routes.dart';
+import 'package:cuteshrew/service_locator.dart';
 import 'package:cuteshrew/widgets/community_title.dart';
 import 'package:cuteshrew/widgets/posting_item.dart';
 import 'package:flutter/material.dart';
+import 'package:cuteshrew/services/navigation_service.dart';
 
 class CommunityPanel extends StatelessWidget {
   final Community communityInfo;
@@ -22,12 +25,8 @@ class CommunityPanel extends StatelessWidget {
           child: CommunityTitle(
               title: communityInfo.communityShowName,
               onClick: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          CommunityPage({'communityInfo': communityInfo})),
-                );
+                locator<NavigationService>().pushNamed(CommunityHomePageRoute,
+                    arguments: {'communityInfo': communityInfo});
               }),
         ),
         const Divider(
@@ -53,14 +52,11 @@ class CommunityPanel extends StatelessWidget {
               child: PostingItem(
                 title: posts[index].title,
                 onClick: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PostingPage({
-                              'communityInfo': community,
-                              'postId': posts[index].postId
-                            })),
-                  );
+                  locator<NavigationService>().pushNamed(PostingPageRoute,
+                      arguments: {
+                        'communityInfo': community,
+                        'postId': posts[index].postId
+                      });
                 },
               ));
         },

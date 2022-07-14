@@ -1,6 +1,9 @@
 import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/helpers/responsiveness.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
+import 'package:cuteshrew/routing/routes.dart';
+import 'package:cuteshrew/service_locator.dart';
+import 'package:cuteshrew/services/navigation_service.dart';
 import 'package:cuteshrew/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,12 +15,18 @@ AppBar topMainNavigationBar(
       leading: !ResponsiveWidget.isSmallScreen(context)
           ? Row(
               children: [
-                Container(
-                  padding: EdgeInsets.only(left: 4),
-                  child: Image.asset(
-                    "assets/icons/logo.png",
-                    width: 50,
+                InkWell(
+                  child: Container(
+                    padding: EdgeInsets.only(left: 4),
+                    child: Image.asset(
+                      "assets/icons/logo.png",
+                      width: 50,
+                    ),
                   ),
+                  onTap: () {
+                    locator<NavigationService>()
+                        .pushNamed(CommunityHomePageRoute);
+                  },
                 ),
               ],
             )

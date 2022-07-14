@@ -3,10 +3,14 @@ import 'package:cuteshrew/network/http_service.dart';
 import 'package:cuteshrew/pages/community_page.dart';
 import 'package:cuteshrew/pages/post_editor_page.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
+import 'package:cuteshrew/routing/routes.dart';
+import 'package:cuteshrew/service_locator.dart';
 import 'package:cuteshrew/strings/strings.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
+import 'package:cuteshrew/services/navigation_service.dart';
 
 class PostingPage extends StatefulWidget {
   static const pageName = '/post';
@@ -58,13 +62,25 @@ class _PostingPageState extends State<PostingPage> {
                       ),
                       Container(
                         padding: const EdgeInsets.only(left: 10.0),
-                        child: Text(
-                            style: const TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                fontSize: 30,
-                                fontWeight: FontWeight.w800,
-                                height: 0.9),
-                            _communityInfo.communityShowName),
+                        child: RichText(
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          text: TextSpan(
+                              style: const TextStyle(
+                                  overflow: TextOverflow.ellipsis,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w800,
+                                  height: 0.9),
+                              text: _communityInfo.communityShowName,
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  locator<NavigationService>().pushNamed(
+                                      CommunityPageRoute,
+                                      arguments: {
+                                        'communityInfo': _communityInfo,
+                                      });
+                                }),
+                        ),
                       ),
                       Html(
                         data: (snapshot.data as PostDetail).body,
@@ -85,15 +101,12 @@ class _PostingPageState extends State<PostingPage> {
     return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
       OutlinedButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PostEditorPage({
-                        'communityInfo': communityInfo,
-                        'postDetail': postDetail,
-                        'isModify': true
-                      })),
-            );
+            locator<NavigationService>().pushNamed(PostEditorPageRoute,
+                arguments: {
+                  'communityInfo': communityInfo,
+                  'postDetail': postDetail,
+                  'isModify': true
+                });
           },
           child: Row(
             children: const [
@@ -140,12 +153,9 @@ class _PostingPageState extends State<PostingPage> {
                     .then((value) => {
                           if (value)
                             {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CommunityPage(
-                                        {'communityInfo': _communityInfo})),
-                              )
+                              locator<NavigationService>().pushNamed(
+                                  CommunityHomePageRoute,
+                                  arguments: {'communityInfo': _communityInfo})
                             }
                           else
                             {
@@ -160,7 +170,7 @@ class _PostingPageState extends State<PostingPage> {
             TextButton(
               child: const Text(Strings.alretBack),
               onPressed: () {
-                Navigator.pop(context);
+                locator<NavigationService>().pop();
               },
             ),
           ],
