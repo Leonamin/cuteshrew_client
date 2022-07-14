@@ -12,29 +12,30 @@ import 'package:cuteshrew/strings/strings.dart';
 AppBar topMainNavigationBar(
         BuildContext context, GlobalKey<ScaffoldState> key) =>
     AppBar(
-      leading: !ResponsiveWidget.isSmallScreen(context)
-          ? Row(
-              children: [
-                InkWell(
-                  child: Container(
-                    padding: EdgeInsets.only(left: 4),
-                    child: Image.asset(
-                      "assets/icons/logo.png",
-                      width: 50,
+      leading: //!ResponsiveWidget.isSmallScreen(context)
+          true
+              ? Row(
+                  children: [
+                    InkWell(
+                      child: Container(
+                        padding: EdgeInsets.only(left: 4),
+                        child: Image.asset(
+                          "assets/icons/logo.png",
+                          width: 50,
+                        ),
+                      ),
+                      onTap: () {
+                        locator<NavigationService>()
+                            .pushNamed(CommunityHomePageRoute);
+                      },
                     ),
-                  ),
-                  onTap: () {
-                    locator<NavigationService>()
-                        .pushNamed(CommunityHomePageRoute);
+                  ],
+                )
+              : IconButton(
+                  onPressed: () {
+                    key.currentState!.openDrawer();
                   },
-                ),
-              ],
-            )
-          : IconButton(
-              onPressed: () {
-                key.currentState!.openDrawer();
-              },
-              icon: const Icon(Icons.menu)),
+                  icon: const Icon(Icons.menu)),
       elevation: 0.0,
       title: Row(
         children: [

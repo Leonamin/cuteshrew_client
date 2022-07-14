@@ -14,18 +14,22 @@ class PostingItem extends StatelessWidget {
         const SizedBox(
           width: 10.0,
         ),
-        RichText(
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          text: TextSpan(
-              text: title,
-              recognizer: TapGestureRecognizer()
-                ..onTap = onClick as GestureTapCallback?),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: RichText(
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              text: TextSpan(
+                  text: title,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = onClick as GestureTapCallback?),
+            ),
+          ),
         ),
-        const SizedBox(
-          width: 10.0,
-        ),
-        const Icon(Icons.comment)
+        Container(
+            padding: EdgeInsets.only(right: 10.0),
+            child: const Icon(Icons.comment))
       ],
     );
   }

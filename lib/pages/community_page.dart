@@ -113,6 +113,9 @@ class _CommunityPageState extends State<CommunityPage> {
       backgroundColor: Colors.white,
       body: ListView(
         children: [
+          const SizedBox(
+            height: 30.0,
+          ),
           (_currentCommunity == null)
               ? const CircularProgressIndicator()
               : Column(

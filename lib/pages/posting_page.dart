@@ -44,6 +44,9 @@ class _PostingPageState extends State<PostingPage> {
       backgroundColor: Colors.white,
       body: ListView(
         children: [
+          const SizedBox(
+            height: 30.0,
+          ),
           FutureBuilder(
               future:
                   httpService.getPosting(_communityInfo.communityName, _postId),
