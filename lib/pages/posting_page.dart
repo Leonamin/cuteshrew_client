@@ -160,12 +160,14 @@ class _PostingPageState extends State<PostingPage> {
                     .then((value) => {
                           if (value)
                             {
+                              Navigator.pop(context),
                               locator<NavigationService>().pushNamed(
                                   CommunityHomePageRoute,
                                   arguments: {'communityInfo': _communityInfo})
                             }
                           else
                             {
+                              Navigator.pop(context),
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(
                                 content: Text(Strings.alarmDeletePostingFailed),
