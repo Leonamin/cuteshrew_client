@@ -3,6 +3,7 @@ import 'package:cuteshrew/network/http_service.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
@@ -44,57 +45,111 @@ class PostEditorPage extends StatelessWidget {
         : PostDetail(postId: 0, title: "", body: "");
     _titleController.text = postInfo.title;
     return Scaffold(
-      body: ListView(
+      body: Column(
         children: [
           const SizedBox(
-            height: 16,
+            height: 30,
           ),
-          _buildTextFormField("제목", _titleController),
-          const SizedBox(
-            height: 8,
-          ),
-          HtmlEditor(
-            controller: _bodyController, //required
-            htmlEditorOptions:
-                HtmlEditorOptions(hint: "내용 입력점", initialText: postInfo.body),
-            otherOptions: const OtherOptions(
-              height: 400,
-            ),
-          )
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          var bodyHtml = await _bodyController.getText();
-          if (token != null) {
-            if (!isModify) {
-              httpService
-                  .uploadPosting(communityInfo.communityName, token,
-                      PostCreate(title: _titleController.text, body: bodyHtml))
-                  .then((value) => {
-                        if (value) {locator<NavigationService>().pop()}
-                      });
-            } else {
-              httpService
-                  .updatePosting(
-                      communityInfo.communityName,
-                      token,
-                      postInfo.postId,
-                      PostCreate(title: _titleController.text, body: bodyHtml))
-                  .then((value) => {
-                        if (value)
-                          {
+          Expanded(
+            flex: 2,
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: RichText(
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    text: TextSpan(
+                        style: const TextStyle(
+                            overflow: TextOverflow.ellipsis,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w800,
+                            height: 0.9),
+                        text: communityInfo.communityShowName,
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
                             locator<NavigationService>()
-                                .pushNamed(PostingPageRoute, arguments: {
+                                .pushNamed(CommunityPageRoute, arguments: {
                               'communityInfo': communityInfo,
-                              'postId': postInfo.postId
-                            })
+                            });
+                          }),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                _buildTextFormField("제목", _titleController),
+                const SizedBox(
+                  height: 8,
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+              flex: 8,
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 9,
+                    child: HtmlEditor(
+                      controller: _bodyController, //required
+                      htmlEditorOptions: HtmlEditorOptions(
+                          hint: "내용 입력점", initialText: postInfo.body),
+                      otherOptions: const OtherOptions(
+                        height: 400,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: IconButton(
+                        onPressed: () async {
+                          var bodyHtml = await _bodyController.getText();
+                          if (token != null) {
+                            if (!isModify) {
+                              httpService
+                                  .uploadPosting(
+                                      communityInfo.communityName,
+                                      token,
+                                      PostCreate(
+                                          title: _titleController.text,
+                                          body: bodyHtml))
+                                  .then((value) => {
+                                        if (value)
+                                          {locator<NavigationService>().pop()}
+                                      });
+                            } else {
+                              httpService
+                                  .updatePosting(
+                                      communityInfo.communityName,
+                                      token,
+                                      postInfo.postId,
+                                      PostCreate(
+                                          title: _titleController.text,
+                                          body: bodyHtml))
+                                  .then((value) => {
+                                        if (value)
+                                          {
+                                            locator<NavigationService>()
+                                                .pushNamed(PostingPageRoute,
+                                                    arguments: {
+                                                  'communityInfo':
+                                                      communityInfo,
+                                                  'postId': postInfo.postId
+                                                })
+                                          }
+                                      });
+                            }
                           }
-                      });
-            }
-          }
-        },
-        child: const Icon(Icons.note_add),
+                        },
+                        icon: const Icon(Icons.note_add_outlined)),
+                  )
+                ],
+              )),
+        ],
       ),
     );
   }
