@@ -1,6 +1,4 @@
 import 'package:cuteshrew/model/models.dart';
-import 'package:cuteshrew/pages/community_page.dart';
-import 'package:cuteshrew/pages/posting_page.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
 import 'package:cuteshrew/widgets/community_title.dart';
@@ -25,7 +23,7 @@ class CommunityPanel extends StatelessWidget {
           child: CommunityTitle(
               title: communityInfo.communityShowName,
               onClick: () {
-                locator<NavigationService>().pushNamed(CommunityHomePageRoute,
+                locator<NavigationService>().pushNamed(CommunityPageRoute,
                     arguments: {'communityInfo': communityInfo});
               }),
         ),
