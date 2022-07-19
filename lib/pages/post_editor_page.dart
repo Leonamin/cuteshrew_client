@@ -1,6 +1,7 @@
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/network/http_service.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
+import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -81,7 +82,14 @@ class PostEditorPage extends StatelessWidget {
                       postInfo.postId,
                       PostCreate(title: _titleController.text, body: bodyHtml))
                   .then((value) => {
-                        if (value) {locator<NavigationService>().pop()}
+                        if (value)
+                          {
+                            locator<NavigationService>()
+                                .pushNamed(PostingPageRoute, arguments: {
+                              'communityInfo': communityInfo,
+                              'postId': postInfo.postId
+                            })
+                          }
                       });
             }
           }
