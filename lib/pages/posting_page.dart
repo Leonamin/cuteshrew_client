@@ -1,7 +1,5 @@
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/network/http_service.dart';
-import 'package:cuteshrew/pages/community_page.dart';
-import 'package:cuteshrew/pages/post_editor_page.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
@@ -63,6 +61,9 @@ class _PostingPageState extends State<PostingPage> {
                             : buildToolTab(context, _communityInfo,
                                 snapshot.data as PostDetail),
                       ),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       Container(
                         padding: const EdgeInsets.only(left: 10.0),
                         child: RichText(
@@ -85,7 +86,10 @@ class _PostingPageState extends State<PostingPage> {
                                 }),
                         ),
                       ),
-                      Html(
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      SelectableHtml(
                         data: (snapshot.data as PostDetail).body,
                       )
                     ],
@@ -173,7 +177,7 @@ class _PostingPageState extends State<PostingPage> {
             TextButton(
               child: const Text(Strings.alretBack),
               onPressed: () {
-                locator<NavigationService>().pop();
+                Navigator.pop(context);
               },
             ),
           ],
