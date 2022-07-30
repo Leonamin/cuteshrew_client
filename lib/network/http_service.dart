@@ -12,6 +12,7 @@ class HttpService {
   final String pageUrl = '/page';
 
   final String queryCountPerPage = 'count_per_page';
+  final String queryPassword = 'password';
 
   var makeQuery = ((String q, String v) => {q: v});
 
@@ -50,15 +51,16 @@ class HttpService {
     }
   }
 
-  Future<PostDetail> getPosting(communityName, postId) async {
-    final url = Uri.http(
-      baseUrl,
-      "$communityUrl/$communityName/$postId",
-    );
+  Future<PostDetail> getPosting(communityName, postId,
+      [String? password]) async {
+    final url = Uri.http(baseUrl, "$communityUrl/$communityName/$postId",
+        password != null ? makeQuery(queryPassword, password) : null);
 
     final response = await get(url);
 
     if (response.statusCode == 200) {
+      var post =
+          PostDetail.fromJson(json.decode(utf8.decode(response.bodyBytes)));
       return PostDetail.fromJson(json.decode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception('Failed to load $communityName page');

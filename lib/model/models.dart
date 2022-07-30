@@ -13,24 +13,40 @@ class PostDetail {
   int postId;
   String title;
   String body;
+  bool isLocked;
 
-  PostDetail({required this.postId, required this.title, required this.body});
+  PostDetail(
+      {required this.postId,
+      required this.title,
+      required this.body,
+      required this.isLocked});
 
   factory PostDetail.fromJson(Map<String, dynamic> json) {
     return PostDetail(
-        postId: json['id'], title: json['title'], body: json['body']);
+        postId: json['id'],
+        title: json['title'],
+        body: json['body'],
+        isLocked: json['is_locked']);
   }
 }
 
 class PostCreate {
   String title;
   String body;
+  bool isLocked;
+  String? password;
 
-  PostCreate({required this.title, required this.body});
+  PostCreate(
+      {required this.title,
+      required this.body,
+      required this.isLocked,
+      required this.password});
 
   Map<String, dynamic> toJson() => {
         'title': title,
         'body': body,
+        'is_locked': isLocked,
+        'password': password
       };
 }
 

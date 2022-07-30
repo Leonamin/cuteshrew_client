@@ -32,6 +32,7 @@ class PostEditorPage extends StatelessWidget {
       borderSide: const BorderSide(color: Colors.transparent, width: 0));
 
   final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final HtmlEditorController _bodyController = HtmlEditorController();
 
   @override
@@ -42,7 +43,7 @@ class PostEditorPage extends StatelessWidget {
     bool isModify = _arguments['isModify'] != null ? true : false;
     PostDetail postInfo = (isModify)
         ? _arguments['postDetail'] as PostDetail
-        : PostDetail(postId: 0, title: "", body: "");
+        : PostDetail(postId: 0, title: "", body: "", isLocked: false);
     _titleController.text = postInfo.title;
     return Scaffold(
       body: Column(
@@ -90,7 +91,7 @@ class PostEditorPage extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(
-                    flex: 9,
+                    flex: 8,
                     child: HtmlEditor(
                       controller: _bodyController, //required
                       htmlEditorOptions: HtmlEditorOptions(
@@ -104,48 +105,69 @@ class PostEditorPage extends StatelessWidget {
                     height: 10,
                   ),
                   Expanded(
-                    flex: 1,
-                    child: IconButton(
-                        onPressed: () async {
-                          var bodyHtml = await _bodyController.getText();
-                          if (token != null) {
-                            if (!isModify) {
-                              httpService
-                                  .uploadPosting(
-                                      communityInfo.communityName,
-                                      token,
-                                      PostCreate(
-                                          title: _titleController.text,
-                                          body: bodyHtml))
-                                  .then((value) => {
-                                        if (value)
-                                          {locator<NavigationService>().pop()}
-                                      });
-                            } else {
-                              httpService
-                                  .updatePosting(
-                                      communityInfo.communityName,
-                                      token,
-                                      postInfo.postId,
-                                      PostCreate(
-                                          title: _titleController.text,
-                                          body: bodyHtml))
-                                  .then((value) => {
-                                        if (value)
-                                          {
-                                            locator<NavigationService>()
-                                                .pushNamed(PostingPageRoute,
-                                                    arguments: {
-                                                  'communityInfo':
-                                                      communityInfo,
-                                                  'postId': postInfo.postId
-                                                })
-                                          }
-                                      });
-                            }
-                          }
-                        },
-                        icon: const Icon(Icons.note_add_outlined)),
+                    flex: 2,
+                    child: Column(
+                      children: [
+                        _buildTextFormField("비밀번호", _passwordController),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.cancel_presentation)),
+                            IconButton(
+                                onPressed: () async {
+                                  var bodyHtml =
+                                      await _bodyController.getText();
+                                  if (token != null) {
+                                    PostCreate post = PostCreate(
+                                        title: _titleController.text,
+                                        body: bodyHtml,
+                                        isLocked:
+                                            _passwordController.text.isNotEmpty,
+                                        password: _passwordController.text);
+                                    if (!isModify) {
+                                      httpService
+                                          .uploadPosting(
+                                              communityInfo.communityName,
+                                              token,
+                                              post)
+                                          .then((value) => {
+                                                if (value)
+                                                  {
+                                                    locator<NavigationService>()
+                                                        .pop()
+                                                  }
+                                              });
+                                    } else {
+                                      httpService
+                                          .updatePosting(
+                                              communityInfo.communityName,
+                                              token,
+                                              postInfo.postId,
+                                              post)
+                                          .then((value) => {
+                                                if (value)
+                                                  {
+                                                    locator<NavigationService>()
+                                                        .pushNamed(
+                                                            PostingPageRoute,
+                                                            arguments: {
+                                                          'communityInfo':
+                                                              communityInfo,
+                                                          'postId':
+                                                              postInfo.postId
+                                                        })
+                                                  }
+                                              });
+                                    }
+                                  }
+                                },
+                                icon: const Icon(Icons.note_add_outlined)),
+                          ],
+                        ),
+                      ],
+                    ),
                   )
                 ],
               )),
