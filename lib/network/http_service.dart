@@ -15,6 +15,7 @@ class HttpService {
   final String queryPassword = 'password';
 
   var makeQuery = ((String q, String v) => {q: v});
+  var mapCodeAndData = ((int c, d) => {'code': c, 'data': d});
 
   Future<List<Community>> getMainPage() async {
     final url = Uri.http(baseUrl, communityUrl);
@@ -51,7 +52,7 @@ class HttpService {
     }
   }
 
-  Future<PostDetail> getPosting(communityName, postId,
+  Future<Map<String, dynamic>> getPosting(communityName, postId,
       [String? password]) async {
     final url = Uri.http(baseUrl, "$communityUrl/$communityName/$postId",
         password != null ? makeQuery(queryPassword, password) : null);
@@ -61,9 +62,9 @@ class HttpService {
     if (response.statusCode == 200) {
       var post =
           PostDetail.fromJson(json.decode(utf8.decode(response.bodyBytes)));
-      return PostDetail.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+      return mapCodeAndData(response.statusCode, post);
     } else {
-      throw Exception('Failed to load $communityName page');
+      return mapCodeAndData(response.statusCode, null);
     }
   }
 
