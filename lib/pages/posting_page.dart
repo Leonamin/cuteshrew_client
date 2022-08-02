@@ -5,8 +5,8 @@ import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
 import 'package:cuteshrew/strings/strings.dart';
 import 'package:cuteshrew/widgets/clickable_text.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 import 'package:cuteshrew/services/navigation_service.dart';
@@ -25,14 +25,29 @@ class PostingPage extends StatefulWidget {
 class _PostingPageState extends State<PostingPage> {
   HttpService httpService = HttpService();
   late Community _communityInfo;
+  late PostDetail _postDetail;
   late int _postId;
   late LoginToken? _token;
+
+  Map<String, dynamic>? _postingResult;
+
+  static const int _passwordLengthLimit = 20;
+  final OutlineInputBorder _border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: const BorderSide(color: Colors.transparent, width: 0));
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _communityInfo = widget._arguments['communityInfo'] as Community;
     _postId = widget._arguments['postId'] as int;
+    httpService.getPosting(_communityInfo.communityName, _postId).then((value) {
+      setState(() {
+        _postingResult = value as Map<String, dynamic>?;
+      });
+    });
   }
 
   @override
@@ -46,67 +61,80 @@ class _PostingPageState extends State<PostingPage> {
           const SizedBox(
             height: 30.0,
           ),
-          FutureBuilder(
-              future:
-                  httpService.getPosting(_communityInfo.communityName, _postId),
-              builder: ((context, snapshot) {
-                if (snapshot.hasData) {
-                  Map<String, dynamic> youMustDeleteThis =
-                      snapshot.data as Map<String, dynamic>;
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: ((context.select((LoginProvider login) =>
-                                    login.loginToken)) ==
-                                null)
-                            ? null
-                            : buildToolTab(context, _communityInfo,
-                                youMustDeleteThis['data'] as PostDetail),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: ClickableText(
-                          text: _communityInfo.communityShowName,
-                          size: 30,
-                          weight: FontWeight.w800,
-                          onClick: () {
-                            locator<NavigationService>()
-                                .pushNamed(CommunityPageRoute, arguments: {
-                              'communityInfo': _communityInfo,
-                            });
-                          },
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Html(
-                        data: youMustDeleteThis['data'].body,
-                      )
-                    ],
-                  );
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-                return const CircularProgressIndicator();
-              }))
+          _buildBody(),
         ],
       ),
     );
   }
 
-  Widget buildToolTab(BuildContext context, communityInfo, postDetail) {
+  Widget _buildBody() {
+    if (_postingResult != null) {
+      switch (_postingResult?['code']) {
+        case 200:
+          return _buildPostingPanel(_postingResult?['data']);
+        case 400:
+        case 403:
+          return _buildPasswordPanel();
+        default:
+      }
+      return Container();
+    }
+    return const CircularProgressIndicator();
+  }
+
+  Widget _buildPostingPanel(PostDetail data) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          child: ((context.select((LoginProvider login) => login.loginToken)) ==
+                  null)
+              ? null
+              : _buildToolTab(data),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          padding: const EdgeInsets.only(left: 10.0),
+          child: ClickableText(
+            text: _communityInfo.communityShowName,
+            size: 30,
+            weight: FontWeight.w800,
+            onClick: () {
+              locator<NavigationService>()
+                  .pushNamed(CommunityPageRoute, arguments: {
+                'communityInfo': _communityInfo,
+              });
+            },
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Html(
+          data: data.body,
+        )
+      ],
+    );
+  }
+
+  Widget _buildPasswordPanel() {
+    return Column(
+      children: [
+        Text("잠긴 게시물입니다!"),
+        _buildTextFormField("비밀번호", _passwordController),
+      ],
+    );
+  }
+
+  Widget _buildToolTab(PostDetail postDetail) {
     return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
       OutlinedButton(
           onPressed: () {
             locator<NavigationService>().pushNamed(PostEditorPageRoute,
                 arguments: {
-                  'communityInfo': communityInfo,
+                  'communityInfo': _communityInfo,
                   'postDetail': postDetail,
                   'isModify': true
                 });
@@ -181,6 +209,46 @@ class _PostingPageState extends State<PostingPage> {
           ],
         );
       },
+    );
+  }
+
+  TextFormField _buildTextFormField(
+      String labelText, TextEditingController controller,
+      {String title = ""}) {
+    return TextFormField(
+      inputFormatters: [LengthLimitingTextInputFormatter(_passwordLengthLimit)],
+      textInputAction: TextInputAction.go,
+      onFieldSubmitted: (value) {
+        httpService
+            .getPosting(_communityInfo.communityName, _postId, value)
+            .then((value) {
+          if (value['code'] == 200) {
+            setState(() {
+              _postingResult = value;
+            });
+          }
+        });
+      },
+      cursorColor: Colors.white,
+      controller: controller,
+      validator: (text) {
+        if (text == null || text.isEmpty) {
+          return "이거 비어있으면 안됨";
+        }
+
+        return null;
+      },
+      decoration: InputDecoration(
+          labelText: labelText,
+          border: _border,
+          errorBorder: _border,
+          enabledBorder: _border,
+          focusedBorder: _border,
+          filled: true,
+          fillColor: Colors.black54,
+          errorStyle: const TextStyle(
+              color: Colors.redAccent, fontWeight: FontWeight.bold),
+          labelStyle: const TextStyle(color: Colors.white)),
     );
   }
 }
