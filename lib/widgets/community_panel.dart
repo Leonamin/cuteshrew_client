@@ -1,7 +1,7 @@
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
-import 'package:cuteshrew/widgets/community_title.dart';
+import 'package:cuteshrew/widgets/clickable_text.dart';
 import 'package:cuteshrew/widgets/posting_item.dart';
 import 'package:flutter/material.dart';
 import 'package:cuteshrew/services/navigation_service.dart';
@@ -20,12 +20,15 @@ class CommunityPanel extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(_paddingItem),
-          child: CommunityTitle(
-              title: communityInfo.communityShowName,
-              onClick: () {
-                locator<NavigationService>().pushNamed(CommunityPageRoute,
-                    arguments: {'communityInfo': communityInfo});
-              }),
+          child: ClickableText(
+            text: communityInfo.communityShowName,
+            size: 30,
+            weight: FontWeight.w800,
+            onClick: () {
+              locator<NavigationService>().pushNamed(CommunityPageRoute,
+                  arguments: {'communityInfo': communityInfo});
+            },
+          ),
         ),
         const Divider(
           thickness: 3,

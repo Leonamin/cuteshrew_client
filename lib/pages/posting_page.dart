@@ -4,6 +4,7 @@ import 'package:cuteshrew/provider/login_provider.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
 import 'package:cuteshrew/strings/strings.dart';
+import 'package:cuteshrew/widgets/clickable_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -50,6 +51,9 @@ class _PostingPageState extends State<PostingPage> {
                   httpService.getPosting(_communityInfo.communityName, _postId),
               builder: ((context, snapshot) {
                 if (snapshot.hasData) {
+                  Map<String, dynamic> youMustDeleteThis =
+                      snapshot.data as Map<String, dynamic>;
+
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -59,38 +63,30 @@ class _PostingPageState extends State<PostingPage> {
                                 null)
                             ? null
                             : buildToolTab(context, _communityInfo,
-                                snapshot.data as PostDetail),
+                                youMustDeleteThis['data'] as PostDetail),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
                       Container(
                         padding: const EdgeInsets.only(left: 10.0),
-                        child: RichText(
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          text: TextSpan(
-                              style: const TextStyle(
-                                  overflow: TextOverflow.ellipsis,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w800,
-                                  height: 0.9),
-                              text: _communityInfo.communityShowName,
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  locator<NavigationService>().pushNamed(
-                                      CommunityPageRoute,
-                                      arguments: {
-                                        'communityInfo': _communityInfo,
-                                      });
-                                }),
+                        child: ClickableText(
+                          text: _communityInfo.communityShowName,
+                          size: 30,
+                          weight: FontWeight.w800,
+                          onClick: () {
+                            locator<NavigationService>()
+                                .pushNamed(CommunityPageRoute, arguments: {
+                              'communityInfo': _communityInfo,
+                            });
+                          },
                         ),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      SelectableHtml(
-                        data: (snapshot.data as PostDetail).body,
+                      Html(
+                        data: youMustDeleteThis['data'].body,
                       )
                     ],
                   );

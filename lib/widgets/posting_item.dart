@@ -1,4 +1,4 @@
-import 'package:flutter/gestures.dart';
+import 'package:cuteshrew/widgets/clickable_text.dart';
 import 'package:flutter/material.dart';
 
 class PostingItem extends StatelessWidget {
@@ -17,13 +17,9 @@ class PostingItem extends StatelessWidget {
         Expanded(
           child: Container(
             padding: const EdgeInsets.only(right: 10.0),
-            child: RichText(
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              text: TextSpan(
-                  text: title,
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = onClick as GestureTapCallback?),
+            child: ClickableText(
+              text: title,
+              onClick: onClick,
             ),
           ),
         ),
