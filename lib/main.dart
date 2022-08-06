@@ -1,3 +1,4 @@
+import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/helpers/no_transition_builder.dart';
 import 'package:cuteshrew/layout/main_layout.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
@@ -28,24 +29,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Cute Shrew',
-        theme: ThemeData(
-          primarySwatch: Colors.green,
-          textTheme: GoogleFonts.mulishTextTheme(Theme.of(context).textTheme)
-              .apply(bodyColor: Colors.black),
-          pageTransitionsTheme: PageTransitionsTheme(
-            builders: kIsWeb
-                ? {
-                    // No animations for every OS if the app running on the web
-                    for (final platform in TargetPlatform.values)
-                      platform: const NoTransitionsBuilder(),
-                  }
-                : const {
-                    // handel other platforms you are targeting
-                  },
+    return Provider<CuteshrewApiClient>(
+      create: (_) => const CuteshrewApiClient(),
+      child: MaterialApp(
+          title: 'Cute Shrew',
+          theme: ThemeData(
+            primarySwatch: Colors.green,
+            textTheme: GoogleFonts.mulishTextTheme(Theme.of(context).textTheme)
+                .apply(bodyColor: Colors.black),
+            pageTransitionsTheme: PageTransitionsTheme(
+              builders: kIsWeb
+                  ? {
+                      // No animations for every OS if the app running on the web
+                      for (final platform in TargetPlatform.values)
+                        platform: const NoTransitionsBuilder(),
+                    }
+                  : const {
+                      // handel other platforms you are targeting
+                    },
+            ),
           ),
-        ),
-        home: MainLayout());
+          home: MainLayout()),
+    );
   }
 }
