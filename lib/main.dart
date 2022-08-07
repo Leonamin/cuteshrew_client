@@ -18,6 +18,9 @@ void main() {
       ChangeNotifierProvider(
         create: (_) => LoginProvider(),
       ),
+      Provider<CuteshrewApiClient>(
+        create: (_) => const CuteshrewApiClient(),
+      ),
       ChangeNotifierProvider(create: (_) => PageNotifier())
     ],
     child: const MyApp(),
@@ -29,27 +32,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider<CuteshrewApiClient>(
-      create: (_) => const CuteshrewApiClient(),
-      child: MaterialApp(
-          title: 'Cute Shrew',
-          theme: ThemeData(
-            primarySwatch: Colors.green,
-            textTheme: GoogleFonts.mulishTextTheme(Theme.of(context).textTheme)
-                .apply(bodyColor: Colors.black),
-            pageTransitionsTheme: PageTransitionsTheme(
-              builders: kIsWeb
-                  ? {
-                      // No animations for every OS if the app running on the web
-                      for (final platform in TargetPlatform.values)
-                        platform: const NoTransitionsBuilder(),
-                    }
-                  : const {
-                      // handel other platforms you are targeting
-                    },
-            ),
+    return MaterialApp(
+        title: 'Cute Shrew',
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+          textTheme: GoogleFonts.mulishTextTheme(Theme.of(context).textTheme)
+              .apply(bodyColor: Colors.black),
+          pageTransitionsTheme: PageTransitionsTheme(
+            builders: kIsWeb
+                ? {
+                    // No animations for every OS if the app running on the web
+                    for (final platform in TargetPlatform.values)
+                      platform: const NoTransitionsBuilder(),
+                  }
+                : const {
+                    // handel other platforms you are targeting
+                  },
           ),
-          home: MainLayout()),
-    );
+        ),
+        home: MainLayout());
   }
 }

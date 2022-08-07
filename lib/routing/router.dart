@@ -1,4 +1,5 @@
 import 'package:cuteshrew/pages/auth_page.dart';
+import 'package:cuteshrew/pages/auth_screen_page.dart';
 import 'package:cuteshrew/pages/community_page.dart';
 import 'package:cuteshrew/pages/error_page.dart';
 import 'package:cuteshrew/pages/home_page.dart';
@@ -18,7 +19,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case PostEditorPageRoute:
       return _getPageRoute(PostEditorPage(settings.arguments as dynamic));
     case AuthenticationPageRoute:
-      return _getPageRoute(AuthPage());
+      return _getPageRoute(AuthScreenPage());
 
     default:
       return _getPageRoute(PageNotFound());

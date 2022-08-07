@@ -1,9 +1,11 @@
+import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/constants/style.dart';
-import 'package:cuteshrew/helpers/responsiveness.dart';
+import 'package:cuteshrew/notifiers/login_notifier.dart';
 import 'package:cuteshrew/provider/login_provider.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
 import 'package:cuteshrew/services/navigation_service.dart';
+import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +39,18 @@ AppBar topMainNavigationBar(
                   },
                   icon: const Icon(Icons.menu)),
       elevation: 0.0,
-      title: Row(
+      title: MainNavTitle(),
+      iconTheme: IconThemeData(color: dark),
+      backgroundColor: lightCream,
+    );
+
+class MainNavTitle extends StatelessWidget {
+  const MainNavTitle({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<LoginState>(builder: (context, state, child) {
+      return Row(
         children: [
           Visibility(
               child: CustomText(
@@ -84,16 +97,13 @@ AppBar topMainNavigationBar(
           ),
           InkWell(
             onTap: () {
-              context.read<LoginProvider>().status != Status.Authenticated
+              state is UnauthorizedState
                   ? locator<NavigationService>()
                       .pushNamed(AuthenticationPageRoute)
-                  : context.read<LoginProvider>().logout();
+                  : context.read<LoginNotifier>().logout();
             },
             child: CustomText(
-              text:
-                  context.watch<LoginProvider>().status != Status.Authenticated
-                      ? Strings.login
-                      : Strings.logout,
+              text: state is UnauthorizedState ? Strings.login : Strings.logout,
               color: lightGrey,
             ),
           ),
@@ -108,8 +118,7 @@ AppBar topMainNavigationBar(
                 margin: const EdgeInsets.all(2),
                 child: CircleAvatar(
                   backgroundColor: light,
-                  child: (context.watch<LoginProvider>().status ==
-                          Status.Authenticated)
+                  child: state is AuthorizedState
                       ? const Icon(
                           Icons.person_outline,
                           color: dark,
@@ -121,7 +130,7 @@ AppBar topMainNavigationBar(
                 )),
           )
         ],
-      ),
-      iconTheme: IconThemeData(color: dark),
-      backgroundColor: lightCream,
-    );
+      );
+    });
+  }
+}
