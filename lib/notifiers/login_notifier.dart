@@ -9,7 +9,7 @@ class LoginNotifier extends ValueNotifier<LoginState> {
   final CuteshrewApiClient api;
 
   Future<void> login(id, password) async {
-    if (value is! UnauthorizedState) {
+    if (value is UnauthorizedState) {
       value = LoginState.reqeustAuthorization();
       try {
         final result = await api.postLogin(id, password);
@@ -23,5 +23,9 @@ class LoginNotifier extends ValueNotifier<LoginState> {
         value = LoginState.unauthorized();
       }
     }
+  }
+
+  Future<void> logout() async {
+    value = LoginState.unauthorized();
   }
 }
