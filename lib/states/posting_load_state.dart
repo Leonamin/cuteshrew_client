@@ -35,6 +35,12 @@ abstract class PostingLoadState {
     required int postId,
     required String communityName,
   }) = NeedPasswordPostingLoadState;
+  const factory PostingLoadState.invalidPassword({
+    required int postId,
+    required String communityName,
+    required int failCount,
+  }) = InvalidPasswordPostingLoadState;
+
   const factory PostingLoadState.unknownError({
     required int postId,
     required String communityName,
@@ -94,12 +100,32 @@ class NoDataPostingLoadState extends PostingLoadState {
   }) : super(postId: postId, communityName: communityName);
 }
 
-//TODO 잘못된 비밀번호 횟수 받아오기
 class NeedPasswordPostingLoadState extends PostingLoadState {
   const NeedPasswordPostingLoadState({
     required int postId,
     required String communityName,
   }) : super(postId: postId, communityName: communityName);
+}
+
+class InvalidPasswordPostingLoadState extends PostingLoadState {
+  const InvalidPasswordPostingLoadState({
+    required int postId,
+    required String communityName,
+    required this.failCount,
+  }) : super(postId: postId, communityName: communityName);
+
+  final int failCount;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is InvalidPasswordPostingLoadState &&
+          postId == other.postId &&
+          communityName == other.communityName &&
+          failCount == other.failCount);
+
+  @override
+  int get hashCode => Object.hash(super.hashCode, failCount.hashCode);
 }
 
 class UnknownErrorPostingLoadState extends PostingLoadState {
