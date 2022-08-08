@@ -1,4 +1,5 @@
 import 'package:cuteshrew/model/models.dart';
+import 'package:cuteshrew/models/post_detail.dart';
 import 'package:cuteshrew/network/http_service.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';

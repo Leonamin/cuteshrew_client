@@ -9,27 +9,6 @@ class Post {
   }
 }
 
-class PostDetail {
-  int postId;
-  String title;
-  String body;
-  bool isLocked;
-
-  PostDetail(
-      {required this.postId,
-      required this.title,
-      required this.body,
-      required this.isLocked});
-
-  factory PostDetail.fromJson(Map<String, dynamic> json) {
-    return PostDetail(
-        postId: json['id'],
-        title: json['title'],
-        body: json['body'],
-        isLocked: json['is_locked']);
-  }
-}
-
 class PostCreate {
   String title;
   String body;
