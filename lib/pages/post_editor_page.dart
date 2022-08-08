@@ -1,8 +1,8 @@
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/network/http_service.dart';
-import 'package:cuteshrew/provider/login_provider.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
+import 'package:cuteshrew/states/login_state.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,141 +38,146 @@ class PostEditorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HttpService httpService = HttpService();
-    var token = context.select((LoginProvider login) => login.loginToken);
     Community communityInfo = _arguments['communityInfo'] as Community;
     bool isModify = _arguments['isModify'] != null ? true : false;
     PostDetail postInfo = (isModify)
         ? _arguments['postDetail'] as PostDetail
         : PostDetail(postId: 0, title: "", body: "", isLocked: false);
     _titleController.text = postInfo.title;
-    return Scaffold(
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 30,
-          ),
-          Expanded(
-            flex: 2,
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: RichText(
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    text: TextSpan(
-                        style: const TextStyle(
-                            overflow: TextOverflow.ellipsis,
-                            fontSize: 30,
-                            fontWeight: FontWeight.w800,
-                            height: 0.9),
-                        text: communityInfo.communityShowName,
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            locator<NavigationService>()
-                                .pushNamed(CommunityPageRoute, arguments: {
-                              'communityInfo': communityInfo,
-                            });
-                          }),
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                _buildTextFormField("제목", _titleController),
-                const SizedBox(
-                  height: 8,
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-              flex: 8,
-              child: Column(
-                children: [
-                  Expanded(
-                    flex: 8,
-                    child: HtmlEditor(
-                      controller: _bodyController, //required
-                      htmlEditorOptions: HtmlEditorOptions(
-                          hint: "내용 입력점", initialText: postInfo.body),
-                      otherOptions: const OtherOptions(
-                        height: 400,
+
+    return Consumer<LoginState>(
+      builder: (context, state, child) {
+        return Scaffold(
+          body: Column(
+            children: [
+              const SizedBox(
+                height: 30,
+              ),
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: RichText(
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        text: TextSpan(
+                            style: const TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 30,
+                                fontWeight: FontWeight.w800,
+                                height: 0.9),
+                            text: communityInfo.communityShowName,
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                locator<NavigationService>()
+                                    .pushNamed(CommunityPageRoute, arguments: {
+                                  'communityInfo': communityInfo,
+                                });
+                              }),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      children: [
-                        _buildTextFormField("비밀번호", _passwordController),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    _buildTextFormField("제목", _titleController),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                  flex: 8,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 8,
+                        child: HtmlEditor(
+                          controller: _bodyController, //required
+                          htmlEditorOptions: HtmlEditorOptions(
+                              hint: "내용 입력점", initialText: postInfo.body),
+                          otherOptions: const OtherOptions(
+                            height: 400,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Column(
                           children: [
-                            IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.cancel_presentation)),
-                            IconButton(
-                                onPressed: () async {
-                                  var bodyHtml =
-                                      await _bodyController.getText();
-                                  if (token != null) {
-                                    PostCreate post = PostCreate(
-                                        title: _titleController.text,
-                                        body: bodyHtml,
-                                        isLocked:
-                                            _passwordController.text.isNotEmpty,
-                                        password: _passwordController.text);
-                                    if (!isModify) {
-                                      httpService
-                                          .uploadPosting(
-                                              communityInfo.communityName,
-                                              token,
-                                              post)
-                                          .then((value) => {
-                                                if (value)
-                                                  {
-                                                    locator<NavigationService>()
-                                                        .pop()
-                                                  }
-                                              });
-                                    } else {
-                                      httpService
-                                          .updatePosting(
-                                              communityInfo.communityName,
-                                              token,
-                                              postInfo.postId,
-                                              post)
-                                          .then((value) => {
-                                                if (value)
-                                                  {
-                                                    locator<NavigationService>()
-                                                        .pushNamed(
-                                                            PostingPageRoute,
-                                                            arguments: {
-                                                          'communityInfo':
-                                                              communityInfo,
-                                                          'postId':
-                                                              postInfo.postId
-                                                        })
-                                                  }
-                                              });
-                                    }
-                                  }
-                                },
-                                icon: const Icon(Icons.note_add_outlined)),
+                            _buildTextFormField("비밀번호", _passwordController),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                    onPressed: () {},
+                                    icon:
+                                        const Icon(Icons.cancel_presentation)),
+                                IconButton(
+                                    onPressed: () async {
+                                      var bodyHtml =
+                                          await _bodyController.getText();
+                                      if (state is AuthorizedState) {
+                                        PostCreate post = PostCreate(
+                                            title: _titleController.text,
+                                            body: bodyHtml,
+                                            isLocked: _passwordController
+                                                .text.isNotEmpty,
+                                            password: _passwordController.text);
+                                        if (!isModify) {
+                                          httpService
+                                              .uploadPosting(
+                                                  communityInfo.communityName,
+                                                  state.loginToken,
+                                                  post)
+                                              .then((value) => {
+                                                    if (value)
+                                                      {
+                                                        locator<NavigationService>()
+                                                            .pop()
+                                                      }
+                                                  });
+                                        } else {
+                                          httpService
+                                              .updatePosting(
+                                                  communityInfo.communityName,
+                                                  state.loginToken,
+                                                  postInfo.postId,
+                                                  post)
+                                              .then((value) => {
+                                                    if (value)
+                                                      {
+                                                        locator<NavigationService>()
+                                                            .pushNamed(
+                                                                PostingPageRoute,
+                                                                arguments: {
+                                                              'communityInfo':
+                                                                  communityInfo,
+                                                              'postId': postInfo
+                                                                  .postId
+                                                            })
+                                                      }
+                                                  });
+                                        }
+                                      }
+                                    },
+                                    icon: const Icon(Icons.note_add_outlined)),
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
-                  )
-                ],
-              )),
-        ],
-      ),
+                      )
+                    ],
+                  )),
+            ],
+          ),
+        );
+      },
     );
   }
 

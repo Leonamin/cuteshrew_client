@@ -17,7 +17,7 @@ class CuteshrewApiClient {
   Map<String, String> makeQuery(String q, String v) => {q: v};
   Map<String, dynamic> mapCodeAndData(int c, d) => {'code': c, 'data': d};
 
-  Future<TestLoginToken?> postLogin(nickname, password) async {
+  Future<LoginToken?> postLogin(nickname, password) async {
     Map data = {'username': nickname, 'password': password};
     String encodedBody = data.keys.map((key) => "$key=${data[key]}").join("&");
 
@@ -34,8 +34,7 @@ class CuteshrewApiClient {
         body: encodedBody);
 
     if (response.statusCode == 200) {
-      return TestLoginToken.fromJson(
-          json.decode(utf8.decode(response.bodyBytes)));
+      return LoginToken.fromJson(json.decode(utf8.decode(response.bodyBytes)));
     }
     return null;
   }

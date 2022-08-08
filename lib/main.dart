@@ -1,7 +1,6 @@
 import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/helpers/no_transition_builder.dart';
 import 'package:cuteshrew/layout/main_layout.dart';
-import 'package:cuteshrew/provider/login_provider.dart';
 import 'package:cuteshrew/provider/page_notifier.dart';
 import 'package:cuteshrew/service_locator.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +14,6 @@ void main() {
   setupLocator();
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider(
-        create: (_) => LoginProvider(),
-      ),
       Provider<CuteshrewApiClient>(
         create: (_) => const CuteshrewApiClient(),
       ),

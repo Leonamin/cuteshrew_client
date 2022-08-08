@@ -73,18 +73,6 @@ class Community {
   }
 }
 
-class LoginToken {
-  final String accessToken;
-  final String tokenType;
-
-  LoginToken({required this.accessToken, required this.tokenType});
-  factory LoginToken.fromJson(Map<String, dynamic> json) {
-    return LoginToken(
-        accessToken: json['access_token'], tokenType: json['token_type']);
-    // latestPostingList: Post.fromJson(json['postings']));
-  }
-}
-
 class Login {
   final String username;
   final String password;

@@ -13,7 +13,7 @@ abstract class LoginState {
   const factory LoginState.reqeustAuthorization() = RequestAuthorizationState;
   const factory LoginState.authorized(
       {required UserInfo userInfo,
-      required TestLoginToken loginToken}) = AuthorizedState;
+      required LoginToken loginToken}) = AuthorizedState;
 }
 
 class UnauthorizedState extends LoginState {
@@ -28,7 +28,7 @@ class AuthorizedState extends LoginState {
   const AuthorizedState({required this.userInfo, required this.loginToken});
 
   final UserInfo userInfo;
-  final TestLoginToken loginToken;
+  final LoginToken loginToken;
 
   @override
   bool operator ==(Object other) =>

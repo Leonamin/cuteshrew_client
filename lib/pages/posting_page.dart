@@ -1,8 +1,8 @@
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/network/http_service.dart';
-import 'package:cuteshrew/provider/login_provider.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
+import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/strings/strings.dart';
 import 'package:cuteshrew/widgets/clickable_text.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,6 @@ class _PostingPageState extends State<PostingPage> {
   late Community _communityInfo;
   late PostDetail _postDetail;
   late int _postId;
-  late LoginToken? _token;
 
   Map<String, dynamic>? _postingResult;
 
@@ -52,26 +51,27 @@ class _PostingPageState extends State<PostingPage> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO 이게 정말 최선의 방법일까
-    _token = context.read<LoginProvider>().loginToken;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: ListView(
-        children: [
-          const SizedBox(
-            height: 30.0,
-          ),
-          _buildBody(),
-        ],
-      ),
-    );
+    return Consumer<LoginState>(builder: (context, state, child) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        body: ListView(
+          children: [
+            const SizedBox(
+              height: 30.0,
+            ),
+            _buildBody(state),
+          ],
+        ),
+      );
+    });
   }
 
-  Widget _buildBody() {
+  //TODO PostingDetailNotifier 사용
+  Widget _buildBody(state) {
     if (_postingResult != null) {
       switch (_postingResult?['code']) {
         case 200:
-          return _buildPostingPanel(_postingResult?['data']);
+          return _buildPostingPanel(state, _postingResult?['data']);
         case 400:
         case 403:
           return _buildPasswordPanel();
@@ -82,15 +82,12 @@ class _PostingPageState extends State<PostingPage> {
     return const CircularProgressIndicator();
   }
 
-  Widget _buildPostingPanel(PostDetail data) {
+  Widget _buildPostingPanel(state, PostDetail data) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          child: ((context.select((LoginProvider login) => login.loginToken)) ==
-                  null)
-              ? null
-              : _buildToolTab(data),
+          child: state is AuthorizedState ? _buildToolTab(state, data) : null,
         ),
         const SizedBox(
           height: 10,
@@ -128,7 +125,7 @@ class _PostingPageState extends State<PostingPage> {
     );
   }
 
-  Widget _buildToolTab(PostDetail postDetail) {
+  Widget _buildToolTab(state, PostDetail postDetail) {
     return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
       OutlinedButton(
           onPressed: () {
@@ -150,7 +147,8 @@ class _PostingPageState extends State<PostingPage> {
           )),
       ElevatedButton(
           onPressed: () {
-            _showDialog(context);
+            //TODO 임시로
+            _showDialog(context, state);
           },
           //TODO 나중에 버튼 색상 좀...
           child: Row(
@@ -166,7 +164,7 @@ class _PostingPageState extends State<PostingPage> {
   }
 
   //TODO 나중에 삭제점
-  void _showDialog(BuildContext context) {
+  void _showDialog(BuildContext context, state) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -179,8 +177,8 @@ class _PostingPageState extends State<PostingPage> {
               child: const Text(Strings.alretAccept),
               onPressed: () {
                 httpService
-                    .deletePosting(
-                        _communityInfo.communityName, _token!, _postId)
+                    .deletePosting(_communityInfo.communityName,
+                        state.loginToken.accessToken, _postId)
                     .then((value) => {
                           if (value)
                             {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cuteshrew/model/models.dart';
+import 'package:cuteshrew/models/login_token.dart';
 import 'package:http/http.dart';
 
 class HttpService {
