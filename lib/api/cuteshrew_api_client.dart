@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cuteshrew/models/login_token.dart';
+import 'package:cuteshrew/models/post_detail.dart';
 import 'package:http/http.dart';
 
 class CuteshrewApiClient {
@@ -17,7 +18,23 @@ class CuteshrewApiClient {
   Map<String, String> makeQuery(String q, String v) => {q: v};
   Map<String, dynamic> mapCodeAndData(int c, d) => {'code': c, 'data': d};
 
-  Future<LoginToken?> postLogin(nickname, password) async {
+  Future<Map<String, dynamic>> getPosting(String communityName, int postId,
+      [String? password]) async {
+    final url = Uri.http(baseUrl, "$_communityUrl/$communityName/$postId",
+        password != null ? makeQuery(_queryNamePassword, password) : null);
+
+    final response = await get(url);
+
+    if (response.statusCode == 200) {
+      var post =
+          PostDetail.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+      return mapCodeAndData(response.statusCode, post);
+    } else {
+      return mapCodeAndData(response.statusCode, null);
+    }
+  }
+
+  Future<LoginToken?> postLogin(String nickname, String password) async {
     Map data = {'username': nickname, 'password': password};
     String encodedBody = data.keys.map((key) => "$key=${data[key]}").join("&");
 
@@ -37,6 +54,23 @@ class CuteshrewApiClient {
       return LoginToken.fromJson(json.decode(utf8.decode(response.bodyBytes)));
     }
     return null;
+  }
+
+  Future<bool> deletePosting(
+      String communityName, LoginToken token, int postId) async {
+    final url = Uri.http(baseUrl, '$_communityUrl/$communityName/$postId');
+    final response = await delete(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "${token.tokenType} ${token.accessToken}"
+      },
+    );
+
+    if (response.statusCode == 204) {
+      return true;
+    }
+    return false;
   }
 /*
   Future<List<Community>?> getMainPage() async {
@@ -65,22 +99,6 @@ class CuteshrewApiClient {
       return Community.fromJson(json.decode(utf8.decode(response.bodyBytes)));
     }
     return null;
-  }
-
-  Future<Map<String, dynamic>> getPosting(communityName, postId,
-      [String? password]) async {
-    final url = Uri.http(baseUrl, "$_communityUrl/$communityName/$postId",
-        password != null ? makeQuery(_queryNamePassword, password) : null);
-
-    final response = await get(url);
-
-    if (response.statusCode == 200) {
-      var post =
-          PostDetail.fromJson(json.decode(utf8.decode(response.bodyBytes)));
-      return mapCodeAndData(response.statusCode, post);
-    } else {
-      return mapCodeAndData(response.statusCode, null);
-    }
   }
 
   Future<bool> postSignin(UserCreate user) async {
@@ -132,21 +150,6 @@ class CuteshrewApiClient {
     return false;
   }
 
-  Future<bool> deletePosting(
-      String communityName, TestLoginToken token, int postId) async {
-    final url = Uri.http(baseUrl, '$_communityUrl/$communityName/$postId');
-    final response = await delete(
-      url,
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "${token.tokenType} ${token.accessToken}"
-      },
-    );
-
-    if (response.statusCode == 204) {
-      return true;
-    }
-    return false;
-  }
+  
   */
 }
