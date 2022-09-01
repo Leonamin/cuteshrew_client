@@ -21,7 +21,7 @@ class MainLayout extends StatelessWidget {
         update: (context, value, previous) => value.value,
         child: Scaffold(
             key: scaffoldKey,
-            extendBodyBehindAppBar: true,
+            // extendBodyBehindAppBar: true,
             appBar: topMainNavigationBar(context, scaffoldKey),
             drawer: const Drawer(),
             body: const ResponsiveWidget(
