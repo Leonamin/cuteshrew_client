@@ -147,8 +147,7 @@ class LoadedDataPostingPageLayout extends StatelessWidget {
     final LoginToken? token = loginState is AuthorizedState
         ? (loginState as AuthorizedState).loginToken
         : null;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
       children: [
         Container(
           padding: const EdgeInsets.only(left: 10.0),
