@@ -1,5 +1,6 @@
 import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/model/models.dart';
+import 'package:cuteshrew/models/login_token.dart';
 import 'package:cuteshrew/notifiers/posting_page_notifier.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
@@ -86,7 +87,9 @@ class PostingPageLayout extends StatelessWidget {
             return PasswordCertificationPostingPageLayout(state: state);
           }
           if (state is DeletedDataPostingPageState) {
-            locator<NavigationService>().pushNamed(CommunityHomePageRoute);
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              locator<NavigationService>().pushNamed(CommunityHomePageRoute);
+            });
           }
           if (state is UnknownErrorPostingPageState) {}
           return const NoDataPostingPageLayout();
@@ -141,6 +144,9 @@ class LoadedDataPostingPageLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final LoginToken? token = loginState is AuthorizedState
+        ? (loginState as AuthorizedState).loginToken
+        : null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -162,7 +168,7 @@ class LoadedDataPostingPageLayout extends StatelessWidget {
           height: 10,
         ),
         Container(
-          child: loginState is AuthorizedState
+          child: token != null
               ? Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   OutlinedButton(
                       onPressed: () {
@@ -185,7 +191,8 @@ class LoadedDataPostingPageLayout extends StatelessWidget {
                   ElevatedButton(
                       onPressed: () {
                         //TODO 임시로
-                        _showDialog(context, loginState);
+                        // _showDialog(context, loginState);
+                        context.read<PostingNotifier>().deletePosting(token);
                       },
                       child: Row(
                         children: const [
@@ -207,36 +214,37 @@ class LoadedDataPostingPageLayout extends StatelessWidget {
     );
   }
 
-  //FIXME 다이얼로그 대체해야함 provider 못찾는 문제
-  void _showDialog(BuildContext context, LoginState loginState) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text(Strings.alretDeletePostingTitle),
-          content: const Text(Strings.alretDeletePostingBody),
-          actions: <Widget>[
-            TextButton(
-              child: const Text(Strings.alretAccept),
-              onPressed: () {
-                if (loginState is AuthorizedState) {
-                  context
-                      .read<PostingNotifier>()
-                      .deletePosting(loginState.loginToken);
-                }
-              },
-            ),
-            TextButton(
-              child: const Text(Strings.alretBack),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  //FIXME provider 못찾는 문제
+
+  // void _showDialog(BuildContext context, LoginState loginState) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text(Strings.alretDeletePostingTitle),
+  //         content: const Text(Strings.alretDeletePostingBody),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: const Text(Strings.alretAccept),
+  //             onPressed: () {
+  //               if (loginState is AuthorizedState) {
+  //                 context
+  //                     .read<PostingNotifier>()
+  //                     .deletePosting(loginState.loginToken);
+  //               }
+  //             },
+  //           ),
+  //           TextButton(
+  //             child: const Text(Strings.alretBack),
+  //             onPressed: () {
+  //               Navigator.pop(context);
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }
 
 class PasswordCertificationPostingPageLayout extends StatelessWidget {
