@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/login_token.dart';
 import 'package:cuteshrew/models/post_detail.dart';
 import 'package:http/http.dart';
@@ -17,6 +18,20 @@ class CuteshrewApiClient {
 
   Map<String, String> makeQuery(String q, String v) => {q: v};
   Map<String, dynamic> mapCodeAndData(int c, d) => {'code': c, 'data': d};
+
+  Future<List<Community>?> getMainPage() async {
+    final url = Uri.http(baseUrl, _communityUrl);
+
+    Response response = await get(url);
+
+    if (response.statusCode == 200) {
+      return [
+        for (final e in json.decode(utf8.decode(response.bodyBytes)))
+          Community.fromJson(e),
+      ];
+    }
+    return null;
+  }
 
   Future<Map<String, dynamic>> getPosting(String communityName, int postId,
       [String? password]) async {

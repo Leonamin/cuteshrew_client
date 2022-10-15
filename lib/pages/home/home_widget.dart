@@ -1,0 +1,68 @@
+import 'package:cuteshrew/api/cuteshrew_api_client.dart';
+import 'package:cuteshrew/model/models.dart';
+import 'package:cuteshrew/notifiers/home_page_notifier.dart';
+import 'package:cuteshrew/states/home_page_state.dart';
+import 'package:cuteshrew/widgets/community_panel.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
+
+class HomeWidget extends StatelessWidget {
+  const HomeWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) {
+        final notifier =
+            HomePageNotifier(api: context.read<CuteshrewApiClient>());
+        notifier.getCommunities();
+        return notifier;
+      },
+      child: ProxyProvider<HomePageNotifier, HomePageState>(
+        update: (context, value, previous) => value.value,
+        child: Consumer<HomePageState>(
+          builder: (context, value, child) {
+            return Scaffold(
+              body: () {
+                if (value is LoadedDataHomePageState) {
+                  return LoadedDataHomeWidget(
+                    communities: value.communities,
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }(),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class LoadedDataHomeWidget extends StatelessWidget {
+  List<Community> communities;
+  LoadedDataHomeWidget({Key? key, required this.communities}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(children: [
+      const SizedBox(
+        height: 30,
+      ),
+      MasonryGridView.count(
+        crossAxisCount: 2,
+        mainAxisSpacing: 4,
+        crossAxisSpacing: 4,
+        shrinkWrap: true,
+        itemCount: communities.length,
+        itemBuilder: (BuildContext context, int index) {
+          return CommunityPanel(communityInfo: communities[index]);
+        },
+      )
+    ]);
+  }
+}

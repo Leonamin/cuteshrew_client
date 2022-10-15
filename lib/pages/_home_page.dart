@@ -4,16 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:cuteshrew/network/http_service.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-class HomePage extends StatefulWidget {
+class NoHomePage extends StatefulWidget {
   static const pageName = '/home';
 
-  HomePage({Key? key}) : super(key: key);
+  NoHomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<NoHomePage> createState() => _NoHomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _NoHomePageState extends State<NoHomePage> {
   List<Community>? _communities;
 
   HttpService httpService = HttpService();

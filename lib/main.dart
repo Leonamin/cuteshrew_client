@@ -1,6 +1,8 @@
 import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/helpers/no_transition_builder.dart';
 import 'package:cuteshrew/layout/main_layout.dart';
+import 'package:cuteshrew/notifiers/login_notifier.dart';
+import 'package:cuteshrew/pages/home/home_layout.dart';
 import 'package:cuteshrew/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,6 +18,10 @@ void main() {
       Provider<CuteshrewApiClient>(
         create: (_) => const CuteshrewApiClient(),
       ),
+      ChangeNotifierProvider<LoginNotifier>(
+        create: (context) =>
+            LoginNotifier(api: context.read<CuteshrewApiClient>()),
+      )
     ],
     child: const MyApp(),
   ));
@@ -44,6 +50,6 @@ class MyApp extends StatelessWidget {
                   },
           ),
         ),
-        home: MainLayout());
+        home: HomeLayout());
   }
 }
