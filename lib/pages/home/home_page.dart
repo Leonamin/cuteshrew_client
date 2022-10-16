@@ -7,8 +7,8 @@ import 'package:cuteshrew/widgets/top_main_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomeLayout extends StatelessWidget {
-  const HomeLayout({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
