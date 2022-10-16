@@ -1,4 +1,4 @@
-import 'package:cuteshrew/pages/auth_page.dart';
+import 'package:cuteshrew/pages/deprecated/auth_page.dart';
 import 'package:cuteshrew/pages/auth_screen_page.dart';
 import 'package:cuteshrew/pages/community_page.dart';
 import 'package:cuteshrew/pages/error_page.dart';

@@ -4,7 +4,7 @@ import 'package:cuteshrew/notifiers/login_notifier.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/widgets/large_main_screen.dart';
 import 'package:cuteshrew/widgets/small_main_screen.dart';
-import 'package:cuteshrew/widgets/top_main_nav.dart';
+import 'package:cuteshrew/widgets/deprecated/top_main_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
