@@ -1,6 +1,6 @@
 import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/notifiers/login_notifier.dart';
-import 'package:cuteshrew/pages/auth_screen_page.dart';
+import 'package:cuteshrew/pages/auth/auth_page.dart';
 import 'package:cuteshrew/pages/home/home_page.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/widgets/custom_text.dart';
@@ -99,7 +99,7 @@ class MainNavTitle extends StatelessWidget {
                   ? Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const AuthScreenPage(),
+                        builder: (context) => const AuthPage(),
                       ))
                   : context.read<LoginNotifier>().logout();
             },

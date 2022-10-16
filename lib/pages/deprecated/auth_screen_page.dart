@@ -1,10 +1,12 @@
-import 'package:cuteshrew/pages/auth_screen_page_widgets/login_layout.dart';
+import 'package:cuteshrew/pages/deprecated/login_layout.dart';
+import 'package:cuteshrew/service_locator.dart';
+import 'package:cuteshrew/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:provider/provider.dart';
 
-class AuthPage extends StatelessWidget {
-  const AuthPage({Key? key}) : super(key: key);
+class AuthScreenPage extends StatelessWidget {
+  const AuthScreenPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class AuthLayout extends StatelessWidget {
         return Container();
       }
       if (state is AuthorizedState) {
-        Navigator.pop(context);
+        locator<NavigationService>().pop();
       }
       //TODO
       // if (state is AuthorizationFailedState) {
