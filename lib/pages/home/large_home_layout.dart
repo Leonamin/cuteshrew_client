@@ -1,9 +1,9 @@
 import 'package:cuteshrew/constants/style.dart';
-import 'package:cuteshrew/pages/home/home_widget.dart';
+import 'package:cuteshrew/pages/home/home_screen.dart';
 import 'package:flutter/material.dart';
 
-class LargeHomeScreen extends StatelessWidget {
-  const LargeHomeScreen({Key? key}) : super(key: key);
+class LargeHomeLayout extends StatelessWidget {
+  const LargeHomeLayout({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class LargeHomeScreen extends StatelessWidget {
             flex: 4,
             child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: HomeWidget())),
+                child: HomeScreen())),
         Expanded(
           flex: 1,
           child: Container(

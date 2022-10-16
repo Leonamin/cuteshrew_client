@@ -1,7 +1,7 @@
 import 'package:cuteshrew/helpers/responsiveness.dart';
 import 'package:cuteshrew/notifiers/login_notifier.dart';
-import 'package:cuteshrew/pages/home/large_home_screen.dart';
-import 'package:cuteshrew/pages/home/small_home_screen.dart';
+import 'package:cuteshrew/pages/home/large_home_layout.dart';
+import 'package:cuteshrew/pages/home/small_home_layout.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/widgets/main_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +21,8 @@ class HomePage extends StatelessWidget {
           appBar: mainAppBar(context, scaffoldKey),
           drawer: const Drawer(),
           body: const ResponsiveWidget(
-            largeScreen: LargeHomeScreen(),
-            smallScreen: SmallHomeScreen(),
+            largeScreen: LargeHomeLayout(),
+            smallScreen: SmallHomeLayout(),
           )),
     );
   }

@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
 
-class HomeWidget extends StatelessWidget {
-  const HomeWidget({Key? key}) : super(key: key);
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class HomeWidget extends StatelessWidget {
             return Scaffold(
               body: () {
                 if (value is LoadedDataHomePageState) {
-                  return LoadedDataHomeWidget(
+                  return LoadedDataHomeScreen(
                     communities: value.communities,
                   );
                 } else {
@@ -43,9 +43,9 @@ class HomeWidget extends StatelessWidget {
   }
 }
 
-class LoadedDataHomeWidget extends StatelessWidget {
+class LoadedDataHomeScreen extends StatelessWidget {
   List<Community> communities;
-  LoadedDataHomeWidget({Key? key, required this.communities}) : super(key: key);
+  LoadedDataHomeScreen({Key? key, required this.communities}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
