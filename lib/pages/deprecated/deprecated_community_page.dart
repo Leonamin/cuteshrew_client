@@ -1,6 +1,6 @@
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/network/http_service.dart';
-import 'package:cuteshrew/pages/post_editor_page.dart';
+import 'package:cuteshrew/pages/deprecated/post_editor_page.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
 import 'package:cuteshrew/states/login_state.dart';

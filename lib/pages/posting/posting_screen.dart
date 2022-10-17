@@ -2,6 +2,9 @@ import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/login_token.dart';
 import 'package:cuteshrew/notifiers/posting_page_notifier.dart';
+import 'package:cuteshrew/pages/community/community_page.dart';
+import 'package:cuteshrew/pages/home/home_page.dart';
+import 'package:cuteshrew/pages/post_editor/post_editor_page.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
 import 'package:cuteshrew/states/login_state.dart';
@@ -77,7 +80,8 @@ class PostingPageLayout extends StatelessWidget {
           }
           if (state is DeletedDataPostingPageState) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              locator<NavigationService>().pushNamed(CommunityHomePageRoute);
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => HomePage()));
             });
           }
           if (state is UnknownErrorPostingPageState) {}
@@ -101,7 +105,8 @@ class NoDataPostingPageLayout extends StatelessWidget {
           ClickableText(
             text: "홈으로 돌아가기",
             onClick: () {
-              locator<NavigationService>().pushNamed(CommunityHomePageRoute);
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => HomePage()));
             },
           )
         ],
@@ -145,10 +150,11 @@ class LoadedDataPostingPageLayout extends StatelessWidget {
             size: 30,
             weight: FontWeight.w800,
             onClick: () {
-              locator<NavigationService>()
-                  .pushNamed(CommunityPageRoute, arguments: {
-                'communityInfo': postingPageState.communityInfo,
-              });
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CommunityPage(
+                          communityInfo: postingPageState.communityInfo)));
             },
           ),
         ),
@@ -160,12 +166,15 @@ class LoadedDataPostingPageLayout extends StatelessWidget {
               ? Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   OutlinedButton(
                       onPressed: () {
-                        locator<NavigationService>()
-                            .pushNamed(PostEditorPageRoute, arguments: {
-                          'communityInfo': postingPageState.communityInfo,
-                          'postDetail': postingPageState.postDetail,
-                          'isModify': true
-                        });
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PostEditorPage(
+                                      communityInfo:
+                                          postingPageState.communityInfo,
+                                      originPost: postingPageState.postDetail,
+                                      isModify: true,
+                                    )));
                       },
                       child: Row(
                         children: const [

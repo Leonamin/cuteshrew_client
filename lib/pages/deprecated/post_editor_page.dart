@@ -17,7 +17,7 @@ import 'package:cuteshrew/services/navigation_service.dart';
 // arguments
 // communityInfo: Community 포스팅 업로드시 커뮤니티 구분에 사용
 // postInfo: PostDetail[Optional] 포스팅 수정시 내용 가져오기
-// isModity: bool[Optional] 포스팅 새로작성, 수정인지 구분
+// isModify: bool[Optional] 포스팅 새로작성, 수정인지 구분
 class PostEditorPage extends StatelessWidget {
   static const pageName = '/write';
   final Map<String, dynamic> _arguments;
