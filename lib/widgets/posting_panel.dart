@@ -1,5 +1,5 @@
 import 'package:cuteshrew/model/models.dart';
-import 'package:cuteshrew/pages/posting_page.dart';
+import 'package:cuteshrew/pages/posting/posting_page.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
 import 'package:cuteshrew/widgets/posting_item.dart';
@@ -24,11 +24,13 @@ class PostingPanel extends StatelessWidget {
               child: PostingItem(
                 title: posts[index].title,
                 onClick: () {
-                  locator<NavigationService>().pushNamed(PostingPageRoute,
-                      arguments: {
-                        'communityInfo': community,
-                        'postId': posts[index].postId
-                      });
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) => PostingPage(
+                                communityInfo: community,
+                                postId: posts[index].postId,
+                              ))));
                 },
               ));
         },

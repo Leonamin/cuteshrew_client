@@ -2,7 +2,7 @@ import 'package:cuteshrew/pages/deprecated/auth_screen_page.dart';
 import 'package:cuteshrew/pages/deprecated/deprecated_community_page.dart';
 import 'package:cuteshrew/pages/error_page.dart';
 import 'package:cuteshrew/pages/post_editor_page.dart';
-import 'package:cuteshrew/pages/posting_page.dart';
+import 'package:cuteshrew/pages/deprecated/posting_page.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:flutter/material.dart';
 

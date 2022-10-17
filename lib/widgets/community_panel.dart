@@ -57,11 +57,11 @@ class CommunityPanel extends StatelessWidget {
               child: PostingItem(
                 title: posts[index].title,
                 onClick: () {
-                  locator<NavigationService>().pushNamed(PostingPageRoute,
-                      arguments: {
-                        'communityInfo': community,
-                        'postId': posts[index].postId
-                      });
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              CommunityPage(communityInfo: communityInfo)));
                 },
               ));
         },
