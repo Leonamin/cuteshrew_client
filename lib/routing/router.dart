@@ -1,5 +1,5 @@
 import 'package:cuteshrew/pages/deprecated/auth_screen_page.dart';
-import 'package:cuteshrew/pages/community_page.dart';
+import 'package:cuteshrew/pages/deprecated/deprecated_community_page.dart';
 import 'package:cuteshrew/pages/error_page.dart';
 import 'package:cuteshrew/pages/post_editor_page.dart';
 import 'package:cuteshrew/pages/posting_page.dart';

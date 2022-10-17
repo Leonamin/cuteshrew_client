@@ -87,6 +87,20 @@ class CuteshrewApiClient {
     }
     return false;
   }
+
+  Future<Community?> getCommunity(communityName, pageNum, postingCount) async {
+    final url = Uri.http(
+        baseUrl,
+        "$_communityUrl/$communityName$_pageUrl/$pageNum",
+        makeQuery(_queryNameCountPerPage, postingCount.toString()));
+
+    final response = await get(url);
+
+    if (response.statusCode == 200) {
+      return Community.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+    }
+    return null;
+  }
 /*
   Future<List<Community>?> getMainPage() async {
     final url = Uri.http(baseUrl, _communityUrl);

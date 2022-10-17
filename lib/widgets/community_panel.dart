@@ -1,4 +1,5 @@
 import 'package:cuteshrew/model/models.dart';
+import 'package:cuteshrew/pages/community/community_page.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
 import 'package:cuteshrew/widgets/clickable_text.dart';
@@ -25,8 +26,11 @@ class CommunityPanel extends StatelessWidget {
             size: 30,
             weight: FontWeight.w800,
             onClick: () {
-              locator<NavigationService>().pushNamed(CommunityPageRoute,
-                  arguments: {'communityInfo': communityInfo});
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          CommunityPage(communityInfo: communityInfo)));
             },
           ),
         ),
