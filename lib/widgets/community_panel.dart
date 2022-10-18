@@ -1,5 +1,6 @@
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/pages/community/community_page.dart';
+import 'package:cuteshrew/pages/posting/posting_page.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
 import 'package:cuteshrew/widgets/clickable_text.dart';
@@ -60,8 +61,10 @@ class CommunityPanel extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              CommunityPage(communityInfo: communityInfo)));
+                          builder: (context) => PostingPage(
+                                communityInfo: communityInfo,
+                                postId: posts[index].postId,
+                              )));
                 },
               ));
         },
