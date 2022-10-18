@@ -3,19 +3,27 @@ class PostDetail {
   String title;
   String body;
   bool isLocked;
+  int publishedAt;
+  int updatedAt;
 
-  PostDetail(
-      {required this.postId,
-      required this.title,
-      required this.body,
-      required this.isLocked});
+  PostDetail({
+    required this.postId,
+    required this.title,
+    required this.body,
+    required this.isLocked,
+    required this.publishedAt,
+    required this.updatedAt,
+  });
 
   factory PostDetail.fromJson(Map<String, dynamic> json) {
     return PostDetail(
-        postId: json['id'],
-        title: json['title'],
-        body: json['body'],
-        isLocked: json['is_locked']);
+      postId: json['id'],
+      title: json['title'],
+      body: json['body'],
+      isLocked: json['is_locked'],
+      publishedAt: json['published_at'],
+      updatedAt: json['updated_at'],
+    );
   }
 
   @override
@@ -25,7 +33,9 @@ class PostDetail {
           postId == other.postId &&
           title == other.title &&
           body == other.body &&
-          isLocked == other.isLocked);
+          isLocked == other.isLocked &&
+          publishedAt == other.publishedAt &&
+          updatedAt == other.updatedAt);
 
   @override
   int get hashCode => Object.hash(postId, title, body, isLocked);

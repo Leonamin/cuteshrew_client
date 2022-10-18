@@ -5,8 +5,6 @@ import 'package:cuteshrew/notifiers/posting_page_notifier.dart';
 import 'package:cuteshrew/pages/community/community_page.dart';
 import 'package:cuteshrew/pages/home/home_page.dart';
 import 'package:cuteshrew/pages/post_editor/post_editor_page.dart';
-import 'package:cuteshrew/routing/routes.dart';
-import 'package:cuteshrew/service_locator.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/states/posting_page_state.dart';
 import 'package:cuteshrew/widgets/clickable_text.dart';
@@ -14,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
-import 'package:cuteshrew/services/navigation_service.dart';
 
 class PostingScreen extends StatefulWidget {
   Community communityInfo;
@@ -42,7 +39,7 @@ class _PostingScreenState extends State<PostingScreen> {
         },
         child: ProxyProvider<PostingNotifier, PostingPageState>(
           update: (context, value, previous) => value.value,
-          child: PostingPageLayout(
+          child: PostingPageScreen(
             loginState: loginState,
           ),
         ),
@@ -51,8 +48,8 @@ class _PostingScreenState extends State<PostingScreen> {
   }
 }
 
-class PostingPageLayout extends StatelessWidget {
-  const PostingPageLayout({Key? key, required this.loginState})
+class PostingPageScreen extends StatelessWidget {
+  const PostingPageScreen({Key? key, required this.loginState})
       : super(key: key);
 
   final LoginState loginState;
@@ -67,16 +64,16 @@ class PostingPageLayout extends StatelessWidget {
             return Container();
           }
           if (state is LoadedDataPostingPageState) {
-            return LoadedDataPostingPageLayout(
+            return LoadedDataPostingPageScreen(
               postingPageState: state,
               loginState: loginState,
             );
           }
           if (state is NeedPasswordPostingPageState) {
-            return PasswordCertificationPostingPageLayout(state: state);
+            return PasswordCertificationPostingPageScreen(state: state);
           }
           if (state is InvalidPasswordPostingPageState) {
-            return PasswordCertificationPostingPageLayout(state: state);
+            return PasswordCertificationPostingPageScreen(state: state);
           }
           if (state is DeletedDataPostingPageState) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -85,15 +82,15 @@ class PostingPageLayout extends StatelessWidget {
             });
           }
           if (state is UnknownErrorPostingPageState) {}
-          return const NoDataPostingPageLayout();
+          return const NoDataPostingPageScreen();
         }(),
       );
     });
   }
 }
 
-class NoDataPostingPageLayout extends StatelessWidget {
-  const NoDataPostingPageLayout({Key? key}) : super(key: key);
+class NoDataPostingPageScreen extends StatelessWidget {
+  const NoDataPostingPageScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -115,8 +112,8 @@ class NoDataPostingPageLayout extends StatelessWidget {
   }
 }
 
-class LoadingPostingPageLayout extends StatelessWidget {
-  const LoadingPostingPageLayout({Key? key}) : super(key: key);
+class LoadingPostingPageScreen extends StatelessWidget {
+  const LoadingPostingPageScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -126,8 +123,8 @@ class LoadingPostingPageLayout extends StatelessWidget {
   }
 }
 
-class LoadedDataPostingPageLayout extends StatelessWidget {
-  const LoadedDataPostingPageLayout({
+class LoadedDataPostingPageScreen extends StatelessWidget {
+  const LoadedDataPostingPageScreen({
     Key? key,
     required this.postingPageState,
     required this.loginState,
@@ -136,6 +133,37 @@ class LoadedDataPostingPageLayout extends StatelessWidget {
   final LoadedDataPostingPageState postingPageState;
   final LoginState loginState;
 
+  // timestamp 초단위임
+  String formatTimeStamp(int timeStamp) {
+    DateTime postTime = DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000);
+    DateTime now = DateTime.now();
+    final gap = now.difference(postTime);
+    int currentTime = DateTime.now().millisecondsSinceEpoch;
+    int timeGap = currentTime - timeStamp * 1000;
+
+    /*
+      1분 이내: x초 전
+      1시간 이내: x분 전
+      하루 이내: x시간 전
+      3일 이내: x일 전
+      이후: xxxx년 xx월 x일 
+    */
+
+    if (gap.inMinutes < 1) {
+      return "${gap.inSeconds}초 전";
+    }
+    if (gap.inHours < 1) {
+      return "${gap.inMinutes}분 전";
+    }
+    if (gap.inDays < 1) {
+      return "${gap.inHours}시간 전";
+    }
+    if (gap.inDays < 4) {
+      return "${gap.inDays}일 전";
+    }
+    return "${postTime.year.toString()}년 ${postTime.month.toString().padLeft(2, '0')}월 ${postTime.day.toString().padLeft(2, '0')}일";
+  }
+
   @override
   Widget build(BuildContext context) {
     final LoginToken? token = loginState is AuthorizedState
@@ -143,6 +171,7 @@ class LoadedDataPostingPageLayout extends StatelessWidget {
         : null;
     return ListView(
       children: [
+        // 제목
         Container(
           padding: const EdgeInsets.only(left: 10.0),
           child: ClickableText(
@@ -161,6 +190,12 @@ class LoadedDataPostingPageLayout extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
+        // 시간
+        Text(formatTimeStamp(postingPageState.postDetail.publishedAt)),
+        const SizedBox(
+          height: 10,
+        ),
+        // 툴바
         Container(
           child: token != null
               ? Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -244,8 +279,8 @@ class LoadedDataPostingPageLayout extends StatelessWidget {
   // }
 }
 
-class PasswordCertificationPostingPageLayout extends StatelessWidget {
-  PasswordCertificationPostingPageLayout({
+class PasswordCertificationPostingPageScreen extends StatelessWidget {
+  PasswordCertificationPostingPageScreen({
     Key? key,
     required this.state,
   }) : super(key: key);
