@@ -1,4 +1,5 @@
 import 'package:cuteshrew/api/cuteshrew_api_client.dart';
+import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/login_token.dart';
 import 'package:cuteshrew/notifiers/posting_page_notifier.dart';
@@ -164,34 +165,95 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
     return "${postTime.year.toString()}년 ${postTime.month.toString().padLeft(2, '0')}월 ${postTime.day.toString().padLeft(2, '0')}일";
   }
 
+  Widget _makePostingHeader(context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      // 소속 게시판
+      GestureDetector(
+        child: Row(
+          children: [
+            Text(
+              postingPageState.communityInfo.communityShowName,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.blue,
+                fontWeight: FontWeight.w100,
+              ),
+            ),
+            const Icon(
+              Icons.arrow_right,
+              color: Colors.blue,
+            ),
+          ],
+        ),
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CommunityPage(
+                      communityInfo: postingPageState.communityInfo)));
+        },
+      ),
+      const SizedBox(
+        height: 5,
+      ),
+      // 제목
+      Text(
+        postingPageState.postDetail.title,
+        style: const TextStyle(
+            color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(
+        height: 5,
+      ),
+      Row(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(30)),
+            child: Container(
+                padding: const EdgeInsets.all(2),
+                margin: const EdgeInsets.all(2),
+                child: const CircleAvatar(
+                    backgroundColor: light,
+                    child: Icon(
+                      Icons.person_outline,
+                      color: dark,
+                    ))),
+          ),
+          const SizedBox(
+            width: 5,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                postingPageState.postDetail.userInfo.name,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+              Text(
+                formatTimeStamp(postingPageState.postDetail.publishedAt),
+                style: TextStyle(
+                    color: Colors.black.withOpacity(0.8), fontSize: 14),
+              )
+            ],
+          )
+        ],
+      ),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final LoginToken? token = loginState is AuthorizedState
         ? (loginState as AuthorizedState).loginToken
         : null;
     return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       children: [
-        // 제목
-        Container(
-          padding: const EdgeInsets.only(left: 10.0),
-          child: ClickableText(
-            text: postingPageState.communityInfo.communityShowName,
-            size: 30,
-            weight: FontWeight.w800,
-            onClick: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CommunityPage(
-                          communityInfo: postingPageState.communityInfo)));
-            },
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        // 시간
-        Text(formatTimeStamp(postingPageState.postDetail.publishedAt)),
+        _makePostingHeader(context),
         const SizedBox(
           height: 10,
         ),
@@ -199,7 +261,10 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
         Container(
           child: token != null
               ? Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  OutlinedButton(
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.grey,
+                          textStyle: const TextStyle(color: Colors.black)),
                       onPressed: () {
                         Navigator.push(
                             context,
@@ -220,7 +285,14 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
                           Text("수정")
                         ],
                       )),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey,
+                        textStyle: const TextStyle(color: Colors.black),
+                      ),
                       onPressed: () {
                         //TODO 임시로
                         // _showDialog(context, loginState);
@@ -238,8 +310,8 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
                 ])
               : null,
         ),
-        const SizedBox(
-          height: 10,
+        const Divider(
+          height: 5,
         ),
         Html(data: postingPageState.postDetail.body)
       ],

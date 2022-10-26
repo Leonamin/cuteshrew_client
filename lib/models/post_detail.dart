@@ -1,3 +1,5 @@
+import 'package:cuteshrew/models/user_info.dart';
+
 class PostDetail {
   int postId;
   String title;
@@ -5,15 +7,16 @@ class PostDetail {
   bool isLocked;
   int publishedAt;
   int updatedAt;
+  UserInfo userInfo;
 
-  PostDetail({
-    required this.postId,
-    required this.title,
-    required this.body,
-    required this.isLocked,
-    required this.publishedAt,
-    required this.updatedAt,
-  });
+  PostDetail(
+      {required this.postId,
+      required this.title,
+      required this.body,
+      required this.isLocked,
+      required this.publishedAt,
+      required this.updatedAt,
+      required this.userInfo});
 
   factory PostDetail.fromJson(Map<String, dynamic> json) {
     return PostDetail(
@@ -23,6 +26,7 @@ class PostDetail {
       isLocked: json['is_locked'],
       publishedAt: json['published_at'],
       updatedAt: json['updated_at'],
+      userInfo: UserInfo.fromJson(json['creator']),
     );
   }
 
@@ -35,8 +39,10 @@ class PostDetail {
           body == other.body &&
           isLocked == other.isLocked &&
           publishedAt == other.publishedAt &&
-          updatedAt == other.updatedAt);
+          updatedAt == other.updatedAt &&
+          userInfo == other.userInfo);
 
   @override
-  int get hashCode => Object.hash(postId, title, body, isLocked);
+  int get hashCode => Object.hash(
+      postId, title, body, isLocked, publishedAt, updatedAt, userInfo);
 }
