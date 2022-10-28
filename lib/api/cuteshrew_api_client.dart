@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:cuteshrew/model/models.dart';
+import 'package:cuteshrew/models/comment_create.dart';
+import 'package:cuteshrew/models/comment_detail.dart';
 import 'package:cuteshrew/models/login_token.dart';
 import 'package:cuteshrew/models/post_detail.dart';
 import 'package:http/http.dart';
@@ -12,6 +14,7 @@ class CuteshrewApiClient {
   final String _loginUrl = "/login";
   final String _userUrl = "/user/general";
   final String _pageUrl = '/page';
+  final String _commentUrl = '/comment';
 
   final String _queryNameCountPerPage = 'count_per_page';
   final String _queryNamePassword = 'password';
@@ -100,6 +103,104 @@ class CuteshrewApiClient {
       return Community.fromJson(json.decode(utf8.decode(response.bodyBytes)));
     }
     return null;
+  }
+
+  Future<List<CommentDetail>?> getCommentPage(
+      String communityName, int postId, int pageNum, int commentCount) async {
+    final url = Uri.http(
+        baseUrl,
+        "$_communityUrl/$communityName/$postId/$_commentUrl/$pageNum",
+        makeQuery(_queryNameCountPerPage, commentCount.toString()));
+
+    final response = await get(url);
+
+    if (response.statusCode == 200) {
+      return [
+        for (final e in json.decode(utf8.decode(response.bodyBytes)))
+          CommentDetail.fromJson(e),
+      ];
+    }
+    return null;
+  }
+
+  Future<bool> uploadComment(LoginToken token, String commentName, int postId,
+      CommentCreate comment) async {
+    final url =
+        Uri.http(baseUrl, "$_communityUrl/$commentName/$postId/$_commentUrl");
+
+    final response = await post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "${token.tokenType} ${token.accessToken}",
+        },
+        encoding: Encoding.getByName('utf-8'),
+        body: jsonEncode(comment.toJson()));
+
+    if (response.statusCode == 201) {
+      return true;
+    } else {
+      throw Exception('Failed to create comment');
+    }
+  }
+
+  Future<bool> uploadReply(LoginToken token, String commentName, int postId,
+      int group_id, CommentCreate comment) async {
+    final url = Uri.http(
+        baseUrl, "$_communityUrl/$commentName/$postId/$_commentUrl/$group_id");
+
+    final response = await post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "${token.tokenType} ${token.accessToken}",
+        },
+        encoding: Encoding.getByName('utf-8'),
+        body: jsonEncode(comment.toJson()));
+
+    if (response.statusCode == 201) {
+      return true;
+    } else {
+      throw Exception('Failed to create reply');
+    }
+  }
+
+  Future<bool> updateComment(LoginToken token, String commentName, int postId,
+      int commentId, CommentCreate comment) async {
+    final url = Uri.http(
+        baseUrl, "$_communityUrl/$commentName/$postId/$_commentUrl/$commentId");
+
+    final response = await post(url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "${token.tokenType} ${token.accessToken}",
+        },
+        encoding: Encoding.getByName('utf-8'),
+        body: jsonEncode(comment.toJson()));
+
+    if (response.statusCode == 201) {
+      return true;
+    } else {
+      throw Exception('Failed to update comment');
+    }
+  }
+
+  Future<bool> deleteComment(LoginToken token, String commentName, int postId,
+      int commentId, CommentCreate comment) async {
+    final url = Uri.http(
+        baseUrl, "$_communityUrl/$commentName/$postId/$_commentUrl/$commentId");
+
+    final response = await delete(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "${token.tokenType} ${token.accessToken}",
+      },
+    );
+
+    if (response.statusCode == 204) {
+      return true;
+    } else {
+      throw Exception('Failed to delete comment');
+    }
   }
 /*
   Future<List<Community>?> getMainPage() async {
