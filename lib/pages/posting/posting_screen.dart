@@ -6,6 +6,7 @@ import 'package:cuteshrew/notifiers/posting_page_notifier.dart';
 import 'package:cuteshrew/pages/community/community_page.dart';
 import 'package:cuteshrew/pages/home/home_page.dart';
 import 'package:cuteshrew/pages/post_editor/post_editor_page.dart';
+import 'package:cuteshrew/pages/posting/comment_screen.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/states/posting_page_state.dart';
 import 'package:cuteshrew/widgets/clickable_text.dart';
@@ -313,7 +314,15 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
         const Divider(
           height: 5,
         ),
-        Html(data: postingPageState.postDetail.body)
+        Html(data: postingPageState.postDetail.body),
+        const Divider(
+          height: 5,
+        ),
+        Expanded(
+          child: CommentScreen(
+              communityInfo: postingPageState.communityInfo,
+              postId: postingPageState.postId),
+        ),
       ],
     );
   }
