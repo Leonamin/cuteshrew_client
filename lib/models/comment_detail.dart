@@ -33,6 +33,6 @@ class CommentDetail {
         commentClass: json['comment_class'],
         order: json['order'],
         groupId: json['group_id'],
-        userInfo: json['creator']);
+        userInfo: UserInfo.fromJson(json['creator']));
   }
 }

@@ -109,7 +109,7 @@ class CuteshrewApiClient {
       String communityName, int postId, int pageNum, int commentCount) async {
     final url = Uri.http(
         baseUrl,
-        "$_communityUrl/$communityName/$postId/$_commentUrl/$pageNum",
+        "$_communityUrl/$communityName/$postId$_commentUrl/$pageNum",
         makeQuery(_queryNameCountPerPage, commentCount.toString()));
 
     final response = await get(url);
