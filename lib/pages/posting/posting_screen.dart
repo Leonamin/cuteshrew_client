@@ -318,11 +318,10 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
         const Divider(
           height: 5,
         ),
-        Expanded(
-          child: CommentScreen(
-              communityInfo: postingPageState.communityInfo,
-              postId: postingPageState.postId),
-        ),
+        // Expanded 위젯은 Column, Row, Flex 내에서만 사용 가능하다.
+        CommentScreen(
+            communityInfo: postingPageState.communityInfo,
+            postId: postingPageState.postId),
       ],
     );
   }
