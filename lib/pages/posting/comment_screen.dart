@@ -4,6 +4,7 @@ import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/comment_detail.dart';
 import 'package:cuteshrew/notifiers/comment_page_notifier.dart';
 import 'package:cuteshrew/states/comment_page_state.dart';
+import 'package:cuteshrew/widgets/list_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -86,12 +87,14 @@ class _LoadedCommentScreenState extends State<LoadedCommentScreen> {
   // 현재 페이지 번호로부터 전~후 최대 버튼 표시 범위 설정
   final int _pageRange = 4;
   // 페이지 번호 버튼 리스트
-  List<ButtonProperties> _pageButtonList = [];
+  List<ListButtonProperties> _pageButtonProperties = [];
 
   @override
   void initState() {
     super.initState();
-    _maxPage = widget.communityInfo.postingsCount ~/ widget.countPerPage + 1;
+
+    // 현재 페이지 기준으로 전 후 버튼 개수 만들기 알고리즘
+    _maxPage = widget.comments.length ~/ widget.countPerPage + 1;
     int minSelectablePage = widget.currentPageNum - _pageRange;
     int maxSelectablePage = widget.currentPageNum + _pageRange;
 
@@ -108,9 +111,16 @@ class _LoadedCommentScreenState extends State<LoadedCommentScreen> {
       minSelectablePage = 1;
       maxSelectablePage = _maxPage;
     }
-    _pageButtonList = List<ButtonProperties>.generate(
+    _pageButtonProperties = List<ListButtonProperties>.generate(
         maxSelectablePage - minSelectablePage + 1,
-        (index) => ButtonProperties(page: minSelectablePage + index));
+        (index) => ListButtonProperties(
+            id: minSelectablePage + index,
+            color: Colors.blue,
+            onPressed: () {
+              context
+                  .read<CommentPageNotifier>()
+                  .getCommentPage(_pageButtonProperties[index].id);
+            }));
   }
 
   Widget _makeCommentPanel(List<CommentDetail> comments) {
@@ -136,37 +146,9 @@ class _LoadedCommentScreenState extends State<LoadedCommentScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _makeCommentPanel(widget.comments),
-        //FIXME 이게 정말 최선인가? 진짜 보기 싫은 코드다
-        ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: 100.0),
-          child: Center(
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.all(15),
-                itemCount: _pageButtonList.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    width: 50,
-                    height: 50,
-                    child: ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                (_pageButtonList[index].page ==
-                                        widget.currentPageNum)
-                                    ? Colors.blue
-                                    : Colors.cyan)),
-                        onPressed: () {
-                          //todo
-                          context
-                              .read<CommentPageNotifier>()
-                              .getCommentPage(index);
-                        },
-                        child: Text('${_pageButtonList[index].page}',
-                            style: const TextStyle(color: Colors.white))),
-                  );
-                }),
-          ),
-        )
+        ListButton(
+            itemCount: _pageButtonProperties.length,
+            propertyList: _pageButtonProperties),
       ],
     );
   }

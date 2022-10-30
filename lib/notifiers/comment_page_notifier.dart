@@ -24,8 +24,7 @@ class CommentPageNotifier extends ValueNotifier<CommentPageState> {
   int get countPerPage => value.countPerPage;
 
   // UI -> n번 페이지 요청 -> n번 페이지로 변수 변경 및 요청
-  Future<void> getCommentPage(int currentPageNum,
-      [int countPerPage = 50]) async {
+  Future<void> getCommentPage(int currentPageNum) async {
     if (value is! LoadingCommentPageState) {
       value = CommentPageState.loading(
           postId: postId,
