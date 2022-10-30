@@ -3,6 +3,7 @@ import 'package:cuteshrew/constants/values.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/comment_detail.dart';
 import 'package:cuteshrew/notifiers/comment_page_notifier.dart';
+import 'package:cuteshrew/pages/posting/comment_card.dart';
 import 'package:cuteshrew/states/comment_page_state.dart';
 import 'package:cuteshrew/widgets/list_button.dart';
 import 'package:flutter/material.dart';
@@ -115,13 +116,26 @@ class _LoadedCommentScreenState extends State<LoadedCommentScreen> {
   }
 
   Widget _makeCommentPanel(List<CommentDetail> comments) {
+    if (comments.isEmpty) {
+      // 이렇게 하면 width를 부모의 크기만큼 사용한다. Expanded를 쓰면 ListView라서 에러발생
+      return Card(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              height: 40,
+            ),
+            const Text("댓글이 아직 없습니다."),
+            Container(),
+          ],
+        ),
+      );
+    }
     return ListView.separated(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: ((context, index) {
-          return Container(
-            child: Text(comments[index].comment),
-          );
+          return CommentCard(comment: comments[index]);
         }),
         separatorBuilder: (context, index) {
           return const Divider(
@@ -142,6 +156,7 @@ class _LoadedCommentScreenState extends State<LoadedCommentScreen> {
           propertyList: _pageButtonProperties,
           selectedIndex: _pageButtonProperties[0].id,
         ),
+        //CommentEditor()
       ],
     );
   }
