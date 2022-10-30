@@ -9,6 +9,7 @@ import 'package:cuteshrew/pages/post_editor/post_editor_page.dart';
 import 'package:cuteshrew/pages/posting/comment_screen.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/states/posting_page_state.dart';
+import 'package:cuteshrew/utils/utils.dart';
 import 'package:cuteshrew/widgets/clickable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -135,37 +136,6 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
   final LoadedDataPostingPageState postingPageState;
   final LoginState loginState;
 
-  // timestamp 초단위임
-  String formatTimeStamp(int timeStamp) {
-    DateTime postTime = DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000);
-    DateTime now = DateTime.now();
-    final gap = now.difference(postTime);
-    int currentTime = DateTime.now().millisecondsSinceEpoch;
-    int timeGap = currentTime - timeStamp * 1000;
-
-    /*
-      1분 이내: x초 전
-      1시간 이내: x분 전
-      하루 이내: x시간 전
-      3일 이내: x일 전
-      이후: xxxx년 xx월 x일 
-    */
-
-    if (gap.inMinutes < 1) {
-      return "${gap.inSeconds}초 전";
-    }
-    if (gap.inHours < 1) {
-      return "${gap.inMinutes}분 전";
-    }
-    if (gap.inDays < 1) {
-      return "${gap.inHours}시간 전";
-    }
-    if (gap.inDays < 4) {
-      return "${gap.inDays}일 전";
-    }
-    return "${postTime.year.toString()}년 ${postTime.month.toString().padLeft(2, '0')}월 ${postTime.day.toString().padLeft(2, '0')}일";
-  }
-
   Widget _makePostingHeader(context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       // 소속 게시판
@@ -235,7 +205,7 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
                     fontSize: 16),
               ),
               Text(
-                formatTimeStamp(postingPageState.postDetail.publishedAt),
+                Utils.formatTimeStamp(postingPageState.postDetail.publishedAt),
                 style: TextStyle(
                     color: Colors.black.withOpacity(0.8), fontSize: 14),
               )
