@@ -5,6 +5,7 @@ import 'package:cuteshrew/notifiers/community_page_notifier.dart';
 import 'package:cuteshrew/pages/post_editor/post_editor_page.dart';
 import 'package:cuteshrew/states/community_page_state.dart';
 import 'package:cuteshrew/states/login_state.dart';
+import 'package:cuteshrew/widgets/list_button.dart';
 import 'package:cuteshrew/widgets/posting_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -59,15 +60,6 @@ class CommunityScreen extends StatelessWidget {
   }
 }
 
-class ButtonProperties {
-  int page;
-  Color color;
-  bool selected;
-
-  ButtonProperties(
-      {required this.page, this.color = Colors.black, this.selected = false});
-}
-
 class LoadedDataCommunityScreen extends StatefulWidget {
   Community communityInfo; // 현재 커뮤니티 정보
   int currentPageNum; // 현재 페이지 번호
@@ -91,7 +83,7 @@ class _LoadedDataCommunityScreenState extends State<LoadedDataCommunityScreen> {
   // 현재 페이지 번호로부터 전~후 최대 버튼 표시 범위 설정
   final int _pageRange = 4;
   // 페이지 번호 버튼 리스트
-  List<ButtonProperties> _pageButtonList = [];
+  List<ListButtonProperties> _pageButtonProperties = [];
 
   @override
   void initState() {
@@ -113,9 +105,16 @@ class _LoadedDataCommunityScreenState extends State<LoadedDataCommunityScreen> {
       minSelectablePage = 1;
       maxSelectablePage = _maxPage;
     }
-    _pageButtonList = List<ButtonProperties>.generate(
+    _pageButtonProperties = List<ListButtonProperties>.generate(
         maxSelectablePage - minSelectablePage + 1,
-        (index) => ButtonProperties(page: minSelectablePage + index));
+        (index) => ListButtonProperties(
+            id: minSelectablePage + index,
+            color: Colors.blue,
+            onPressed: () {
+              context
+                  .read<CommunityPageNotifier>()
+                  .getCommunityInfo(_pageButtonProperties[index].id);
+            }));
   }
 
   @override
@@ -144,35 +143,11 @@ class _LoadedDataCommunityScreenState extends State<LoadedDataCommunityScreen> {
                 PostingPanel(
                     community: widget.communityInfo,
                     posts: widget.communityInfo.latestPostingList),
-                //FIXME 이게 정말 최선인가? 진짜 보기 싫은 코드다
-                ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: 100.0),
-                  child: Center(
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.all(15),
-                        itemCount: _pageButtonList.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            width: 50,
-                            height: 50,
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
-                                            (_pageButtonList[index].page ==
-                                                    widget.currentPageNum)
-                                                ? Colors.blue
-                                                : Colors.cyan)),
-                                onPressed: () {
-                                  //todo
-                                },
-                                child: Text('${_pageButtonList[index].page}',
-                                    style: TextStyle(color: Colors.white))),
-                          );
-                        }),
-                  ),
-                )
+                ListButton(
+                  itemCount: _pageButtonProperties.length,
+                  propertyList: _pageButtonProperties,
+                  selectedIndex: _pageButtonProperties[0].id,
+                ),
               ],
             )
           ],

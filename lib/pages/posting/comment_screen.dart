@@ -54,15 +54,6 @@ class CommentScreen extends StatelessWidget {
   }
 }
 
-class ButtonProperties {
-  int page;
-  Color color;
-  bool selected;
-
-  ButtonProperties(
-      {required this.page, this.color = Colors.black, this.selected = false});
-}
-
 class LoadedCommentScreen extends StatefulWidget {
   Community communityInfo; // 현재 커뮤니티 정보
   int currentPageNum; // 현재 페이지 번호
@@ -147,8 +138,10 @@ class _LoadedCommentScreenState extends State<LoadedCommentScreen> {
       children: [
         _makeCommentPanel(widget.comments),
         ListButton(
-            itemCount: _pageButtonProperties.length,
-            propertyList: _pageButtonProperties),
+          itemCount: _pageButtonProperties.length,
+          propertyList: _pageButtonProperties,
+          selectedIndex: _pageButtonProperties[0].id,
+        ),
       ],
     );
   }
