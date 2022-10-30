@@ -27,13 +27,11 @@ class ListButton extends StatefulWidget {
     this.backgroundColor,
     this.selectedColor,
     this.maxHeight,
-    required this.onPressed,
     required this.propertyList,
     this.selectedIndex,
   });
   Color? backgroundColor;
   Color? selectedColor;
-  VoidCallback onPressed;
   double? maxHeight;
   int itemCount;
   List<ListButtonProperties> propertyList;
