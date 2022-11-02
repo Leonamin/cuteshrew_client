@@ -1,5 +1,5 @@
 class CuteShrewApiConstants {
-  static const String scheme = "https";
+  static const String scheme = "http";
   static const String baseUrl = "cuteshrew.xyz";
   static const String _communityUrl = "/community";
   static const String _loginUrl = "/login";
@@ -10,10 +10,10 @@ class CuteShrewApiConstants {
   static const String _queryNameCountPerPage = 'count_per_page';
   static const String _queryNamePassword = 'password';
 
-  static Map<String, String> makeQuery(String q, v) => {q: v};
+  static Map<String, String> makeQuery(String q, String v) => {q: v};
   // MainPage URI
   static get getMainPage =>
-      Uri(host: baseUrl, scheme: scheme, path: _commentUrl);
+      Uri(host: baseUrl, scheme: scheme, path: _communityUrl);
 
   // Login URI
   static get requestLogin =>
@@ -25,7 +25,8 @@ class CuteShrewApiConstants {
           host: baseUrl,
           scheme: scheme,
           path: "$_communityUrl/$communityName$_pageUrl/$pageNum",
-          query: makeQuery(_queryNameCountPerPage, postingCount).toString());
+          queryParameters:
+              makeQuery(_queryNameCountPerPage, postingCount.toString()));
 
   // Posting URI
   static getPosting(String communityName, int postId, [String? password]) =>
@@ -33,8 +34,8 @@ class CuteShrewApiConstants {
           host: baseUrl,
           scheme: scheme,
           path: "$_communityUrl/$communityName/$postId",
-          query: password != null
-              ? makeQuery(_queryNamePassword, password).toString()
+          queryParameters: password != null
+              ? makeQuery(_queryNamePassword, password)
               : null);
 
   static uploadPosting(String communityName) => Uri(
@@ -55,7 +56,8 @@ class CuteShrewApiConstants {
           host: baseUrl,
           scheme: scheme,
           path: "$_communityUrl/$communityName/$postId$_commentUrl/$pageNum",
-          query: makeQuery(_queryNameCountPerPage, commentCount).toString());
+          queryParameters:
+              makeQuery(_queryNameCountPerPage, commentCount.toString()));
 
   static uploadComment(String communityName, int postId) => Uri(
         host: baseUrl,
