@@ -1,4 +1,4 @@
-import 'package:cuteshrew/notifiers/login_notifier.dart';
+import 'package:cuteshrew/providers/login_notifier.dart';
 import 'package:cuteshrew/pages/home/home_page.dart';
 import 'package:cuteshrew/strings/strings.dart';
 import 'package:flutter/material.dart';

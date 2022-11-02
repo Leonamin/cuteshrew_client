@@ -1,7 +1,7 @@
 import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/constants/values.dart';
 import 'package:cuteshrew/model/models.dart';
-import 'package:cuteshrew/notifiers/community_page_notifier.dart';
+import 'package:cuteshrew/providers/community_page_notifier.dart';
 import 'package:cuteshrew/pages/post_editor/post_editor_page.dart';
 import 'package:cuteshrew/states/community_page_state.dart';
 import 'package:cuteshrew/states/login_state.dart';

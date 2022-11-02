@@ -2,7 +2,7 @@ import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/constants/values.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/comment_detail.dart';
-import 'package:cuteshrew/notifiers/comment_page_notifier.dart';
+import 'package:cuteshrew/providers/comment_page_notifier.dart';
 import 'package:cuteshrew/pages/posting/comment_card.dart';
 import 'package:cuteshrew/states/comment_page_state.dart';
 import 'package:cuteshrew/widgets/list_button.dart';

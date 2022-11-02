@@ -1,6 +1,6 @@
 import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/helpers/responsiveness.dart';
-import 'package:cuteshrew/notifiers/login_notifier.dart';
+import 'package:cuteshrew/providers/login_notifier.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/widgets/large_main_screen.dart';
 import 'package:cuteshrew/widgets/small_main_screen.dart';

@@ -1,5 +1,5 @@
 import 'package:cuteshrew/constants/style.dart';
-import 'package:cuteshrew/notifiers/login_notifier.dart';
+import 'package:cuteshrew/providers/login_notifier.dart';
 import 'package:cuteshrew/pages/auth/auth_page.dart';
 import 'package:cuteshrew/pages/home/home_page.dart';
 import 'package:cuteshrew/states/login_state.dart';

@@ -1,5 +1,5 @@
 import 'package:cuteshrew/constants/style.dart';
-import 'package:cuteshrew/notifiers/login_notifier.dart';
+import 'package:cuteshrew/providers/login_notifier.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
 import 'package:cuteshrew/services/navigation_service.dart';

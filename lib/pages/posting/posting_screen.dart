@@ -2,7 +2,7 @@ import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/login_token.dart';
-import 'package:cuteshrew/notifiers/posting_page_notifier.dart';
+import 'package:cuteshrew/providers/posting_page_notifier.dart';
 import 'package:cuteshrew/pages/community/community_page.dart';
 import 'package:cuteshrew/pages/home/home_page.dart';
 import 'package:cuteshrew/pages/post_editor/post_editor_page.dart';

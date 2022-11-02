@@ -1,7 +1,7 @@
 import 'package:cuteshrew/helpers/responsiveness.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/post_detail.dart';
-import 'package:cuteshrew/notifiers/login_notifier.dart';
+import 'package:cuteshrew/providers/login_notifier.dart';
 import 'package:cuteshrew/pages/post_editor/large_post_editor_layout.dart';
 import 'package:cuteshrew/pages/post_editor/small_post_editor_layout.dart';
 import 'package:cuteshrew/states/login_state.dart';

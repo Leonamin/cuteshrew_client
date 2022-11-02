@@ -1,6 +1,6 @@
 import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/model/models.dart';
-import 'package:cuteshrew/notifiers/home_page_notifier.dart';
+import 'package:cuteshrew/providers/home_page_notifier.dart';
 import 'package:cuteshrew/states/home_page_state.dart';
 import 'package:cuteshrew/widgets/community_panel.dart';
 import 'package:flutter/material.dart';
