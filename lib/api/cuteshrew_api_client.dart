@@ -56,6 +56,36 @@ class CuteshrewApiClient {
     return null;
   }
 
+  Future<void> uploadPosting(
+      String communityName, LoginToken token, PostCreate posting) async {
+    final response =
+        await post(CuteShrewApiConstants.uploadPosting(communityName),
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "${token.tokenType} ${token.accessToken}"
+            },
+            encoding: Encoding.getByName('utf-8'),
+            body: jsonEncode(posting.toJson()));
+    if (response.statusCode != 201) {
+      throw Exception(response);
+    }
+  }
+
+  Future<void> updatePosting(String communityName, LoginToken token, int postId,
+      PostCreate posting) async {
+    final response =
+        await put(CuteShrewApiConstants.updatePosting(communityName, postId),
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "${token.tokenType} ${token.accessToken}"
+            },
+            encoding: Encoding.getByName('utf-8'),
+            body: jsonEncode(posting.toJson()));
+    if (response.statusCode != 202) {
+      throw Exception(response);
+    }
+  }
+
   Future<bool> deletePosting(
       String communityName, LoginToken token, int postId) async {
     final response = await delete(

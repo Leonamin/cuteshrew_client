@@ -44,6 +44,12 @@ class CuteShrewApiConstants {
         path: "$_communityUrl/$communityName",
       );
 
+  static updatePosting(String communityName, int postId) => Uri(
+        host: baseUrl,
+        scheme: scheme,
+        path: "$_communityUrl/$communityName/$postId",
+      );
+
   static deletePosting(String communityName, int postId) => Uri(
       host: baseUrl,
       scheme: scheme,
