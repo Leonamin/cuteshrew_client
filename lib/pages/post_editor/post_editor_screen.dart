@@ -1,10 +1,9 @@
 import 'dart:html';
 
+import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/post_detail.dart';
-import 'package:cuteshrew/network/http_service.dart';
-import 'package:cuteshrew/pages/community/community_page.dart';
-import 'package:cuteshrew/pages/posting/posting_page.dart';
+import 'package:cuteshrew/providers/posting_editor_provider.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,7 +48,22 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final HtmlEditorController _editorController = HtmlEditorController();
 
-  Widget _makeHeader() {
+  SnackBar _makeSnackBar(String content, [Color? backgroundColor]) {
+    return SnackBar(
+      content: Text(content),
+      backgroundColor: backgroundColor,
+    );
+  }
+
+  void _check(PostingEdiorState state) {
+    if (state == PostingEdiorState.COMPLETED) {
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(_makeSnackBar("포스팅 업로드 실패"));
+    }
+  }
+
+  Widget _makeHeader(LoginState loginState) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Column(
@@ -62,27 +76,74 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                 "글쓰기",
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
-              Row(
-                children: [
-                  OutlinedButton(
-                      onPressed: () {},
-                      child: Text("임시저장",
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black.withOpacity(0.8)))),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green[100]),
-                      child: Text(
-                        "등록",
-                        style:
-                            TextStyle(fontSize: 14, color: Colors.green[500]),
-                      ))
-                ],
+              Consumer<PostingEditorProvider>(
+                builder: (context, value, child) {
+                  return Row(
+                    children: [
+                      OutlinedButton(
+                          onPressed: () {},
+                          child: Text("임시저장",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black.withOpacity(0.8)))),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            //TODO Event 체크 하는 함수를 만들어서 onPressd() 내부를 좀 줄이자
+                            if (loginState is AuthorizedState) {
+                              if (_titleController.text.isEmpty) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(_makeSnackBar("제목이 비어있습니다."));
+                                return;
+                              }
+                              _editorController.getText().then((value) {
+                                final bodyHtml = value;
+                                if (bodyHtml.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      _makeSnackBar("내용이 비어있습니다."));
+                                  return;
+                                }
+                                PostCreate newPosting = PostCreate(
+                                    title: _titleController.text,
+                                    body: bodyHtml,
+                                    isLocked:
+                                        _passwordController.text.isNotEmpty,
+                                    password: _passwordController.text);
+                                widget.isModify
+                                    ? context
+                                        .read<PostingEditorProvider>()
+                                        .updatePosting(
+                                            widget.communityInfo.communityName,
+                                            loginState.loginToken,
+                                            newPosting,
+                                            widget.originPost!.postId)
+                                        .then((state) => _check(state))
+                                    : context
+                                        .read<PostingEditorProvider>()
+                                        .uploadPosting(
+                                          widget.communityInfo.communityName,
+                                          loginState.loginToken,
+                                          newPosting,
+                                        )
+                                        .then((state) => _check(state));
+                              });
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(_makeSnackBar("로그인이 필요합니다."));
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green[100]),
+                          child: Text(
+                            "등록",
+                            style: TextStyle(
+                                fontSize: 14, color: Colors.green[500]),
+                          ))
+                    ],
+                  );
+                },
               )
             ],
           ),
@@ -170,104 +231,20 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
     _titleController.text = widget.originPost?.title ?? "";
 
     return Consumer<LoginState>(
-      builder: (context, state, child) {
-        return Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-            child: Column(
-              children: [
-                _makeHeader(),
-                Expanded(child: _makeBody()),
-
-                // Expanded(
-                //     flex: 8,
-                //     child: Column(
-                //       children: [
-                //         Expanded(
-                //           flex: 8,
-                //           child: HtmlEditor(
-                //             controller: _bodyController, //required
-                //             htmlEditorOptions: HtmlEditorOptions(
-                //                 hint: "내용 입력점", initialText: originPost?.body),
-                //             otherOptions: const OtherOptions(
-                //               height: 400,
-                //             ),
-                //           ),
-                //         ),
-                //         const SizedBox(
-                //           height: 10,
-                //         ),
-                //         Expanded(
-                //           flex: 2,
-                //           child: Column(
-                //             children: [
-                //               _buildTextFormField("비밀번호", _passwordController),
-                //               Row(
-                //                 mainAxisAlignment: MainAxisAlignment.end,
-                //                 children: [
-                //                   IconButton(
-                //                       onPressed: () {},
-                //                       icon:
-                //                           const Icon(Icons.cancel_presentation)),
-                //                   IconButton(
-                //                       onPressed: () async {
-                //                         var bodyHtml =
-                //                             await _bodyController.getText();
-                //                         if (state is AuthorizedState) {
-                //                           PostCreate post = PostCreate(
-                //                               title: _titleController.text,
-                //                               body: bodyHtml,
-                //                               isLocked: _passwordController
-                //                                   .text.isNotEmpty,
-                //                               password: _passwordController.text);
-                //                           if (!isModify) {
-                //                             httpService
-                //                                 .uploadPosting(
-                //                                     communityInfo.communityName,
-                //                                     state.loginToken,
-                //                                     post)
-                //                                 .then((value) => {
-                //                                       if (value)
-                //                                         {Navigator.pop(context)}
-                //                                     });
-                //                           } else {
-                //                             httpService
-                //                                 .updatePosting(
-                //                                     communityInfo.communityName,
-                //                                     state.loginToken,
-                //                                     originPost?.postId ?? 0,
-                //                                     post)
-                //                                 .then((value) => {
-                //                                       if (value)
-                //                                         {
-                //                                           Navigator.push(
-                //                                               context,
-                //                                               MaterialPageRoute(
-                //                                                   builder:
-                //                                                       (context) =>
-                //                                                           PostingPage(
-                //                                                             communityInfo:
-                //                                                                 communityInfo,
-                //                                                             postId:
-                //                                                                 originPost!.postId,
-                //                                                           )))
-                //                                         }
-                //                                     });
-                //                           }
-                //                         }
-                //                       },
-                //                       icon: const Icon(Icons.note_add_outlined)),
-                //                 ],
-                //               ),
-                //             ],
-                //           ),
-                //         )
-                //       ],
-                //     )),
-              ],
-            ),
-          ),
-        );
+      builder: (context, loginState, child) {
+        return ChangeNotifierProvider(
+            create: (context) =>
+                PostingEditorProvider(api: context.read<CuteshrewApiClient>()),
+            child: Scaffold(
+                body: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 8.0),
+                    child: Column(
+                      children: [
+                        _makeHeader(loginState),
+                        Expanded(child: _makeBody())
+                      ],
+                    ))));
       },
     );
   }
