@@ -2,6 +2,7 @@ import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/constants/values.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/comment_detail.dart';
+import 'package:cuteshrew/pages/posting/comment_editor.dart';
 import 'package:cuteshrew/providers/comment_page_notifier.dart';
 import 'package:cuteshrew/pages/posting/comment_card.dart';
 import 'package:cuteshrew/states/comment_page_state.dart';
@@ -40,6 +41,7 @@ class CommentScreen extends StatelessWidget {
           if (state is LoadedCommentPageState) {
             return LoadedCommentScreen(
               communityInfo: state.communityInfo,
+              postId: postId,
               currentPageNum: state.currentPageNum,
               countPerPage: state.countPerPage,
               comments: state.comments,
@@ -57,12 +59,14 @@ class CommentScreen extends StatelessWidget {
 
 class LoadedCommentScreen extends StatefulWidget {
   Community communityInfo; // 현재 커뮤니티 정보
+  int postId;
   int currentPageNum; // 현재 페이지 번호
   int countPerPage; // 한 페이지에 표시할 게시물 수
   List<CommentDetail> comments;
 
   LoadedCommentScreen({
     required this.communityInfo,
+    required this.postId,
     required this.currentPageNum,
     required this.countPerPage,
     required this.comments,
@@ -150,6 +154,10 @@ class _LoadedCommentScreenState extends State<LoadedCommentScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        CommentEditor(
+          communityInfo: widget.communityInfo,
+          postId: widget.postId,
+        ),
         _makeCommentPanel(widget.comments),
         ListButton(
           itemCount: _pageButtonProperties.length,
