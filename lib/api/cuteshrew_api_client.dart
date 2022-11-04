@@ -126,7 +126,7 @@ class CuteshrewApiClient {
     return null;
   }
 
-  Future<bool> uploadComment(LoginToken token, String communityName, int postId,
+  Future<void> uploadComment(LoginToken token, String communityName, int postId,
       CommentCreate comment) async {
     final response =
         await post(CuteShrewApiConstants.uploadComment(communityName, postId),
@@ -137,14 +137,12 @@ class CuteshrewApiClient {
             encoding: Encoding.getByName('utf-8'),
             body: jsonEncode(comment.toJson()));
 
-    if (response.statusCode == 201) {
-      return true;
-    } else {
-      throw Exception('Failed to create comment');
+    if (response.statusCode != 201) {
+      throw Exception(response);
     }
   }
 
-  Future<bool> uploadReply(LoginToken token, String communityName, int postId,
+  Future<void> uploadReply(LoginToken token, String communityName, int postId,
       int groupId, CommentCreate comment) async {
     final response = await post(
         CuteShrewApiConstants.uploadReply(communityName, postId, groupId),
@@ -155,14 +153,12 @@ class CuteshrewApiClient {
         encoding: Encoding.getByName('utf-8'),
         body: jsonEncode(comment.toJson()));
 
-    if (response.statusCode == 201) {
-      return true;
-    } else {
-      throw Exception('Failed to create reply');
+    if (response.statusCode != 201) {
+      throw Exception(response);
     }
   }
 
-  Future<bool> updateComment(LoginToken token, String communityName, int postId,
+  Future<void> updateComment(LoginToken token, String communityName, int postId,
       int commentId, CommentCreate comment) async {
     final response = await post(
         CuteShrewApiConstants.basicCommentUrl(communityName, postId, commentId),
@@ -173,14 +169,12 @@ class CuteshrewApiClient {
         encoding: Encoding.getByName('utf-8'),
         body: jsonEncode(comment.toJson()));
 
-    if (response.statusCode == 201) {
-      return true;
-    } else {
-      throw Exception('Failed to update comment');
+    if (response.statusCode != 201) {
+      throw Exception(response);
     }
   }
 
-  Future<bool> deleteComment(LoginToken token, String communityName, int postId,
+  Future<void> deleteComment(LoginToken token, String communityName, int postId,
       int commentId, CommentCreate comment) async {
     final response = await delete(
       CuteShrewApiConstants.basicCommentUrl(communityName, postId, commentId),
@@ -190,10 +184,8 @@ class CuteshrewApiClient {
       },
     );
 
-    if (response.statusCode == 204) {
-      return true;
-    } else {
-      throw Exception('Failed to delete comment');
+    if (response.statusCode != 204) {
+      throw Exception(response);
     }
   }
 /*
