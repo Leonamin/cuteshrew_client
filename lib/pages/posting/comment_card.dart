@@ -11,6 +11,7 @@ class CommentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Card(
           color: Colors.grey[300],
@@ -37,7 +38,7 @@ class CommentCard extends StatelessWidget {
                             ))),
                   ),
                   const SizedBox(
-                    width: 5,
+                    width: 4,
                   ),
                   Text(
                     comment.userInfo.name,
@@ -61,20 +62,13 @@ class CommentCard extends StatelessWidget {
           ),
         ),
         const SizedBox(
-          height: 5,
+          height: 4,
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Row(
-            // 이렇게 하면 가로가 자동으로 부모에 맞게 꽉 채워진다 Expanded는 상위 위젯이 Listview라 사용 불가
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                comment.comment,
-                style: const TextStyle(color: Colors.black),
-              ),
-              Container(),
-            ],
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Text(
+            comment.comment,
+            style: const TextStyle(color: Colors.black),
           ),
         ),
       ],
