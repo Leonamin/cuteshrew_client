@@ -1,12 +1,22 @@
+import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/constants/style.dart';
+import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/comment_detail.dart';
+import 'package:cuteshrew/providers/comment_editor_provider.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CommentCard extends StatelessWidget {
-  CommentCard({super.key, required this.comment});
+  CommentCard(
+      {super.key,
+      required this.communityInfo,
+      required this.postId,
+      required this.comment});
 
+  Community communityInfo;
+  int postId;
   CommentDetail comment;
 
   int voteCount = 0;
@@ -90,86 +100,121 @@ class CommentCard extends StatelessWidget {
     return voteCount.toString();
   }
 
-  void _deleteComment(LoginState loginState) {
-    if (loginState is AuthorizedState) {
+  void _checkCommentState(CommentEdiorState state, BuildContext context) {
+    if (state == CommentEdiorState.COMPLETED) {
+      //TODO 어떻게하면 부모위젯을 리빌드 할 수 있을까?
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => PostingPage(
+      //           communityInfo: widget.communityInfo, postId: widget.postId),
+      //     ));
+      ScaffoldMessenger.of(context).showSnackBar(_makeSnackBar("댓글 삭제 완료"));
     } else {
-      // ScaffoldMessenger.of(context).showSnackBar(_makeSnackBar("로그인이 필요함"));
+      ScaffoldMessenger.of(context).showSnackBar(_makeSnackBar("댓글 삭제 실패"));
     }
   }
 
-  Widget _bottom() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        TextButton.icon(
-            style: TextButton.styleFrom(foregroundColor: Colors.green),
-            onPressed: () {},
-            icon: const Icon(Icons.thumb_up_alt_rounded),
-            label: Text(formatVoteCount(voteCount))),
-        TextButton.icon(
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
-            onPressed: () {},
-            icon: const Icon(
-              Icons.thumb_down_rounded,
+  void _deleteComment(LoginState loginState, BuildContext context) {
+    if (loginState is AuthorizedState) {
+      context
+          .read<CommentEditorProvider>()
+          .deleteComment(communityInfo.communityName, loginState.loginToken,
+              postId, comment.commentId)
+          .then((value) => _checkCommentState(value, context));
+    } else {
+      // Stateless에서는 인자를 주지 않으면 Undefined name 'context'가 발생한다.
+      // Stateful에서는 인자를 안줘도 해당 오류가 발생하지 않는다.
+      ScaffoldMessenger.of(context).showSnackBar(_makeSnackBar("로그인이 필요함"));
+    }
+  }
+
+  Widget _bottom(LoginState loginState, BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) =>
+          CommentEditorProvider(api: context.read<CuteshrewApiClient>()),
+      builder: (context, child) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            TextButton.icon(
+                style: TextButton.styleFrom(foregroundColor: Colors.green),
+                onPressed: () {},
+                icon: const Icon(Icons.thumb_up_alt_rounded),
+                label: Text(formatVoteCount(voteCount))),
+            TextButton.icon(
+                style: TextButton.styleFrom(foregroundColor: Colors.red),
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.thumb_down_rounded,
+                ),
+                label: Text(formatVoteCount(voteCount))),
+            TextButton.icon(
+              style: TextButton.styleFrom(foregroundColor: Colors.grey),
+              onPressed: () {},
+              icon: const Icon(
+                Icons.add_comment,
+              ),
+              label: const Text("답글"),
             ),
-            label: Text(formatVoteCount(voteCount))),
-        TextButton.icon(
-          style: TextButton.styleFrom(foregroundColor: Colors.grey),
-          onPressed: () {},
-          icon: const Icon(
-            Icons.add_comment,
-          ),
-          label: const Text("답글"),
-        ),
-        TextButton.icon(
-          style: TextButton.styleFrom(foregroundColor: Colors.grey),
-          onPressed: () {},
-          icon: const Icon(
-            Icons.share,
-          ),
-          label: const Text("공유"),
-        ),
-        TextButton.icon(
-          style: TextButton.styleFrom(foregroundColor: Colors.grey),
-          onPressed: () {},
-          icon: const Icon(
-            Icons.edit,
-          ),
-          label: const Text("수정"),
-        ),
-        TextButton.icon(
-          style: TextButton.styleFrom(foregroundColor: Colors.red),
-          onPressed: () {},
-          icon: const Icon(
-            Icons.delete,
-          ),
-          label: const Text("삭제"),
-        )
-      ],
+            // TODO 공간부족
+            // TextButton.icon(
+            //   style: TextButton.styleFrom(foregroundColor: Colors.grey),
+            //   onPressed: () {},
+            //   icon: const Icon(
+            //     Icons.share,
+            //   ),
+            //   label: const Text("공유"),
+            // ),
+            // TextButton.icon(
+            //   style: TextButton.styleFrom(foregroundColor: Colors.grey),
+            //   onPressed: () {},
+            //   icon: const Icon(
+            //     Icons.edit,
+            //   ),
+            //   label: const Text("수정"),
+            // ),
+            TextButton.icon(
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              onPressed: () {
+                _deleteComment(loginState, context);
+              },
+              icon: const Icon(
+                Icons.delete,
+              ),
+              label: const Text("삭제"),
+            )
+          ],
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _header(),
-        const SizedBox(
-          height: 4,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(
-            comment.comment,
-            style: const TextStyle(color: Colors.black),
-          ),
-        ),
-        const SizedBox(
-          height: 4,
-        ),
-        _bottom(),
-      ],
+    return Consumer<LoginState>(
+      builder: (context, state, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _header(),
+            const SizedBox(
+              height: 4,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                comment.comment,
+                style: const TextStyle(color: Colors.black),
+              ),
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            _bottom(state, context),
+          ],
+        );
+      },
     );
   }
 }

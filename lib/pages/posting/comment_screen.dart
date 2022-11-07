@@ -139,7 +139,10 @@ class _LoadedCommentScreenState extends State<LoadedCommentScreen> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: ((context, index) {
-          return CommentCard(comment: comments[index]);
+          return CommentCard(
+              communityInfo: widget.communityInfo,
+              postId: widget.postId,
+              comment: comments[index]);
         }),
         separatorBuilder: (context, index) {
           return const Divider(

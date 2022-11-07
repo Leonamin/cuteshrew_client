@@ -174,8 +174,8 @@ class CuteshrewApiClient {
     }
   }
 
-  Future<void> deleteComment(LoginToken token, String communityName, int postId,
-      int commentId, CommentCreate comment) async {
+  Future<void> deleteComment(
+      LoginToken token, String communityName, int postId, int commentId) async {
     final response = await delete(
       CuteShrewApiConstants.basicCommentUrl(communityName, postId, commentId),
       headers: {
