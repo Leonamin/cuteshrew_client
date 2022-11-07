@@ -81,6 +81,6 @@ class CuteShrewApiConstants {
       Uri(
         host: baseUrl,
         scheme: scheme,
-        path: "$_communityUrl/$communityName/$postId/$_commentUrl/$commentId",
+        path: "$_communityUrl/$communityName/$postId$_commentUrl/$commentId",
       );
 }
