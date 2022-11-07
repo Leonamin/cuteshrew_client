@@ -5,6 +5,8 @@ import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/comment_create.dart';
 import 'package:cuteshrew/pages/posting/posting_page.dart';
 import 'package:cuteshrew/providers/comment_editor_provider.dart';
+import 'package:cuteshrew/providers/comment_page_notifier.dart';
+import 'package:cuteshrew/states/comment_page_state.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/widgets/circle_user_icon.dart';
 import 'package:flutter/material.dart';
@@ -35,20 +37,19 @@ class _CommentEditorState extends State<CommentEditor> {
     );
   }
 
-  void _checkCommentState(CommentEdiorState state) {
+  void _checkCommentState(
+      CommentEdiorState state, CommentPageState commentPageState) {
     if (state == CommentEdiorState.COMPLETED) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PostingPage(
-                communityInfo: widget.communityInfo, postId: widget.postId),
-          ));
+      context
+          .read<CommentPageNotifier>()
+          .getCommentPage(commentPageState.currentPageNum);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(_makeSnackBar("댓글 업로드 실패"));
     }
   }
 
-  void _sendComment(LoginState loginState, CommentEditorProvider provider) {
+  void _sendComment(LoginState loginState, CommentPageState commentPageState,
+      CommentEditorProvider provider) {
     if (loginState is AuthorizedState) {
       if (_commentController.text.isEmpty) {
         ScaffoldMessenger.of(context)
@@ -60,7 +61,7 @@ class _CommentEditorState extends State<CommentEditor> {
       provider
           .uploadComment(widget.communityInfo.communityName,
               loginState.loginToken, widget.postId, newComment)
-          .then((state) => _checkCommentState(state));
+          .then((state) => _checkCommentState(state, commentPageState));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(_makeSnackBar("로그인이 필요합니다."));
     }
@@ -127,16 +128,21 @@ class _CommentEditorState extends State<CommentEditor> {
                 const SizedBox(
                   width: 8,
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      _sendComment(loginState, value);
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green[100]),
-                    child: Text(
-                      "등록",
-                      style: TextStyle(fontSize: 14, color: Colors.green[500]),
-                    ))
+                Consumer<CommentPageState>(
+                  builder: (context, commentPageState, child) {
+                    return ElevatedButton(
+                        onPressed: () {
+                          _sendComment(loginState, commentPageState, value);
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green[100]),
+                        child: Text(
+                          "등록",
+                          style:
+                              TextStyle(fontSize: 14, color: Colors.green[500]),
+                        ));
+                  },
+                )
               ],
             );
           },

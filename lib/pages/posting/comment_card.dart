@@ -3,6 +3,8 @@ import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/comment_detail.dart';
 import 'package:cuteshrew/providers/comment_editor_provider.dart';
+import 'package:cuteshrew/providers/comment_page_notifier.dart';
+import 'package:cuteshrew/states/comment_page_state.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -100,28 +102,28 @@ class CommentCard extends StatelessWidget {
     return voteCount.toString();
   }
 
-  void _checkCommentState(CommentEdiorState state, BuildContext context) {
+  void _checkCommentState(CommentEdiorState state,
+      CommentPageState commentPageState, BuildContext context) {
     if (state == CommentEdiorState.COMPLETED) {
-      //TODO 어떻게하면 부모위젯을 리빌드 할 수 있을까?
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) => PostingPage(
-      //           communityInfo: widget.communityInfo, postId: widget.postId),
-      //     ));
+      // FIXME 만약 현재 페이지가 마지막이고 댓글을 지울경우 페이지가 사라지는 경우 예외처리 필요
+      context
+          .read<CommentPageNotifier>()
+          .getCommentPage(commentPageState.currentPageNum);
       ScaffoldMessenger.of(context).showSnackBar(_makeSnackBar("댓글 삭제 완료"));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(_makeSnackBar("댓글 삭제 실패"));
     }
   }
 
-  void _deleteComment(LoginState loginState, BuildContext context) {
+  void _deleteComment(LoginState loginState, CommentPageState commentPageState,
+      BuildContext context) {
     if (loginState is AuthorizedState) {
       context
           .read<CommentEditorProvider>()
           .deleteComment(communityInfo.communityName, loginState.loginToken,
               postId, comment.commentId)
-          .then((value) => _checkCommentState(value, context));
+          .then(
+              (value) => _checkCommentState(value, commentPageState, context));
     } else {
       // Stateless에서는 인자를 주지 않으면 Undefined name 'context'가 발생한다.
       // Stateful에서는 인자를 안줘도 해당 오류가 발생하지 않는다.
@@ -129,7 +131,8 @@ class CommentCard extends StatelessWidget {
     }
   }
 
-  Widget _bottom(LoginState loginState, BuildContext context) {
+  Widget _bottom(LoginState loginState, CommentPageState commentPageState,
+      BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) =>
           CommentEditorProvider(api: context.read<CuteshrewApiClient>()),
@@ -177,7 +180,7 @@ class CommentCard extends StatelessWidget {
             TextButton.icon(
               style: TextButton.styleFrom(foregroundColor: Colors.red),
               onPressed: () {
-                _deleteComment(loginState, context);
+                _deleteComment(loginState, commentPageState, context);
               },
               icon: const Icon(
                 Icons.delete,
@@ -193,7 +196,7 @@ class CommentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<LoginState>(
-      builder: (context, state, child) {
+      builder: (context, loginState, child) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -211,7 +214,11 @@ class CommentCard extends StatelessWidget {
             const SizedBox(
               height: 4,
             ),
-            _bottom(state, context),
+            Consumer<CommentPageState>(
+              builder: (context, commentPageState, child) {
+                return _bottom(loginState, commentPageState, context);
+              },
+            ),
           ],
         );
       },
