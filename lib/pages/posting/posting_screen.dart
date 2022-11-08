@@ -2,6 +2,7 @@ import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/login_token.dart';
+import 'package:cuteshrew/pages/posting/posting_screen/password_certification_posting_page_screen.dart';
 import 'package:cuteshrew/providers/posting_page_notifier.dart';
 import 'package:cuteshrew/pages/community/community_page.dart';
 import 'package:cuteshrew/pages/home/home_page.dart';
@@ -73,10 +74,8 @@ class PostingPageScreen extends StatelessWidget {
             );
           }
           if (state is NeedPasswordPostingPageState) {
-            return PasswordCertificationPostingPageScreen(state: state);
-          }
-          if (state is InvalidPasswordPostingPageState) {
-            return PasswordCertificationPostingPageScreen(state: state);
+            return PasswordCertificationPostingPageScreen(
+                postingPageState: state);
           }
           if (state is DeletedDataPostingPageState) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -327,58 +326,4 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
   //     },
   //   );
   // }
-}
-
-class PasswordCertificationPostingPageScreen extends StatelessWidget {
-  PasswordCertificationPostingPageScreen({
-    Key? key,
-    required this.state,
-  }) : super(key: key);
-
-  final PostingPageState state;
-
-  static const int _passwordLengthLimit = 20;
-  final OutlineInputBorder _border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8.0),
-      borderSide: const BorderSide(color: Colors.transparent, width: 0));
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _passwordController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text("잠긴 게시물입니다!"),
-        TextFormField(
-          inputFormatters: [
-            LengthLimitingTextInputFormatter(_passwordLengthLimit)
-          ],
-          textInputAction: TextInputAction.go,
-          onFieldSubmitted: (value) {
-            context.read<PostingNotifier>().getPosting(value);
-          },
-          cursorColor: Colors.white,
-          controller: _passwordController,
-          validator: (text) {
-            if (text == null || text.isEmpty) {
-              return "이거 비어있으면 안됨";
-            }
-
-            return null;
-          },
-          decoration: InputDecoration(
-              labelText: "비밀번호",
-              border: _border,
-              errorBorder: _border,
-              enabledBorder: _border,
-              focusedBorder: _border,
-              filled: true,
-              fillColor: Colors.black54,
-              errorStyle: const TextStyle(
-                  color: Colors.redAccent, fontWeight: FontWeight.bold),
-              labelStyle: const TextStyle(color: Colors.white)),
-        )
-      ],
-    );
-  }
 }

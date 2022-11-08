@@ -36,11 +36,11 @@ abstract class PostingPageState {
     required int postId,
     required Community communityInfo,
   }) = NeedPasswordPostingPageState;
-  const factory PostingPageState.invalidPassword({
-    required int postId,
-    required Community communityInfo,
-    required int failCount,
-  }) = InvalidPasswordPostingPageState;
+  // const factory PostingPageState.invalidPassword({
+  //   required int postId,
+  //   required Community communityInfo,
+  //   required int failCount,
+  // }) = InvalidPasswordPostingPageState;
   const factory PostingPageState.loadingDelete({
     required int postId,
     required Community communityInfo,
@@ -115,26 +115,26 @@ class NeedPasswordPostingPageState extends PostingPageState {
   }) : super(postId: postId, communityInfo: communityInfo);
 }
 
-class InvalidPasswordPostingPageState extends PostingPageState {
-  const InvalidPasswordPostingPageState({
-    required int postId,
-    required Community communityInfo,
-    required this.failCount,
-  }) : super(postId: postId, communityInfo: communityInfo);
+// class InvalidPasswordPostingPageState extends PostingPageState {
+//   const InvalidPasswordPostingPageState({
+//     required int postId,
+//     required Community communityInfo,
+//     required this.failCount,
+//   }) : super(postId: postId, communityInfo: communityInfo);
 
-  final int failCount;
+//   final int failCount;
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is InvalidPasswordPostingPageState &&
-          postId == other.postId &&
-          communityInfo == other.communityInfo &&
-          failCount == other.failCount);
+//   @override
+//   bool operator ==(Object other) =>
+//       identical(this, other) ||
+//       (other is InvalidPasswordPostingPageState &&
+//           postId == other.postId &&
+//           communityInfo == other.communityInfo &&
+//           failCount == other.failCount);
 
-  @override
-  int get hashCode => Object.hash(super.hashCode, failCount.hashCode);
-}
+//   @override
+//   int get hashCode => Object.hash(super.hashCode, failCount.hashCode);
+// }
 
 class LoadingDeletePostingPageState extends PostingPageState {
   const LoadingDeletePostingPageState({

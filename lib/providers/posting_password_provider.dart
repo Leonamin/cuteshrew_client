@@ -3,97 +3,43 @@ import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/post_detail.dart';
 import 'package:flutter/cupertino.dart';
 
-abstract class PostingPasswordState {
+enum PostingPasswordState {
+  INVALID,
+  LOADING,
+  VALID,
+  ERROR,
+}
+
+class PostingPasswordProvider extends ChangeNotifier {
+  final CuteshrewApiClient api;
   final Community communityInfo;
   final int postId;
+  PostDetail? posting;
+  PostingPasswordState _state = PostingPasswordState.INVALID;
+  PostingPasswordState get state => _state;
 
-  const PostingPasswordState(
-      {required this.communityInfo, required this.postId});
-
-  const factory PostingPasswordState.invalid({
-    required Community communityInfo,
-    required int postId,
-  }) = InvalidPassword;
-
-  const factory PostingPasswordState.valid(
-      {required Community communityInfo,
-      required int postId,
-      required PostDetail postDetail}) = ValidPassword;
-
-  const factory PostingPasswordState.loading({
-    required Community communityInfo,
-    required int postId,
-  }) = LoadingPassword;
-
-  const factory PostingPasswordState.error({
-    required Community communityInfo,
-    required int postId,
-    required dynamic error,
-  }) = ErrorPassword;
-}
-
-class InvalidPassword extends PostingPasswordState {
-  const InvalidPassword({required Community communityInfo, required int postId})
-      : super(communityInfo: communityInfo, postId: postId);
-}
-
-class LoadingPassword extends PostingPasswordState {
-  const LoadingPassword({required Community communityInfo, required int postId})
-      : super(communityInfo: communityInfo, postId: postId);
-}
-
-class ValidPassword extends PostingPasswordState {
-  final PostDetail postDetail;
-  const ValidPassword(
-      {required Community communityInfo,
-      required int postId,
-      required this.postDetail})
-      : super(communityInfo: communityInfo, postId: postId);
-}
-
-class ErrorPassword extends PostingPasswordState {
-  final dynamic error;
-
-  const ErrorPassword(
-      {required Community communityInfo,
-      required int postId,
-      required this.error})
-      : super(communityInfo: communityInfo, postId: postId);
-}
-
-class PostingPasswordProvider extends ValueNotifier<PostingPasswordState> {
-  final CuteshrewApiClient api;
-  Community get communityInfo => value.communityInfo;
-  int get postId => value.postId;
   PostingPasswordProvider(
-      {required this.api,
-      required Community communityInfo,
-      required int postId})
-      : super(PostingPasswordState.invalid(
-            communityInfo: communityInfo, postId: postId));
+      {required this.api, required this.communityInfo, required this.postId});
 
-  Future<void> getPosting(String password) async {
-    value = PostingPasswordState.loading(
-        communityInfo: communityInfo, postId: postId);
-
-    if (value != LoadingPassword) {
+  Future<PostingPasswordState> getPosting(String password) async {
+    if (state != PostingPasswordState.LOADING) {
+      _state = PostingPasswordState.LOADING;
+      notifyListeners();
       try {
         final result =
             await api.getPosting(communityInfo.communityName, postId, password);
         if (result['code'] == 200) {
-          value = PostingPasswordState.valid(
-              communityInfo: communityInfo,
-              postId: postId,
-              postDetail: result['data']);
+          _state = PostingPasswordState.VALID;
+          posting = result['data'];
         } else if (result['code'] == 403) {
-          value = PostingPasswordState.invalid(
-              communityInfo: communityInfo, postId: postId);
+          _state = PostingPasswordState.INVALID;
         }
       } catch (e) {
         print(e);
-        value = PostingPasswordState.error(
-            communityInfo: communityInfo, postId: postId, error: e);
+        _state = PostingPasswordState.ERROR;
       }
     }
+    notifyListeners();
+    return state;
   }
 }
