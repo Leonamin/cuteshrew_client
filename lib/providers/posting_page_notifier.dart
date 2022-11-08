@@ -1,6 +1,7 @@
 import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/login_token.dart';
+import 'package:cuteshrew/models/post_detail.dart';
 import 'package:cuteshrew/states/posting_page_state.dart';
 import 'package:flutter/widgets.dart';
 
@@ -36,15 +37,17 @@ class PostingNotifier extends ValueNotifier<PostingPageState> {
             postId: postId,
             communityInfo: communityInfo,
           );
-        } else if (result['code'] == 403) {
-          //TODO need to change conditional
-          value = PostingPageState.invalidPassword(
-            postId: postId,
-            communityInfo: communityInfo,
-            // failCount: result['data']
-            failCount: 1,
-          );
-        } else {
+        }
+        // else if (result['code'] == 403) {
+        //   //TODO need to change conditional
+        //   value = PostingPageState.invalidPassword(
+        //     postId: postId,
+        //     communityInfo: communityInfo,
+        //     // failCount: result['data']
+        //     failCount: 1,
+        //   );
+        // }
+        else {
           value = PostingPageState.noData(
             postId: postId,
             communityInfo: communityInfo,
@@ -58,6 +61,12 @@ class PostingNotifier extends ValueNotifier<PostingPageState> {
         );
       }
     }
+  }
+
+  Future<void> setPosting(
+      Community communityInfo, int postId, PostDetail posting) async {
+    value = PostingPageState.loadedData(
+        postId: postId, communityInfo: communityInfo, postDetail: posting);
   }
 
   Future<void> deletePosting(LoginToken loginToken) async {
