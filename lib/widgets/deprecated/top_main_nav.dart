@@ -25,8 +25,8 @@ AppBar topMainNavigationBar(
                         ),
                       ),
                       onTap: () {
-                        locator<NavigationService>()
-                            .pushNamed(CommunityHomePageRoute);
+                        // locator<NavigationService>()
+                        //     .pushNamed(CommunityHomePageRoute);
                       },
                     ),
                   ],
@@ -95,10 +95,10 @@ class MainNavTitle extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              state is UnauthorizedState
-                  ? locator<NavigationService>()
-                      .pushNamed(AuthenticationPageRoute)
-                  : context.read<LoginNotifier>().logout();
+              // state is UnauthorizedState
+              //     ? locator<NavigationService>()
+              //         .pushNamed(AuthenticationPageRoute)
+              //     : context.read<LoginNotifier>().logout();
             },
             child: CustomText(
               text: state is UnauthorizedState ? Strings.login : Strings.logout,
