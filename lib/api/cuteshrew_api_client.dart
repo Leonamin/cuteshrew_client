@@ -56,6 +56,19 @@ class CuteshrewApiClient {
     return null;
   }
 
+  Future<void> postSignin(UserCreate user) async {
+    final response = await post(CuteShrewApiConstants.requestSignin,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        encoding: Encoding.getByName('utf-8'),
+        body: jsonEncode(user.toMap()));
+
+    if (response.statusCode != 200) {
+      throw Exception(response);
+    }
+  }
+
   Future<void> uploadPosting(
       String communityName, LoginToken token, PostCreate posting) async {
     final response =
@@ -217,21 +230,7 @@ class CuteshrewApiClient {
     return null;
   }
 
-  Future<bool> postSignin(UserCreate user) async {
-    final url = Uri.http(baseUrl, _userUrl);
-
-    final response = await post(url,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        encoding: Encoding.getByName('utf-8'),
-        body: jsonEncode(user.toMap()));
-
-    if (response.statusCode == 200) {
-      return true;
-    }
-    return false;
-  }
+  
 
   Future<bool> uploadPosting(
       String communityName, TestLoginToken token, PostCreate posting) async {

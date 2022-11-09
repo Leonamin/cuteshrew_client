@@ -1,5 +1,8 @@
+import 'package:cuteshrew/api/cuteshrew_api_client.dart';
+import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/providers/login_notifier.dart';
 import 'package:cuteshrew/pages/home/home_page.dart';
+import 'package:cuteshrew/providers/register_provider.dart';
 import 'package:cuteshrew/strings/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:cuteshrew/states/login_state.dart';
@@ -90,8 +93,33 @@ class _UnauthorizedAuthScreenState extends State<UnauthorizedAuthScreen> {
 
   bool isRegister = false;
 
-  bool isAlarmOccurred = false;
-  String alarmComment = "";
+  SnackBar _makeSnackBar(String content,
+      [Color? textColor, Color? backgroundColor]) {
+    return SnackBar(
+      content: Text(
+        content,
+        style: TextStyle(color: textColor),
+      ),
+      backgroundColor: backgroundColor,
+    );
+  }
+
+  void _checkState(BuildContext context, RegisterState state) {
+    if (state == RegisterState.COMPLETED) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(_makeSnackBar("회원가입이 완료되었습니다."));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          _makeSnackBar("회원가입을 실패하였습니다.", Colors.white, Colors.red));
+    }
+  }
+
+  void _postSignIn(BuildContext context, UserCreate newUser) {
+    context
+        .read<RegisterProvider>()
+        .postSignIn(newUser)
+        .then((value) => _checkState(context, value));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,147 +133,139 @@ class _UnauthorizedAuthScreenState extends State<UnauthorizedAuthScreen> {
         //       ),
         //       fit: BoxFit.cover),
         // ),
-        child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: SafeArea(
-              child: Form(
-                key: _formKey,
-                child: ListView(
-                  reverse: true,
-                  padding: const EdgeInsets.all(16),
-                  children: [
-                    const SizedBox(
-                      height: _textFormInterval,
-                    ),
-                    ButtonBar(
-                      children: [
-                        AnimatedContainer(
-                            height: isAlarmOccurred ? 60 : 0,
-                            duration: _duration,
-                            curve: _curve,
-                            child: Text(alarmComment)),
-                        const SizedBox(
-                          height: _textFormInterval,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              isRegister = false;
-                              isAlarmOccurred = false;
-                              alarmComment = "";
-                              _formKey.currentState?.reset();
-                            });
-                          },
-                          child: Text(
-                            Strings.login,
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: isRegister
-                                    ? FontWeight.w400
-                                    : FontWeight.w600,
-                                color: isRegister
-                                    ? Colors.black38
-                                    : Colors.black87),
+        child: ChangeNotifierProvider(
+          create: (context) =>
+              RegisterProvider(api: context.read<CuteshrewApiClient>()),
+          builder: (context, child) => Scaffold(
+              backgroundColor: Colors.transparent,
+              body: SafeArea(
+                child: Form(
+                  key: _formKey,
+                  child: ListView(
+                    reverse: true,
+                    padding: const EdgeInsets.all(16),
+                    children: [
+                      const SizedBox(
+                        height: _textFormInterval,
+                      ),
+                      ButtonBar(
+                        children: [
+                          // 로그인
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                isRegister = false;
+                                _formKey.currentState?.reset();
+                              });
+                            },
+                            child: Text(
+                              Strings.login,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: isRegister
+                                      ? FontWeight.w400
+                                      : FontWeight.w600,
+                                  color: isRegister
+                                      ? Colors.black38
+                                      : Colors.black87),
+                            ),
                           ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              isRegister = true;
-                              isAlarmOccurred = false;
-                              alarmComment = "";
-                              _formKey.currentState?.reset();
-                            });
-                          },
-                          child: Text(
-                            Strings.register,
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: isRegister
-                                    ? FontWeight.w600
-                                    : FontWeight.w400,
-                                color: isRegister
-                                    ? Colors.black87
-                                    : Colors.black38),
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: _textFormInterval,
-                    ),
-                    _buildTextFormField(
-                        Strings.labelNickname, _nicknameController),
-                    const SizedBox(
-                      height: _textFormInterval,
-                    ),
-                    AnimatedContainer(
+                          // 회원가입
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                isRegister = true;
+                                _formKey.currentState?.reset();
+                              });
+                            },
+                            child: Text(
+                              Strings.register,
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: isRegister
+                                      ? FontWeight.w600
+                                      : FontWeight.w400,
+                                  color: isRegister
+                                      ? Colors.black87
+                                      : Colors.black38),
+                            ),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: _textFormInterval,
+                      ),
+                      // 로그인/회원가입 닉네임
+                      _buildTextFormField(
+                          Strings.labelNickname, _nicknameController),
+                      const SizedBox(
+                        height: _textFormInterval,
+                      ),
+                      // 회원가입 이메일
+                      AnimatedContainer(
+                          height: isRegister ? 60 : 0,
+                          duration: _duration,
+                          curve: _curve,
+                          child: _buildTextFormField(
+                              Strings.labelEmail, _emailController)),
+                      const SizedBox(
+                        height: _textFormInterval,
+                      ),
+                      // 로그인/회원가입 비밀번호
+                      _buildTextFormField(
+                          Strings.labelPassword, _passwordController),
+                      const SizedBox(
+                        height: _textFormInterval,
+                      ),
+                      // 회원가입 비밀번호 확인
+                      AnimatedContainer(
                         height: isRegister ? 60 : 0,
                         duration: _duration,
                         curve: _curve,
                         child: _buildTextFormField(
-                            Strings.labelEmail, _emailController)),
-                    const SizedBox(
-                      height: _textFormInterval,
-                    ),
-                    _buildTextFormField(
-                        Strings.labelPassword, _passwordController),
-                    const SizedBox(
-                      height: _textFormInterval,
-                    ),
-                    AnimatedContainer(
-                      height: isRegister ? 60 : 0,
-                      duration: _duration,
-                      curve: _curve,
-                      child: _buildTextFormField(
-                          Strings.labelCPassword, _cPasswordController),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          if (!isRegister) {
-                            context.read<LoginNotifier>().login(
-                                _nicknameController.text,
-                                _passwordController.text);
-                          } else {
-                            // var result = await httpService.postSignin(
-                            //     UserCreate(
-                            //         _nicknameController.text,
-                            //         _emailController.text,
-                            //         _passwordController.text));
-
-                            // setState(() {
-                            //   isAlarmOccurred = true;
-                            //   alarmComment =
-                            //       result ? "회원가입 성공이요" : "회원가입 실패요";
-                            // });
-                          }
-                        }
-                      },
-                      style: flatButtonStyle,
-                      child: Text(
-                        isRegister ? Strings.register : Strings.login,
-                        style: const TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.w500),
+                            Strings.labelCPassword, _cPasswordController),
                       ),
-                    ),
-                    const Divider(
-                      height: 33,
-                      thickness: 1,
-                      color: Colors.white,
-                      indent: 16,
-                      endIndent: 16,
-                    ),
-                    const SizedBox(
-                      height: _textFormInterval * 8,
-                    ),
-                  ].reversed.toList(),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            if (!isRegister) {
+                              context.read<LoginNotifier>().login(
+                                  _nicknameController.text,
+                                  _passwordController.text);
+                            } else {
+                              var newUser = UserCreate(
+                                  _nicknameController.text,
+                                  _emailController.text,
+                                  _passwordController.text);
+                              _postSignIn(context, newUser);
+                            }
+                          }
+                        },
+                        style: flatButtonStyle,
+                        child: Text(
+                          isRegister ? Strings.register : Strings.login,
+                          style: const TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      const Divider(
+                        height: 33,
+                        thickness: 1,
+                        color: Colors.white,
+                        indent: 16,
+                        endIndent: 16,
+                      ),
+                      const SizedBox(
+                        height: _textFormInterval * 8,
+                      ),
+                    ].reversed.toList(),
+                  ),
                 ),
-              ),
-            )),
+              )),
+        ),
       ),
     );
   }

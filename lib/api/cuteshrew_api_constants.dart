@@ -19,6 +19,9 @@ class CuteShrewApiConstants {
   static get requestLogin =>
       Uri(host: baseUrl, scheme: scheme, path: _loginUrl);
 
+  static get requestSignin =>
+      Uri(host: baseUrl, scheme: scheme, path: _userUrl);
+
   // Community URI
   static getCommunity(String communityName, int pageNum, int postingCount) =>
       Uri(
