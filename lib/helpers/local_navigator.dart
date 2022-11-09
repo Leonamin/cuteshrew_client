@@ -6,6 +6,6 @@ import 'package:flutter/cupertino.dart';
 
 Navigator localNavigator() => Navigator(
       key: locator<NavigationService>().key,
-      initialRoute: CommunityHomePageRoute,
+      // initialRoute: CommunityHomePageRoute,
       onGenerateRoute: generateRoute,
     );

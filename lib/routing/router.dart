@@ -1,7 +1,10 @@
+import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/pages/auth/auth_page.dart';
 import 'package:cuteshrew/pages/community/community_page.dart';
 import 'package:cuteshrew/pages/error_page.dart';
 import 'package:cuteshrew/pages/home/home_page.dart';
+import 'package:cuteshrew/pages/post_editor/post_editor_page.dart';
+import 'package:cuteshrew/pages/posting/posting_page.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:flutter/material.dart';
 /*
@@ -14,6 +17,7 @@ import 'package:flutter/material.dart';
   /login: 로그인 페이지
 */
 
+//FIXME 무의미하게 communityInfo를 받는 것을 communityName으로 바꿔야함
 Route<dynamic> generateRoute(RouteSettings settings) {
   var uri = Uri.parse(settings.name ?? "");
 
@@ -35,14 +39,72 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     }
   }
 
-  // if (uri.pathSegments.length == 2) {
-  //   if (uri.pathSegments.first == CommunityPageName) {
-  //     var communityInfo = settings.arguments;
-  //     return MaterialPageRoute(
-  //       builder: (context) => CommunityPage(communityInfo: communityInfo),
-  //     );
-  //   }
-  // }
+  if (uri.pathSegments.length == 2) {
+    if (uri.pathSegments.first == CommunityPageName) {
+      String communityName = uri.pathSegments[1];
+      return MaterialPageRoute(
+        builder: (context) => CommunityPage(
+            communityInfo: Community(
+                communityName: communityName,
+                communityShowName: communityName,
+                latestPostingList: [],
+                postingsCount: 0),
+            currentPageNum: 0),
+      );
+    }
+  }
+
+  if (uri.pathSegments.length == 3) {
+    if (uri.pathSegments.first == CommunityPageName) {
+      String communityName = uri.pathSegments[1];
+
+      if (uri.pathSegments[2] == PostEditorPageName) {
+        var args;
+        if (settings.arguments != null) {
+          args = settings.arguments;
+        } else {
+          args = PostEditorPageArguments(null, false);
+        }
+        return MaterialPageRoute(
+          builder: (context) => PostEditorPage(
+              communityInfo: Community(
+                  communityName: communityName,
+                  communityShowName: communityName,
+                  latestPostingList: [],
+                  postingsCount: 0),
+              originPost: args.originPost,
+              isModify: args.isModify),
+        );
+      } else {
+        return MaterialPageRoute(
+          builder: (context) => PostingPage(
+            communityInfo: Community(
+                communityName: communityName,
+                communityShowName: communityName,
+                latestPostingList: [],
+                postingsCount: 0),
+            postId: int.parse(uri.pathSegments[2]),
+          ),
+        );
+      }
+    }
+  }
+
+  if (uri.pathSegments.length == 4) {
+    if (uri.pathSegments.first == CommunityPageName &&
+        uri.pathSegments[2] == 'page') {
+      String communityName = uri.pathSegments[1];
+      return MaterialPageRoute(
+        builder: (context) => CommunityPage(
+            communityInfo: Community(
+                communityName: communityName,
+                communityShowName: communityName,
+                latestPostingList: [],
+                postingsCount: 0),
+            currentPageNum: int.parse(uri.pathSegments[3])),
+      );
+    }
+  }
 
   return MaterialPageRoute(
     builder: (context) => PageNotFound(),

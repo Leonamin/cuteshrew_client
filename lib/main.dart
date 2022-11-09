@@ -3,6 +3,7 @@ import 'package:cuteshrew/helpers/no_transition_builder.dart';
 import 'package:cuteshrew/providers/login_notifier.dart';
 import 'package:cuteshrew/pages/home/home_page.dart';
 import 'package:cuteshrew/routing/router.dart';
+import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -33,24 +34,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Cute Shrew',
-        theme: ThemeData(
-          primarySwatch: Colors.green,
-          textTheme: GoogleFonts.mulishTextTheme(Theme.of(context).textTheme)
-              .apply(bodyColor: Colors.black),
-          pageTransitionsTheme: PageTransitionsTheme(
-            builders: kIsWeb
-                ? {
-                    // No animations for every OS if the app running on the web
-                    for (final platform in TargetPlatform.values)
-                      platform: const NoTransitionsBuilder(),
-                  }
-                : const {
-                    // handel other platforms you are targeting
-                  },
-          ),
+      title: 'Cute Shrew',
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        textTheme: GoogleFonts.mulishTextTheme(Theme.of(context).textTheme)
+            .apply(bodyColor: Colors.black),
+        pageTransitionsTheme: PageTransitionsTheme(
+          builders: kIsWeb
+              ? {
+                  // No animations for every OS if the app running on the web
+                  for (final platform in TargetPlatform.values)
+                    platform: const NoTransitionsBuilder(),
+                }
+              : const {
+                  // handel other platforms you are targeting
+                },
         ),
-        onGenerateRoute: generateRoute,
-        home: HomePage());
+      ),
+      onGenerateRoute: generateRoute,
+      initialRoute: HomePageRoute,
+    );
   }
 }

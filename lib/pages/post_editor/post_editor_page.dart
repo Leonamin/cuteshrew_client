@@ -9,6 +9,13 @@ import 'package:cuteshrew/widgets/main_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+class PostEditorPageArguments {
+  PostDetail? originPost;
+  bool isModify;
+
+  PostEditorPageArguments(this.originPost, this.isModify);
+}
+
 class PostEditorPage extends StatelessWidget {
   Community communityInfo;
   PostDetail? originPost;
