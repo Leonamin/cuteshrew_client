@@ -2,6 +2,7 @@ import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/providers/login_notifier.dart';
 import 'package:cuteshrew/pages/auth/auth_page.dart';
 import 'package:cuteshrew/pages/home/home_page.dart';
+import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
@@ -22,11 +23,7 @@ AppBar mainAppBar(BuildContext context, GlobalKey<ScaffoldState> key) => AppBar(
                         ),
                       ),
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomePage(),
-                            ));
+                        Navigator.pushNamed(context, Routes.HomePageRoute);
                       },
                     ),
                   ],
@@ -96,11 +93,7 @@ class MainNavTitle extends StatelessWidget {
           InkWell(
             onTap: () {
               state is UnauthorizedState
-                  ? Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const AuthPage(),
-                      ))
+                  ? Navigator.pushNamed(context, Routes.LoginPageRoute)
                   : context.read<LoginNotifier>().logout();
             },
             child: CustomText(

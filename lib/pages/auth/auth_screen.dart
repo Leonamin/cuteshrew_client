@@ -3,6 +3,7 @@ import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/providers/login_notifier.dart';
 import 'package:cuteshrew/pages/home/home_page.dart';
 import 'package:cuteshrew/providers/register_provider.dart';
+import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/strings/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:cuteshrew/states/login_state.dart';
@@ -29,11 +30,7 @@ class AuthScreen extends StatelessWidget {
           // FIXME 이거 없이 하면 setState() or markNeedsBuild() called during build.가 발생한다.
           // state 변경되면 화면 전환되게 하는거 없나
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomePage(),
-                ));
+            Navigator.pushNamed(context, Routes.HomePageRoute);
           });
         }
         //TODO

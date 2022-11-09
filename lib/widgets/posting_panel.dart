@@ -24,13 +24,10 @@ class PostingPanel extends StatelessWidget {
               child: PostingItem(
                 title: posts[index].title,
                 onClick: () {
-                  Navigator.push(
+                  Navigator.pushNamed(
                       context,
-                      MaterialPageRoute(
-                          builder: ((context) => PostingPage(
-                                communityInfo: community,
-                                postId: posts[index].postId,
-                              ))));
+                      Routes.PostingPageRoute(
+                          community.communityName, posts[index].postId));
                 },
               ));
         },

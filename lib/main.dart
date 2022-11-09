@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       onGenerateRoute: generateRoute,
-      initialRoute: HomePageRoute,
+      initialRoute: Routes.HomePageRoute,
     );
   }
 }

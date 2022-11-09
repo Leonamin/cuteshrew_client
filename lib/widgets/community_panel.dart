@@ -27,11 +27,8 @@ class CommunityPanel extends StatelessWidget {
             size: 30,
             weight: FontWeight.w800,
             onClick: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          CommunityPage(communityInfo: communityInfo)));
+              Navigator.pushNamed(context,
+                  Routes.CommuintyNamePageRoute(communityInfo.communityName));
             },
           ),
         ),
@@ -58,13 +55,10 @@ class CommunityPanel extends StatelessWidget {
               child: PostingItem(
                 title: posts[index].title,
                 onClick: () {
-                  Navigator.push(
+                  Navigator.pushNamed(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => PostingPage(
-                                communityInfo: communityInfo,
-                                postId: posts[index].postId,
-                              )));
+                      Routes.PostingPageRoute(
+                          communityInfo.communityName, posts[index].postId));
                 },
               ));
         },

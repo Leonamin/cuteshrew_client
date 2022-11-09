@@ -3,6 +3,7 @@ import 'package:cuteshrew/constants/values.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/providers/community_page_notifier.dart';
 import 'package:cuteshrew/pages/post_editor/post_editor_page.dart';
+import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/states/community_page_state.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/widgets/list_button.dart';
@@ -155,13 +156,10 @@ class _LoadedDataCommunityScreenState extends State<LoadedDataCommunityScreen> {
         floatingActionButton: state is AuthorizedState
             ? FloatingActionButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushNamed(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => PostEditorPage(
-                                communityInfo: widget.communityInfo,
-                                isModify: false,
-                              )));
+                      Routes.PostEditorPageRoute(
+                          widget.communityInfo.communityName));
                 },
                 child: const Icon(Icons.note_add),
               )

@@ -8,6 +8,7 @@ import 'package:cuteshrew/pages/community/community_page.dart';
 import 'package:cuteshrew/pages/home/home_page.dart';
 import 'package:cuteshrew/pages/post_editor/post_editor_page.dart';
 import 'package:cuteshrew/pages/posting/comment_screen.dart';
+import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/states/posting_page_state.dart';
 import 'package:cuteshrew/utils/utils.dart';
@@ -79,8 +80,7 @@ class PostingPageScreen extends StatelessWidget {
           }
           if (state is DeletedDataPostingPageState) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => HomePage()));
+              Navigator.pushNamed(context, Routes.HomePageRoute);
             });
           }
           if (state is UnknownErrorPostingPageState) {}
@@ -104,8 +104,7 @@ class NoDataPostingPageScreen extends StatelessWidget {
           ClickableText(
             text: "홈으로 돌아가기",
             onClick: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => HomePage()));
+              Navigator.pushNamed(context, Routes.HomePageRoute);
             },
           )
         ],
@@ -156,11 +155,10 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
           ],
         ),
         onTap: () {
-          Navigator.push(
+          Navigator.pushNamed(
               context,
-              MaterialPageRoute(
-                  builder: (context) => CommunityPage(
-                      communityInfo: postingPageState.communityInfo)));
+              Routes.CommuintyNamePageRoute(
+                  postingPageState.communityInfo.communityName));
         },
       ),
       const SizedBox(
@@ -236,15 +234,12 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
                           backgroundColor: Colors.grey,
                           textStyle: const TextStyle(color: Colors.black)),
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushNamed(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => PostEditorPage(
-                                      communityInfo:
-                                          postingPageState.communityInfo,
-                                      originPost: postingPageState.postDetail,
-                                      isModify: true,
-                                    )));
+                            Routes.PostEditorPageRoute(
+                                postingPageState.communityInfo.communityName),
+                            arguments: PostEditorPageArguments(
+                                postingPageState.postDetail, true));
                       },
                       child: Row(
                         children: const [
