@@ -1,3 +1,4 @@
+import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/user_info.dart';
 
 class PostDetail {
@@ -8,26 +9,29 @@ class PostDetail {
   int publishedAt;
   int updatedAt;
   UserInfo userInfo;
+  CommunityPreview ownCommunity;
 
-  PostDetail(
-      {required this.postId,
-      required this.title,
-      required this.body,
-      required this.isLocked,
-      required this.publishedAt,
-      required this.updatedAt,
-      required this.userInfo});
+  PostDetail({
+    required this.postId,
+    required this.title,
+    required this.body,
+    required this.isLocked,
+    required this.publishedAt,
+    required this.updatedAt,
+    required this.userInfo,
+    required this.ownCommunity,
+  });
 
   factory PostDetail.fromJson(Map<String, dynamic> json) {
     return PostDetail(
-      postId: json['id'],
-      title: json['title'],
-      body: json['body'],
-      isLocked: json['is_locked'],
-      publishedAt: json['published_at'],
-      updatedAt: json['updated_at'],
-      userInfo: UserInfo.fromJson(json['creator']),
-    );
+        postId: json['id'],
+        title: json['title'],
+        body: json['body'],
+        isLocked: json['is_locked'],
+        publishedAt: json['published_at'],
+        updatedAt: json['updated_at'],
+        userInfo: UserInfo.fromJson(json['creator']),
+        ownCommunity: CommunityPreview.fromJson(json['own_community']));
   }
 
   @override

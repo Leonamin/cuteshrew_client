@@ -52,6 +52,24 @@ class Community {
   }
 }
 
+class CommunityPreview {
+  final int id;
+  final String communityName;
+  final String communityShowName;
+  CommunityPreview({
+    required this.id,
+    required this.communityName,
+    required this.communityShowName,
+  });
+
+  factory CommunityPreview.fromJson(Map<String, dynamic> json) {
+    return CommunityPreview(
+        id: json['id'],
+        communityName: json['name'],
+        communityShowName: json['showname']);
+  }
+}
+
 class Login {
   final String username;
   final String password;
