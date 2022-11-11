@@ -63,13 +63,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     if (uri.pathSegments.first == Routes.CommunityPageName) {
       String communityName = uri.pathSegments[1];
       return MaterialPageRoute(
-        builder: (context) => CommunityPage(
-            communityInfo: Community(
-                communityName: communityName,
-                communityShowName: communityName,
-                latestPostingList: [],
-                postingsCount: 0),
-            currentPageNum: 0),
+        builder: (context) =>
+            CommunityPage(communityName: communityName, currentPageNum: 0),
       );
     }
   }
@@ -116,11 +111,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       String communityName = uri.pathSegments[1];
       return MaterialPageRoute(
         builder: (context) => CommunityPage(
-            communityInfo: Community(
-                communityName: communityName,
-                communityShowName: communityName,
-                latestPostingList: [],
-                postingsCount: 0),
+            communityName: communityName,
             currentPageNum: int.parse(uri.pathSegments[3])),
       );
     }

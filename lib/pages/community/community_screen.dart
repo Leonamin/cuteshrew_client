@@ -2,7 +2,6 @@ import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/constants/values.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/providers/community_page_notifier.dart';
-import 'package:cuteshrew/pages/post_editor/post_editor_page.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/states/community_page_state.dart';
 import 'package:cuteshrew/states/login_state.dart';
@@ -18,11 +17,11 @@ currentPageNum: 받아올 페이지 번호 없으면 기본 1번 시작(추후 u
 class CommunityScreen extends StatelessWidget {
   CommunityScreen({
     Key? key,
-    required this.communityInfo,
+    required this.communityName,
     this.currentPageNum,
   }) : super(key: key);
 
-  Community communityInfo;
+  String communityName;
   int? currentPageNum;
 
   @override
@@ -31,7 +30,11 @@ class CommunityScreen extends StatelessWidget {
       create: (context) {
         final notifier = CommunityPageNotifier(
             api: context.read<CuteshrewApiClient>(),
-            communityInfo: communityInfo,
+            communityInfo: Community(
+                communityName: communityName,
+                communityShowName: "",
+                latestPostingList: [],
+                postingsCount: 0),
             currentPageNum: currentPageNum ?? 1,
             countPerPage: defaultCountPerPage);
         notifier.getCommunityInfo(currentPageNum ?? 1);

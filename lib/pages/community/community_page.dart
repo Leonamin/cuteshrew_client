@@ -9,12 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CommunityPage extends StatelessWidget {
-  Community communityInfo;
+  String communityName;
   int? currentPageNum;
 
   CommunityPage({
     Key? key,
-    required this.communityInfo,
+    required this.communityName,
     this.currentPageNum,
   }) : super(key: key);
 
@@ -30,11 +30,11 @@ class CommunityPage extends StatelessWidget {
           drawer: const Drawer(),
           body: ResponsiveWidget(
             largeScreen: LargeCommunityLayout(
-              communityInfo: communityInfo,
+              communityName: communityName,
               currentPageNum: currentPageNum,
             ),
             smallScreen: SmallCommunityLayout(
-              communityInfo: communityInfo,
+              communityName: communityName,
               currentPageNum: currentPageNum,
             ),
           )),

@@ -3,10 +3,10 @@ import 'package:cuteshrew/pages/community/community_screen.dart';
 import 'package:flutter/material.dart';
 
 class SmallCommunityLayout extends StatelessWidget {
-  Community communityInfo;
+  String communityName;
   int? currentPageNum;
   SmallCommunityLayout(
-      {Key? key, required this.communityInfo, this.currentPageNum})
+      {Key? key, required this.communityName, this.currentPageNum})
       : super(key: key);
 
   @override
@@ -14,7 +14,7 @@ class SmallCommunityLayout extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: CommunityScreen(
-          communityInfo: communityInfo,
+          communityName: communityName,
           currentPageNum: currentPageNum,
         ));
   }
