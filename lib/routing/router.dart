@@ -93,11 +93,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       } else {
         return MaterialPageRoute(
           builder: (context) => PostingPage(
-            communityInfo: Community(
-                communityName: communityName,
-                communityShowName: communityName,
-                latestPostingList: [],
-                postingsCount: 0),
+            communityName: communityName,
             postId: int.parse(uri.pathSegments[2]),
           ),
         );

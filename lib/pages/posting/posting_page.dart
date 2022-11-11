@@ -1,5 +1,4 @@
 import 'package:cuteshrew/helpers/responsiveness.dart';
-import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/providers/login_notifier.dart';
 import 'package:cuteshrew/pages/posting/large_posting_layout.dart';
 import 'package:cuteshrew/pages/posting/small_posting_layout.dart';
@@ -9,9 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PostingPage extends StatelessWidget {
-  Community communityInfo;
+  String communityName;
   int postId;
-  PostingPage({Key? key, required this.communityInfo, required this.postId})
+  PostingPage({Key? key, required this.communityName, required this.postId})
       : super(key: key);
 
   @override
@@ -26,11 +25,11 @@ class PostingPage extends StatelessWidget {
           drawer: const Drawer(),
           body: ResponsiveWidget(
             largeScreen: LargePostingLayout(
-              communityInfo: communityInfo,
+              communityName: communityName,
               postId: postId,
             ),
             smallScreen: SmallPostingLayout(
-              communityInfo: communityInfo,
+              communityName: communityName,
               postId: postId,
             ),
           )),

@@ -4,8 +4,6 @@ import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/login_token.dart';
 import 'package:cuteshrew/pages/posting/posting_screen/password_certification_posting_page_screen.dart';
 import 'package:cuteshrew/providers/posting_page_notifier.dart';
-import 'package:cuteshrew/pages/community/community_page.dart';
-import 'package:cuteshrew/pages/home/home_page.dart';
 import 'package:cuteshrew/pages/post_editor/post_editor_page.dart';
 import 'package:cuteshrew/pages/posting/comment_screen.dart';
 import 'package:cuteshrew/routing/routes.dart';
@@ -14,15 +12,14 @@ import 'package:cuteshrew/states/posting_page_state.dart';
 import 'package:cuteshrew/utils/utils.dart';
 import 'package:cuteshrew/widgets/clickable_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 
 class PostingScreen extends StatefulWidget {
-  Community communityInfo;
+  String communityName;
   int postId;
 
-  PostingScreen({Key? key, required this.communityInfo, required this.postId})
+  PostingScreen({Key? key, required this.communityName, required this.postId})
       : super(key: key);
 
   @override
@@ -37,7 +34,11 @@ class _PostingScreenState extends State<PostingScreen> {
         create: (context) {
           final notifier = PostingNotifier(
               postId: widget.postId,
-              communityInfo: widget.communityInfo,
+              communityInfo: Community(
+                  communityName: widget.communityName,
+                  communityShowName: widget.communityName,
+                  latestPostingList: [],
+                  postingsCount: 0),
               api: context.read<CuteshrewApiClient>());
           notifier.getPosting();
           return notifier;
@@ -141,7 +142,7 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
         child: Row(
           children: [
             Text(
-              postingPageState.communityInfo.communityShowName,
+              postingPageState.postDetail.ownCommunity.communityShowName,
               style: const TextStyle(
                 fontSize: 16,
                 color: Colors.blue,
