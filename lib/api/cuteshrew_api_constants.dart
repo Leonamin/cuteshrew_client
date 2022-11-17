@@ -98,18 +98,18 @@ class CuteShrewApiConstants {
       );
 
   static searchPostings(
-          [int? userId,
-          String? userName,
-          int? startPostId,
-          int? loadPageNum]) =>
-      Uri(
-          host: baseUrl,
-          scheme: scheme,
-          path: "$_searchUrl/postings",
-          queryParameters: {
-            _queryUserId: userId,
-            _queryUserName: userName,
-            _queryStartPostId: startPostId,
-            _queryLoadPageNum: loadPageNum,
-          });
+      [int? userId, String? userName, int? startPostId, int? loadPageNum]) {
+    var params = {
+      _queryUserId: userId,
+      _queryUserName: userName,
+      _queryStartPostId: startPostId,
+      _queryLoadPageNum: loadPageNum
+    };
+    params.removeWhere((key, value) => value == null);
+    return Uri(
+        host: baseUrl,
+        scheme: scheme,
+        path: "$_apiUrl$_searchUrl/posting",
+        queryParameters: params);
+  }
 }

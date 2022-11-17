@@ -5,8 +5,10 @@ import 'package:cuteshrew/pages/error_page.dart';
 import 'package:cuteshrew/pages/home/home_page.dart';
 import 'package:cuteshrew/pages/post_editor/post_editor_page.dart';
 import 'package:cuteshrew/pages/posting/posting_page.dart';
+import 'package:cuteshrew/pages/user/user_page.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:validators/validators.dart';
 /*
   URL 리스트
   /home: 일단은 /community로 대체
@@ -66,6 +68,23 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         builder: (context) =>
             CommunityPage(communityName: communityName, currentPageNum: 0),
       );
+    }
+    if (uri.pathSegments.first == 'user') {
+      String userInfo = uri.pathSegments[1];
+
+      if (isNumeric(userInfo)) {
+        return MaterialPageRoute(
+          builder: (context) => UserPage(
+            userId: int.parse(userInfo),
+          ),
+        );
+      } else {
+        return MaterialPageRoute(
+          builder: (context) => UserPage(
+            userName: userInfo,
+          ),
+        );
+      }
     }
   }
 
