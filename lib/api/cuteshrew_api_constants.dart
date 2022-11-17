@@ -7,9 +7,15 @@ class CuteShrewApiConstants {
   static const String _userUrl = "/user/general";
   static const String _pageUrl = '/page';
   static const String _commentUrl = '/comment';
+  static const String _searchUrl = '/search';
 
   static const String _queryNameCountPerPage = 'count_per_page';
   static const String _queryNamePassword = 'password';
+
+  static const String _queryUserId = 'user_id';
+  static const String _queryUserName = 'user_name';
+  static const String _queryStartPostId = 'start_post_id';
+  static const String _queryLoadPageNum = 'load_page_num';
 
   static Map<String, String> makeQuery(String q, String v) => {q: v};
   // MainPage URI
@@ -90,4 +96,20 @@ class CuteShrewApiConstants {
         path:
             "$_apiUrl$_communityUrl/$communityName/$postId$_commentUrl/$commentId",
       );
+
+  static searchPostings(
+          [int? userId,
+          String? userName,
+          int? startPostId,
+          int? loadPageNum]) =>
+      Uri(
+          host: baseUrl,
+          scheme: scheme,
+          path: "$_searchUrl/postings",
+          queryParameters: {
+            _queryUserId: userId,
+            _queryUserName: userName,
+            _queryStartPostId: startPostId,
+            _queryLoadPageNum: loadPageNum,
+          });
 }

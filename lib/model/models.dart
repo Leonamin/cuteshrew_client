@@ -1,3 +1,5 @@
+import 'package:cuteshrew/models/user_info.dart';
+
 class Post {
   int postId;
   String title;
@@ -90,5 +92,105 @@ class UserCreate {
 
   Map toMap() {
     return {'nickname': nickname, 'email': email, 'password': password};
+  }
+}
+
+class PostPreview {
+  int postId;
+  String title;
+  bool isLocked;
+  int publishedAt;
+  int updatedAt;
+  UserInfo userInfo;
+  CommunityPreview ownCommunity;
+
+  PostPreview({
+    required this.postId,
+    required this.title,
+    required this.isLocked,
+    required this.publishedAt,
+    required this.updatedAt,
+    required this.userInfo,
+    required this.ownCommunity,
+  });
+
+  factory PostPreview.fromJson(Map<String, dynamic> json) {
+    return PostPreview(
+        postId: json['id'],
+        title: json['title'],
+        isLocked: json['is_locked'],
+        publishedAt: json['published_at'],
+        updatedAt: json['updated_at'],
+        userInfo: UserInfo.fromJson(json['creator']),
+        ownCommunity: CommunityPreview.fromJson(json['own_community']));
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PostPreview &&
+          postId == other.postId &&
+          title == other.title &&
+          isLocked == other.isLocked &&
+          publishedAt == other.publishedAt &&
+          updatedAt == other.updatedAt &&
+          userInfo == other.userInfo);
+
+  @override
+  int get hashCode =>
+      Object.hash(postId, title, isLocked, publishedAt, updatedAt, userInfo);
+}
+
+class CommentPreview {
+  int commentId;
+  int userId;
+  String comment;
+  int createdAt;
+  int postId;
+  int commentClass;
+  int order;
+  int groupId;
+  UserInfo userInfo;
+  PostPreview parentPost;
+
+  CommentPreview(
+      {required this.commentId,
+      required this.userId,
+      required this.comment,
+      required this.createdAt,
+      required this.postId,
+      required this.commentClass,
+      required this.order,
+      required this.groupId,
+      required this.userInfo,
+      required this.parentPost});
+
+  factory CommentPreview.fromJson(Map<String, dynamic> json) {
+    return CommentPreview(
+      commentId: json['id'],
+      userId: json['user_id'],
+      comment: json['comment'],
+      createdAt: json['created_at'],
+      postId: json['post_id'],
+      commentClass: json['comment_class'],
+      order: json['order'],
+      groupId: json['group_id'],
+      userInfo: UserInfo.fromJson(json['creator']),
+      parentPost: PostPreview.fromJson(json['parent_post']),
+    );
+  }
+}
+
+class ResponseSearchPostings {
+  int postingCounts;
+  List<PostPreview> postings;
+
+  ResponseSearchPostings({required this.postings, required this.postingCounts});
+
+  factory ResponseSearchPostings.fromJson(Map<String, dynamic> json) {
+    return ResponseSearchPostings(
+        postingCounts: json['posting_count'],
+        postings: List<PostPreview>.from(
+            [...?json['postings']].map((e) => PostPreview.fromJson(e))));
   }
 }

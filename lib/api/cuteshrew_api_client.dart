@@ -201,6 +201,23 @@ class CuteshrewApiClient {
       throw Exception(response);
     }
   }
+
+  Future<Map<String, dynamic>> searchPostings(
+      [int? userId,
+      String? userName,
+      int? startPostId,
+      int? loadPageNum]) async {
+    final response = await get(CuteShrewApiConstants.searchPostings(
+        userId, userName, startPostId, loadPageNum));
+
+    if (response.statusCode == 200) {
+      var post = ResponseSearchPostings.fromJson(
+          json.decode(utf8.decode(response.bodyBytes)));
+      return mapCodeAndData(response.statusCode, post);
+    } else {
+      return mapCodeAndData(response.statusCode, null);
+    }
+  }
 /*
   Future<List<Community>?> getMainPage() async {
     final url = Uri.http(baseUrl, _communityUrl);
