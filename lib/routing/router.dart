@@ -72,7 +72,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     if (uri.pathSegments.first == 'user') {
       String userInfo = uri.pathSegments[1];
 
-      if (isNumeric(userInfo)) {
+      // 생각해보니 숫자 이름도 있을거같다.
+      // if (isNumeric(userInfo)) {
+      if (false) {
         return MaterialPageRoute(
           builder: (context) => UserPage(
             userId: int.parse(userInfo),
