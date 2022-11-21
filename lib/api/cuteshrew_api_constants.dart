@@ -97,15 +97,16 @@ class CuteShrewApiConstants {
             "$_apiUrl$_communityUrl/$communityName/$postId$_commentUrl/$commentId",
       );
 
+  // String으로 와야함 안그럼 버그난다
   static searchPostings(
       [int? userId, String? userName, int? startPostId, int? loadPageNum]) {
     var params = {
-      _queryUserId: userId,
-      _queryUserName: userName,
-      _queryStartPostId: startPostId,
-      _queryLoadPageNum: loadPageNum
+      if (userId != null) _queryUserId: userId.toString(),
+      if (userName != null) _queryUserName: userName,
+      if (startPostId != null) _queryStartPostId: startPostId.toString(),
+      if (loadPageNum != null) _queryLoadPageNum: loadPageNum.toString()
     };
-    params.removeWhere((key, value) => value == null);
+
     return Uri(
         host: baseUrl,
         scheme: scheme,
