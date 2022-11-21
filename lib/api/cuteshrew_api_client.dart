@@ -209,7 +209,6 @@ class CuteshrewApiClient {
       int? loadPageNum]) async {
     final response = await get(CuteShrewApiConstants.searchPostings(
         userId, userName, startPostId, loadPageNum));
-
     if (response.statusCode == 200) {
       var post = ResponseSearchPostings.fromJson(
           json.decode(utf8.decode(response.bodyBytes)));
@@ -218,70 +217,4 @@ class CuteshrewApiClient {
       return mapCodeAndData(response.statusCode, null);
     }
   }
-/*
-  Future<List<Community>?> getMainPage() async {
-    final url = Uri.http(baseUrl, _communityUrl);
-
-    Response response = await get(url);
-
-    if (response.statusCode == 200) {
-      return [
-        for (final e in json.decode(utf8.decode(response.bodyBytes)))
-          Community.fromJson(e),
-      ];
-    }
-    return null;
-  }
-
-  Future<Community?> getCommunity(communityName, pageNum, postingCount) async {
-    final url = Uri.http(
-        baseUrl,
-        "$_communityUrl/$communityName$_pageUrl/$pageNum",
-        makeQuery(_queryNameCountPerPage, postingCount.toString()));
-
-    final response = await get(url);
-
-    if (response.statusCode == 200) {
-      return Community.fromJson(json.decode(utf8.decode(response.bodyBytes)));
-    }
-    return null;
-  }
-
-  
-
-  Future<bool> uploadPosting(
-      String communityName, TestLoginToken token, PostCreate posting) async {
-    final url = Uri.http(baseUrl, '$_communityUrl/$communityName');
-
-    final response = await post(url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "${token.tokenType} ${token.accessToken}"
-        },
-        encoding: Encoding.getByName('utf-8'),
-        body: jsonEncode(posting.toJson()));
-    if (response.statusCode == 201) {
-      return true;
-    }
-    return false;
-  }
-
-  Future<bool> updatePosting(String communityName, TestLoginToken token,
-      int postId, PostCreate posting) async {
-    final url = Uri.http(baseUrl, '$_communityUrl/$communityName/$postId');
-    final response = await put(url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "${token.tokenType} ${token.accessToken}"
-        },
-        encoding: Encoding.getByName('utf-8'),
-        body: jsonEncode(posting.toJson()));
-    if (response.statusCode == 202) {
-      return true;
-    }
-    return false;
-  }
-
-  
-  */
 }
