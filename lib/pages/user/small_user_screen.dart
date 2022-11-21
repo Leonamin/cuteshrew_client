@@ -69,6 +69,9 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
   bool lastStatus = true; // 이거 사실 안씀
   double appBarHeight = 275;
 
+  double scrollPostionToAlpha = 0;
+  AnimationController? _animationController;
+
   // 앱바가 숨겨지려면 역방향으로 내려야해서 Offset이 늘어난다
   bool get _isShrink {
     return _mainScrollController != null &&
@@ -82,6 +85,17 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
         lastStatus = _isShrink;
       });
     }
+
+    setState(() {
+      // 펼쳐지면 색 안보이고 닫혀지면 색 보이게
+      if (_mainScrollController!.offset > (appBarHeight - kToolbarHeight)) {
+        scrollPostionToAlpha = 255;
+      } else {
+        scrollPostionToAlpha = _mainScrollController!.offset *
+            (100 / (appBarHeight - kToolbarHeight));
+      }
+      _animationController!.value = scrollPostionToAlpha / 255;
+    });
   }
 
   @override
@@ -91,6 +105,9 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
     _mainScrollController = ScrollController()
       ..addListener(_mainScrollListener);
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
+
+    //기능 앱바 스크롤 색상전환 애니메이션 등록
+    _animationController = AnimationController(vsync: this);
   }
 
   @override
@@ -192,7 +209,8 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
   _appBar(UserInfo user) {
     return SliverAppBar(
       elevation: 0,
-      backgroundColor: Colors.grey.shade300,
+      // backgroundColor: Colors.grey.shade300,
+      backgroundColor: Colors.grey.withAlpha(scrollPostionToAlpha.toInt()),
       pinned: true,
       expandedHeight: appBarHeight,
       flexibleSpace: FlexibleSpaceBar(
