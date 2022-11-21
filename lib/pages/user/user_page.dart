@@ -21,8 +21,6 @@ class UserPage extends StatelessWidget {
       update: (context, value, previous) => value.value,
       child: Scaffold(
           key: scaffoldKey,
-          // extendBodyBehindAppBar: true,
-          appBar: mainAppBar(context, scaffoldKey),
           drawer: const Drawer(),
           body: ResponsiveWidget(
             largeScreen: SmallUserScreen(
