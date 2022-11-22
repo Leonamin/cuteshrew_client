@@ -195,12 +195,18 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                postingPageState.postDetail.userInfo.name,
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16),
+              InkWell(
+                onTap: () => Navigator.pushNamed(
+                    context,
+                    Routes.UserPageRoute(
+                        postingPageState.postDetail.userInfo.name)),
+                child: Text(
+                  postingPageState.postDetail.userInfo.name,
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
               ),
               Text(
                 Utils.formatTimeStamp(postingPageState.postDetail.publishedAt),

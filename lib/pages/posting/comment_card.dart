@@ -4,6 +4,7 @@ import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/comment_detail.dart';
 import 'package:cuteshrew/providers/comment_editor_provider.dart';
 import 'package:cuteshrew/providers/comment_page_notifier.dart';
+import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/states/comment_page_state.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/utils/utils.dart';
@@ -30,7 +31,7 @@ class CommentCard extends StatelessWidget {
     );
   }
 
-  Card _header() {
+  Card _header(BuildContext context) {
     return Card(
       color: Colors.grey[300],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -57,12 +58,16 @@ class CommentCard extends StatelessWidget {
               const SizedBox(
                 width: 4,
               ),
-              Text(
-                comment.userInfo.name,
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16),
+              InkWell(
+                onTap: () => Navigator.pushNamed(
+                    context, Routes.UserPageRoute(comment.userInfo.name)),
+                child: Text(
+                  comment.userInfo.name,
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
               )
             ],
           ),
@@ -200,7 +205,7 @@ class CommentCard extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _header(),
+            _header(context),
             const SizedBox(
               height: 4,
             ),

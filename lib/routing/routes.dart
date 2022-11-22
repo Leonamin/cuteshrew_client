@@ -18,6 +18,8 @@ class Routes {
   static const PostEditorPagePath = '/write';
   static const LoginPagePath = '/login';
   static const LoginPageName = 'login';
+  static const UserPagePath = '/user';
+  static const UserPageName = 'user';
 
   static String get HomePageRoute => HomePagePath;
   static String get CommunityPageRoute => CommunityPagePath;
@@ -28,4 +30,5 @@ class Routes {
       "$CommunityPagePath/$community/$id";
   static String PostEditorPageRoute(community) =>
       "$CommunityPagePath/$community$PostEditorPagePath";
+  static String UserPageRoute(String userName) => "$UserPagePath/$userName";
 }

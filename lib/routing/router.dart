@@ -69,7 +69,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
             CommunityPage(communityName: communityName, currentPageNum: 0),
       );
     }
-    if (uri.pathSegments.first == 'user') {
+    if (uri.pathSegments.first == Routes.UserPageName) {
       String userInfo = uri.pathSegments[1];
 
       // 생각해보니 숫자 이름도 있을거같다.
