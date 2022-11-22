@@ -2,8 +2,17 @@ import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:flutter/material.dart';
 
+enum UserPageState {
+  INIT,
+  USER_NOT_FOUND,
+  USER_FOUND,
+}
+
 class UserPageProvider extends ChangeNotifier {
   final CuteshrewApiClient api;
+
+  UserPageState _state = UserPageState.INIT;
+  UserPageState get state => _state;
 
   List<PostPreview> userPostings = [];
   List<CommentPreview> userComments = [];
@@ -38,9 +47,9 @@ class UserPageProvider extends ChangeNotifier {
     isLoadingPosting = true;
     notifyListeners();
     try {
-      final result =
-          await api.searchPostings(userId, userName, nextPostId, loadPost);
+      final result = await api.searchPostings(userId, userName, nextPostId, 5);
       if (result['code'] == 200) {
+        _state = UserPageState.USER_FOUND;
         final responsePostings =
             (result['data'] as ResponseSearchPostings).postings;
         postingCounts =
@@ -51,6 +60,8 @@ class UserPageProvider extends ChangeNotifier {
           userPostings.addAll(responsePostings);
           hasMorePosting = true;
         }
+      } else {
+        _state = UserPageState.USER_NOT_FOUND;
       }
     } catch (e) {
       print(e);

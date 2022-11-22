@@ -3,6 +3,7 @@ import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/user_info.dart';
 import 'package:cuteshrew/pages/user/widget/tab_bar_delegate.dart';
 import 'package:cuteshrew/providers/user_page_provider.dart';
+import 'package:cuteshrew/routing/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -34,20 +35,22 @@ class NotFoundSmallUserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Text("해당 사용자는 존재하지 않습니다."),
-        const SizedBox(
-          height: 8,
-        ),
-        TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text("뒤로가기")),
-      ],
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text("해당 사용자는 존재하지 않습니다."),
+          const SizedBox(
+            height: 8,
+          ),
+          TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.HomePageRoute);
+              },
+              child: const Text("홈으로")),
+        ],
+      ),
     );
   }
 }
@@ -369,31 +372,41 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
       },
       child: Consumer<UserPageProvider>(
         builder: (context, provider, child) {
-          return Scaffold(
-            body: NestedScrollView(
-                controller: _mainScrollController,
-                headerSliverBuilder: (context, innerBoxIsScrolled) {
-                  return [
-                    _appBar(UserInfo(
-                        name: widget.userName ?? "null",
-                        email: widget.userName ?? "null")),
-                    SliverOverlapAbsorber(
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                          context),
-                      sliver: _tabBar(),
-                    ),
-                  ];
-                },
-                body: TabBarView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: _tabController,
-                  children: [
-                    _makePostingListWidget(
-                        PageStorageKey<String>("1"), provider),
-                    Container()
-                  ],
-                )),
-          );
+          switch (provider.state) {
+            case UserPageState.INIT:
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            case UserPageState.USER_FOUND:
+              return Scaffold(
+                body: NestedScrollView(
+                    controller: _mainScrollController,
+                    headerSliverBuilder: (context, innerBoxIsScrolled) {
+                      return [
+                        _appBar(UserInfo(
+                            name: widget.userName ?? "null",
+                            email: widget.userName ?? "null")),
+                        SliverOverlapAbsorber(
+                          handle:
+                              NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                  context),
+                          sliver: _tabBar(),
+                        ),
+                      ];
+                    },
+                    body: TabBarView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: _tabController,
+                      children: [
+                        _makePostingListWidget(
+                            PageStorageKey<String>("1"), provider),
+                        Container()
+                      ],
+                    )),
+              );
+            case UserPageState.USER_NOT_FOUND:
+              return const NotFoundSmallUserScreen();
+          }
         },
       ),
     );
