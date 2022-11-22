@@ -296,13 +296,13 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
             )),
             TextButton(
                 onPressed: () {},
-                child: Text(
-                  commentCountToString(10),
-                  maxLines: 1,
-                ),
                 style: TextButton.styleFrom(
                     minimumSize: const Size(60, 60),
-                    backgroundColor: Colors.grey.withOpacity(0.2))),
+                    backgroundColor: Colors.grey.withOpacity(0.2)),
+                child: Text(
+                  commentCountToString(posting.commentCount),
+                  maxLines: 1,
+                )),
           ],
         ),
       ),

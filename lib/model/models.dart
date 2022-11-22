@@ -103,16 +103,17 @@ class PostPreview {
   int updatedAt;
   UserInfo userInfo;
   CommunityPreview ownCommunity;
+  int commentCount;
 
-  PostPreview({
-    required this.postId,
-    required this.title,
-    required this.isLocked,
-    required this.publishedAt,
-    required this.updatedAt,
-    required this.userInfo,
-    required this.ownCommunity,
-  });
+  PostPreview(
+      {required this.postId,
+      required this.title,
+      required this.isLocked,
+      required this.publishedAt,
+      required this.updatedAt,
+      required this.userInfo,
+      required this.ownCommunity,
+      required this.commentCount});
 
   factory PostPreview.fromJson(Map<String, dynamic> json) {
     return PostPreview(
@@ -122,7 +123,8 @@ class PostPreview {
         publishedAt: json['published_at'],
         updatedAt: json['updated_at'],
         userInfo: UserInfo.fromJson(json['creator']),
-        ownCommunity: CommunityPreview.fromJson(json['own_community']));
+        ownCommunity: CommunityPreview.fromJson(json['own_community']),
+        commentCount: json['comment_count']);
   }
 
   @override
