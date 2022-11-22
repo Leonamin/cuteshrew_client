@@ -43,6 +43,8 @@ class UserPageProvider extends ChangeNotifier {
       if (result['code'] == 200) {
         final responsePostings =
             (result['data'] as ResponseSearchPostings).postings;
+        postingCounts =
+            (result['data'] as ResponseSearchPostings).postingCounts;
         if (responsePostings.isEmpty) {
           hasMorePosting = false;
         } else {

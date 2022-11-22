@@ -314,29 +314,43 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
                 handle:
                     NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               ),
-              SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                childCount: provider.userPostings.length + 1,
-                (context, index) {
-                  if (index < provider.userPostings.length) {
-                    return _postingItemRow(provider.userPostings[index]);
-                  }
-                  return InkWell(
-                    onTap: () {
-                      provider.fetchPostings(
-                          userName: widget.userName,
-                          nextPostId: provider.userPostings[index - 1].postId);
-                    },
-                    child: SizedBox(
-                      height: 50,
-                      child: Center(
-                          child: provider.isLoadingPosting
-                              ? const CircularProgressIndicator()
-                              : const Text("더보기")),
-                    ),
-                  );
-                },
-              ))
+
+              // FIXME 비효율적인 방식 리스트 아래 두개를 합쳐야한다.
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                  return Text("${provider.postingCounts} 개의 게시물이 있습니다");
+                }, childCount: 1)),
+              ),
+
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                  childCount: provider.userPostings.length + 1,
+                  (context, index) {
+                    if (index < provider.userPostings.length) {
+                      return _postingItemRow(provider.userPostings[index]);
+                    }
+                    return InkWell(
+                      onTap: () {
+                        provider.fetchPostings(
+                            userName: widget.userName,
+                            nextPostId:
+                                provider.userPostings[index - 1].postId);
+                      },
+                      child: SizedBox(
+                        height: 50,
+                        child: Center(
+                            child: provider.isLoadingPosting
+                                ? const CircularProgressIndicator()
+                                : const Text("더보기")),
+                      ),
+                    );
+                  },
+                )),
+              )
             ],
           );
         },
