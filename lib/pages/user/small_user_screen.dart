@@ -5,6 +5,7 @@ import 'package:cuteshrew/pages/user/widget/tab_bar_delegate.dart';
 import 'package:cuteshrew/providers/user_page_provider.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class SmallUserScreen extends StatefulWidget {
@@ -258,25 +259,52 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
   _postingItemRow(PostPreview posting) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Flexible(
-            child: Text(
-              posting.title,
-              style: const TextStyle(color: Colors.black),
-            ),
-          ),
-          TextButton(
-              onPressed: () {},
-              child: Text(
-                commentCountToString(10),
-                maxLines: 1,
+      child: IntrinsicHeight(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+                child: InkWell(
+              onTap: () => Navigator.pushNamed(
+                  context,
+                  Routes.PostingPageRoute(
+                      posting.ownCommunity.communityName, posting.postId)),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      posting.title,
+                      style: const TextStyle(color: Colors.black, fontSize: 14),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      DateFormat('yy.MM.dd').format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              posting.publishedAt * 1000)),
+                      style: TextStyle(
+                          color: Colors.black.withOpacity(0.8), fontSize: 12),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  ],
+                ),
               ),
-              style: TextButton.styleFrom(
-                  minimumSize: const Size(60, 60),
-                  backgroundColor: Colors.grey.withOpacity(0.2))),
-        ],
+            )),
+            TextButton(
+                onPressed: () {},
+                child: Text(
+                  commentCountToString(10),
+                  maxLines: 1,
+                ),
+                style: TextButton.styleFrom(
+                    minimumSize: const Size(60, 60),
+                    backgroundColor: Colors.grey.withOpacity(0.2))),
+          ],
+        ),
       ),
     );
   }
