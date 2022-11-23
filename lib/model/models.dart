@@ -103,7 +103,7 @@ class PostPreview {
   int updatedAt;
   UserInfo userInfo;
   CommunityPreview ownCommunity;
-  int commentCount;
+  int? commentCount;
 
   PostPreview(
       {required this.postId,
@@ -178,7 +178,7 @@ class CommentPreview {
       order: json['order'],
       groupId: json['group_id'],
       userInfo: UserInfo.fromJson(json['creator']),
-      parentPost: PostPreview.fromJson(json['parent_post']),
+      parentPost: PostPreview.fromJson(json['posting']),
     );
   }
 }
@@ -194,5 +194,19 @@ class ResponseSearchPostings {
         postingCounts: json['posting_count'],
         postings: List<PostPreview>.from(
             [...?json['postings']].map((e) => PostPreview.fromJson(e))));
+  }
+}
+
+class ResponseSearchComments {
+  int commentCounts;
+  List<CommentPreview> comments;
+
+  ResponseSearchComments({required this.commentCounts, required this.comments});
+
+  factory ResponseSearchComments.fromJson(Map<String, dynamic> json) {
+    return ResponseSearchComments(
+        commentCounts: json['comment_count'],
+        comments: List<CommentPreview>.from(
+            [...?json['comments']].map((e) => CommentPreview.fromJson(e))));
   }
 }

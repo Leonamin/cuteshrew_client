@@ -300,9 +300,66 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
                     minimumSize: const Size(60, 60),
                     backgroundColor: Colors.grey.withOpacity(0.2)),
                 child: Text(
-                  commentCountToString(posting.commentCount),
+                  commentCountToString(posting.commentCount!),
                   maxLines: 1,
                 )),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _commentItemRow(CommentPreview comment) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+      child: IntrinsicHeight(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+                child: InkWell(
+              onTap: () => Navigator.pushNamed(
+                  context,
+                  Routes.PostingPageRoute(
+                      comment.parentPost.ownCommunity.communityName,
+                      comment.parentPost.postId)),
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      comment.parentPost.title,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      comment.comment,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      DateFormat('yy.MM.dd').format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              comment.parentPost.publishedAt * 1000)),
+                      style: TextStyle(
+                          color: Colors.black.withOpacity(0.8), fontSize: 12),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  ],
+                ),
+              ),
+            )),
           ],
         ),
       ),
@@ -389,6 +446,85 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
     );
   }
 
+  _makeCommentListWidget(
+    PageStorageKey<String> key,
+    UserPageProvider provider,
+  ) {
+    // 로딩 중이면서 캐시가 없음
+    if (provider.isLoadingComment && provider.userComments.isEmpty) {
+      return const SizedBox(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    // 로딩 아닌데 캐시가 없음
+    if (!provider.isLoadingComment && provider.userComments.isEmpty) {
+      return const SizedBox(
+        height: 50,
+        child: Center(
+          child: Text("데이따 없음"),
+        ),
+      );
+    }
+
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: Builder(
+        builder: (context) {
+          return CustomScrollView(
+            key: key,
+            // controller: controller, 이거 넣으면 sliver 효과 없어서 중첩 스크롤이 안된다.
+            slivers: [
+              SliverOverlapInjector(
+                handle:
+                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              ),
+
+              // FIXME 비효율적인 방식 리스트 아래 두개를 합쳐야한다.
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                  return Text("${provider.commentCounts} 개의 댓글이 있습니다");
+                }, childCount: 1)),
+              ),
+
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                  childCount: provider.userComments.length + 1,
+                  (context, index) {
+                    if (index < provider.userComments.length) {
+                      return _commentItemRow(provider.userComments[index]);
+                    }
+                    return InkWell(
+                      onTap: () {
+                        provider.fetchComments(
+                            userName: widget.userName,
+                            nextId: provider.userComments[index - 1].postId);
+                      },
+                      child: SizedBox(
+                        height: 50,
+                        child: Center(
+                            child: provider.isLoadingComment
+                                ? const CircularProgressIndicator()
+                                : const Text("더보기")),
+                      ),
+                    );
+                  },
+                )),
+              )
+            ],
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -396,6 +532,7 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
         final provider =
             UserPageProvider(api: context.read<CuteshrewApiClient>());
         provider.fetchPostings(userName: widget.userName);
+        provider.fetchComments(userName: widget.userName);
         return provider;
       },
       child: Consumer<UserPageProvider>(
@@ -428,7 +565,8 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
                       children: [
                         _makePostingListWidget(
                             PageStorageKey<String>("1"), provider),
-                        Container()
+                        _makeCommentListWidget(
+                            PageStorageKey<String>("2"), provider),
                       ],
                     )),
               );

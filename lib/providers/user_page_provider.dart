@@ -18,7 +18,7 @@ class UserPageProvider extends ChangeNotifier {
   List<CommentPreview> userComments = [];
 
   int postingCounts = 0;
-  int commentsCounts = 0;
+  int commentCounts = 0;
 
   bool isLoadingPosting = false;
   bool isLoadingComment = false;
@@ -31,6 +31,7 @@ class UserPageProvider extends ChangeNotifier {
   int lastRequestTimePosting = 0;
   int lastRequestTimeComment = 0;
 
+// TODO 이거 posting, comment 분리 해야함
   final requestTerm = const Duration(minutes: 5);
 
   UserPageProvider({required this.api});
@@ -69,6 +70,43 @@ class UserPageProvider extends ChangeNotifier {
       hasMorePosting = false;
     }
     isLoadingPosting = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchComments(
+      {int? userId, String? userName, int? nextId, int? loadPost}) async {
+    // 더이상 포스팅이 없고
+    if (!hasMoreComment) {
+      // 마지막 요청 시간도 5분 이내면
+      if (lastRequestTimeComment < requestTerm.inMilliseconds) {
+        return;
+      }
+    }
+    isLoadingComment = true;
+    notifyListeners();
+    try {
+      final result = await api.searchComments(userId, userName, nextId, 5);
+      if (result['code'] == 200) {
+        if (_state == UserPageState.INIT) _state = UserPageState.USER_FOUND;
+
+        final response = (result['data'] as ResponseSearchComments).comments;
+        commentCounts =
+            (result['data'] as ResponseSearchComments).commentCounts;
+        if (response.isEmpty) {
+          hasMoreComment = false;
+        } else {
+          userComments.addAll(response);
+          hasMoreComment = true;
+        }
+      } else {
+        _state = UserPageState.USER_NOT_FOUND;
+      }
+    } catch (e) {
+      print(e);
+      lastRequestTimeComment = DateTime.now().millisecondsSinceEpoch;
+      hasMoreComment = false;
+    }
+    isLoadingComment = false;
     notifyListeners();
   }
 }
