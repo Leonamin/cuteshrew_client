@@ -14,7 +14,7 @@ class CuteShrewApiConstants {
 
   static const String _queryUserId = 'user_id';
   static const String _queryUserName = 'user_name';
-  static const String _queryStartPostId = 'start_post_id';
+  static const String _queryStartId = 'start_id';
   static const String _queryLoadPageNum = 'load_page_num';
 
   static Map<String, String> makeQuery(String q, String v) => {q: v};
@@ -103,7 +103,7 @@ class CuteShrewApiConstants {
     var params = {
       if (userId != null) _queryUserId: userId.toString(),
       if (userName != null) _queryUserName: userName,
-      if (startPostId != null) _queryStartPostId: startPostId.toString(),
+      if (startPostId != null) _queryStartId: startPostId.toString(),
       if (loadPageNum != null) _queryLoadPageNum: loadPageNum.toString()
     };
 
@@ -111,6 +111,22 @@ class CuteShrewApiConstants {
         host: baseUrl,
         scheme: scheme,
         path: "$_apiUrl$_searchUrl/posting",
+        queryParameters: params);
+  }
+
+  static searchComments(
+      [int? userId, String? userName, int? startId, int? loadPageNum]) {
+    var params = {
+      if (userId != null) _queryUserId: userId.toString(),
+      if (userName != null) _queryUserName: userName,
+      if (startId != null) _queryStartId: startId.toString(),
+      if (loadPageNum != null) _queryLoadPageNum: loadPageNum.toString()
+    };
+
+    return Uri(
+        host: baseUrl,
+        scheme: scheme,
+        path: "$_apiUrl$_searchUrl/comment",
         queryParameters: params);
   }
 }

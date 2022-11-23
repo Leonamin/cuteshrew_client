@@ -217,4 +217,20 @@ class CuteshrewApiClient {
       return mapCodeAndData(response.statusCode, null);
     }
   }
+
+  Future<Map<String, dynamic>> searchComments(
+      [int? userId,
+      String? userName,
+      int? startCommentId,
+      int? loadPageNum]) async {
+    final response = await get(CuteShrewApiConstants.searchComments(
+        userId, userName, startCommentId, loadPageNum));
+    if (response.statusCode == 200) {
+      var post = ResponseSearchPostings.fromJson(
+          json.decode(utf8.decode(response.bodyBytes)));
+      return mapCodeAndData(response.statusCode, post);
+    } else {
+      return mapCodeAndData(response.statusCode, null);
+    }
+  }
 }
