@@ -226,7 +226,7 @@ class CuteshrewApiClient {
     final response = await get(CuteShrewApiConstants.searchComments(
         userId, userName, startCommentId, loadPageNum));
     if (response.statusCode == 200) {
-      var post = ResponseSearchPostings.fromJson(
+      var post = ResponseSearchComments.fromJson(
           json.decode(utf8.decode(response.bodyBytes)));
       return mapCodeAndData(response.statusCode, post);
     } else {
