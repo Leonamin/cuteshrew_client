@@ -1,4 +1,5 @@
 import 'package:cuteshrew/api/cuteshrew_api_client.dart';
+import 'package:cuteshrew/helpers/responsiveness.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/providers/home_page_notifier.dart';
 import 'package:cuteshrew/states/home_page_state.dart';
@@ -50,19 +51,24 @@ class LoadedDataHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(children: [
-      const SizedBox(
-        height: 30,
-      ),
-      MasonryGridView.count(
-        crossAxisCount: 2,
-        mainAxisSpacing: 4,
-        crossAxisSpacing: 4,
-        shrinkWrap: true,
-        itemCount: communities.length,
-        itemBuilder: (BuildContext context, int index) {
-          return CommunityPanel(communityInfo: communities[index]);
-        },
-      )
+      ResponsiveWidget.isLargeScreen(context)
+          ? MasonryGridView.count(
+              crossAxisCount: 2,
+              mainAxisSpacing: 4,
+              crossAxisSpacing: 4,
+              shrinkWrap: true,
+              itemCount: communities.length,
+              itemBuilder: (BuildContext context, int index) {
+                return CommunityPanel(communityInfo: communities[index]);
+              },
+            )
+          : ListView.builder(
+              shrinkWrap: true,
+              itemCount: communities.length,
+              itemBuilder: (BuildContext context, int index) {
+                return CommunityPanel(communityInfo: communities[index]);
+              },
+            ),
     ]);
   }
 }
