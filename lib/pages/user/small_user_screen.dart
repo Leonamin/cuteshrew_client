@@ -121,6 +121,13 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
     super.dispose();
   }
 
+  SnackBar _makeSnackBar(String content, [Color? backgroundColor]) {
+    return SnackBar(
+      content: Text(content),
+      backgroundColor: backgroundColor,
+    );
+  }
+
   // 앱바가 펴진 상태에서 보여줄 위젯
   _userInfoWidget(UserInfo user) {
     return SafeArea(
@@ -423,10 +430,19 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
                     }
                     return InkWell(
                       onTap: () {
-                        provider.fetchPostings(
-                            userName: widget.userName,
-                            nextPostId:
-                                provider.userPostings[index - 1].postId);
+                        provider
+                            .fetchPostings(
+                                userName: widget.userName,
+                                nextPostId:
+                                    provider.userPostings[index - 1].postId)
+                            .then(
+                          (value) {
+                            if (!provider.hasMorePosting) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(_makeSnackBar("마지막 게시글"));
+                            }
+                          },
+                        );
                       },
                       child: SizedBox(
                         height: 50,
@@ -503,9 +519,17 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
                     }
                     return InkWell(
                       onTap: () {
-                        provider.fetchComments(
-                            userName: widget.userName,
-                            nextId: provider.userComments[index - 1].commentId);
+                        provider
+                            .fetchComments(
+                                userName: widget.userName,
+                                nextId:
+                                    provider.userComments[index - 1].commentId)
+                            .then((value) {
+                          if (!provider.hasMoreComment) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(_makeSnackBar("마지막 댓글"));
+                          }
+                        });
                       },
                       child: SizedBox(
                         height: 50,
