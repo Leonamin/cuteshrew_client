@@ -198,11 +198,17 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
   Widget _makeBody() {
     return Column(
       children: [
-        _buildTextFormField(
-          _communitySeletController,
-          "게시판",
-          "게시판",
-          false,
+        Consumer<PostingEditorProvider>(
+          builder: (context, provider, child) {
+            _communitySeletController.text =
+                provider.selectedCommunity?.communityShowName ?? "";
+            return _buildTextFormField(
+              _communitySeletController,
+              "게시판",
+              "게시판",
+              false,
+            );
+          },
         ),
         const SizedBox(
           height: 8,
@@ -233,8 +239,14 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
     return Consumer<LoginState>(
       builder: (context, loginState, child) {
         return ChangeNotifierProvider(
-            create: (context) =>
-                PostingEditorProvider(api: context.read<CuteshrewApiClient>()),
+            create: (context) {
+              final provider = PostingEditorProvider(
+                  api: context.read<CuteshrewApiClient>());
+              provider.fetchCommunities().then((value) {
+                provider.selectCommuinty(widget.communityInfo.communityName);
+              });
+              return provider;
+            },
             child: Scaffold(
                 body: Padding(
                     padding: const EdgeInsets.symmetric(
