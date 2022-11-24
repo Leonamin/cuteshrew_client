@@ -505,7 +505,7 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
                       onTap: () {
                         provider.fetchComments(
                             userName: widget.userName,
-                            nextId: provider.userComments[index - 1].postId);
+                            nextId: provider.userComments[index - 1].commentId);
                       },
                       child: SizedBox(
                         height: 50,
