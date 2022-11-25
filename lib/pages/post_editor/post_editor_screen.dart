@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/post_detail.dart';
