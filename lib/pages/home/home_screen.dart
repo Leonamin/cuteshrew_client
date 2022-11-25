@@ -50,25 +50,23 @@ class LoadedDataHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(children: [
-      ResponsiveWidget.isLargeScreen(context)
-          ? MasonryGridView.count(
-              crossAxisCount: 2,
-              mainAxisSpacing: 4,
-              crossAxisSpacing: 4,
-              shrinkWrap: true,
-              itemCount: communities.length,
-              itemBuilder: (BuildContext context, int index) {
-                return CommunityPanel(communityInfo: communities[index]);
-              },
-            )
-          : ListView.builder(
-              shrinkWrap: true,
-              itemCount: communities.length,
-              itemBuilder: (BuildContext context, int index) {
-                return CommunityPanel(communityInfo: communities[index]);
-              },
-            ),
-    ]);
+    return ResponsiveWidget.isLargeScreen(context)
+        ? MasonryGridView.count(
+            crossAxisCount: 2,
+            mainAxisSpacing: 4,
+            crossAxisSpacing: 4,
+            shrinkWrap: true,
+            itemCount: communities.length,
+            itemBuilder: (BuildContext context, int index) {
+              return CommunityPanel(communityInfo: communities[index]);
+            },
+          )
+        : ListView.builder(
+            shrinkWrap: true,
+            itemCount: communities.length,
+            itemBuilder: (BuildContext context, int index) {
+              return CommunityPanel(communityInfo: communities[index]);
+            },
+          );
   }
 }
