@@ -11,10 +11,8 @@ class PostingItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const SizedBox(
-          width: 10.0,
-        ),
-        Expanded(
+        Flexible(
+          fit: FlexFit.tight,
           child: Container(
             padding: const EdgeInsets.only(right: 10.0),
             child: ClickableText(
@@ -23,7 +21,7 @@ class PostingItem extends StatelessWidget {
             ),
           ),
         ),
-        Container(
+        Padding(
             padding: EdgeInsets.only(right: 10.0),
             child: const Icon(Icons.comment))
       ],
