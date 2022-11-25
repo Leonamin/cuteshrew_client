@@ -1,7 +1,5 @@
 import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/providers/login_notifier.dart';
-import 'package:cuteshrew/pages/auth/auth_page.dart';
-import 'package:cuteshrew/pages/home/home_page.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/states/login_state.dart';
 import 'package:cuteshrew/widgets/custom_text.dart';
@@ -47,13 +45,14 @@ class MainNavTitle extends StatelessWidget {
     return Consumer<LoginState>(builder: (context, state, child) {
       return Row(
         children: [
-          Visibility(
-              child: CustomText(
-            text: "",
-            color: lightGrey,
-            size: 20,
-            weight: FontWeight.bold,
-          )),
+          // 이거 왜 있었는지 까먹음 사이트 제목 쓰는곳이었나?
+          // Visibility(
+          //     child: CustomText(
+          //   text: "",
+          //   color: lightGrey,
+          //   size: 20,
+          //   weight: FontWeight.bold,
+          // )),
           Expanded(child: Container()),
           IconButton(
               onPressed: () {},
