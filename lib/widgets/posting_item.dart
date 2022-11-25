@@ -1,11 +1,20 @@
+import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/widgets/clickable_text.dart';
 import 'package:flutter/material.dart';
 
 class PostingItem extends StatelessWidget {
-  final String title;
+  final Post posting;
   final Function onClick;
-  const PostingItem({Key? key, required this.title, required this.onClick})
+  const PostingItem({Key? key, required this.posting, required this.onClick})
       : super(key: key);
+
+  commentCountToString(int count) {
+    if (count >= 100) {
+      return "99+";
+    } else {
+      return count.toString();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +25,17 @@ class PostingItem extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.only(right: 10.0),
             child: ClickableText(
-              text: title,
+              text: posting.title,
               onClick: onClick,
             ),
           ),
         ),
-        Padding(
-            padding: EdgeInsets.only(right: 10.0),
-            child: const Icon(Icons.comment))
+        Center(
+          child: Text(
+            commentCountToString(posting.commentCount),
+            style: TextStyle(color: Colors.blue[300]),
+          ),
+        ),
       ],
     );
   }

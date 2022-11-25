@@ -22,7 +22,7 @@ class PostingPanel extends StatelessWidget {
           return SizedBox(
               height: 30,
               child: PostingItem(
-                title: posts[index].title,
+                posting: posts[index],
                 onClick: () {
                   Navigator.pushNamed(
                       context,

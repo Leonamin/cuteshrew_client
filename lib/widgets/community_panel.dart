@@ -49,7 +49,7 @@ class CommunityPanel extends StatelessWidget {
           return Container(
               height: 30,
               child: PostingItem(
-                title: posts[index].title,
+                posting: posts[index],
                 onClick: () {
                   Navigator.pushNamed(
                       context,
@@ -76,7 +76,7 @@ class CommunityPanel extends StatelessWidget {
           .map((item) => Container(
               height: 40,
               child: PostingItem(
-                title: item.title,
+                posting: item,
                 onClick: () {
                   Navigator.pushNamed(
                       context,

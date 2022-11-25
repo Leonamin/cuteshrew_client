@@ -3,11 +3,15 @@ import 'package:cuteshrew/models/user_info.dart';
 class Post {
   int postId;
   String title;
+  int commentCount;
 
-  Post({required this.postId, required this.title});
+  Post({required this.postId, required this.title, required this.commentCount});
 
   factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(postId: json['id'], title: json['title']);
+    return Post(
+        postId: json['id'],
+        title: json['title'],
+        commentCount: json['comment_count']);
   }
 }
 
