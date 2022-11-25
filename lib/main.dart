@@ -1,18 +1,17 @@
 import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/helpers/no_transition_builder.dart';
 import 'package:cuteshrew/providers/login_notifier.dart';
-import 'package:cuteshrew/pages/home/home_page.dart';
 import 'package:cuteshrew/routing/router.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+// import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() {
-  usePathUrlStrategy();
+  // usePathUrlStrategy();
   setupLocator();
   runApp(MultiProvider(
     providers: [
