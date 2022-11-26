@@ -53,7 +53,7 @@ class Community {
         communityShowName: json['showname'],
         latestPostingList: List<Post>.from(
             [...?json['postings']].map((e) => Post.fromJson(e))),
-        postingsCount: json['postings_count']);
+        postingsCount: json['posting_count']);
     // latestPostingList: Post.fromJson(json['postings']));
   }
 }
