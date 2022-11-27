@@ -36,6 +36,29 @@ class UserPageProvider extends ChangeNotifier {
 
   UserPageProvider({required this.api});
 
+  Future<void> refreshPostings(
+      {int? userId, String? userName, int? nextPostId, int? loadPost}) async {
+    isLoadingPosting = false;
+    hasMorePosting = true;
+    lastRequestTimePosting = 0;
+    userPostings.clear();
+    return fetchPostings(
+        userId: userId,
+        userName: userName,
+        nextPostId: nextPostId,
+        loadPost: loadPost);
+  }
+
+  Future<void> refreshComments(
+      {int? userId, String? userName, int? nextId, int? loadPost}) async {
+    isLoadingComment = false;
+    hasMoreComment = false;
+    lastRequestTimeComment = 0;
+    userComments.clear();
+    fetchComments(
+        userId: userId, userName: userName, nextId: nextId, loadPost: loadPost);
+  }
+
   Future<void> fetchPostings(
       {int? userId, String? userName, int? nextPostId, int? loadPost}) async {
     // 더이상 포스팅이 없고

@@ -69,6 +69,8 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
     with TickerProviderStateMixin {
   ScrollController? _mainScrollController;
   TabController? _tabController;
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   bool lastStatus = true; // 이거 사실 안씀
   double appBarHeight = 275;
@@ -401,61 +403,68 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
       bottom: false,
       child: Builder(
         builder: (context) {
-          return CustomScrollView(
-            key: key,
-            // controller: controller, 이거 넣으면 sliver 효과 없어서 중첩 스크롤이 안된다.
-            slivers: [
-              SliverOverlapInjector(
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              ),
+          // FIXME Duplicated GlobalKey detected
+          return RefreshIndicator(
+            key: _refreshIndicatorKey,
+            displacement: 50,
+            onRefresh: () =>
+                provider.refreshPostings(userName: widget.userName),
+            child: CustomScrollView(
+              key: key,
+              // controller: controller, 이거 넣으면 sliver 효과 없어서 중첩 스크롤이 안된다.
+              slivers: [
+                SliverOverlapInjector(
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                ),
 
-              // FIXME 비효율적인 방식 리스트 아래 두개를 합쳐야한다.
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                  return Text("${provider.postingCounts} 개의 게시물이 있습니다");
-                }, childCount: 1)),
-              ),
+                // FIXME 비효율적인 방식 리스트 아래 두개를 합쳐야한다.
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                    return Text("${provider.postingCounts} 개의 게시물이 있습니다");
+                  }, childCount: 1)),
+                ),
 
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                  childCount: provider.userPostings.length + 1,
-                  (context, index) {
-                    if (index < provider.userPostings.length) {
-                      return _postingItemRow(provider.userPostings[index]);
-                    }
-                    return InkWell(
-                      onTap: () {
-                        provider
-                            .fetchPostings(
-                                userName: widget.userName,
-                                nextPostId:
-                                    provider.userPostings[index - 1].postId)
-                            .then(
-                          (value) {
-                            if (!provider.hasMorePosting) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(_makeSnackBar("마지막 게시글"));
-                            }
-                          },
-                        );
-                      },
-                      child: SizedBox(
-                        height: 50,
-                        child: Center(
-                            child: provider.isLoadingPosting
-                                ? const CircularProgressIndicator()
-                                : const Text("더보기")),
-                      ),
-                    );
-                  },
-                )),
-              )
-            ],
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                    childCount: provider.userPostings.length + 1,
+                    (context, index) {
+                      if (index < provider.userPostings.length) {
+                        return _postingItemRow(provider.userPostings[index]);
+                      }
+                      return InkWell(
+                        onTap: () {
+                          provider
+                              .fetchPostings(
+                                  userName: widget.userName,
+                                  nextPostId:
+                                      provider.userPostings[index - 1].postId)
+                              .then(
+                            (value) {
+                              if (!provider.hasMorePosting) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(_makeSnackBar("마지막 게시글"));
+                              }
+                            },
+                          );
+                        },
+                        child: SizedBox(
+                          height: 50,
+                          child: Center(
+                              child: provider.isLoadingPosting
+                                  ? const CircularProgressIndicator()
+                                  : const Text("더보기")),
+                        ),
+                      );
+                    },
+                  )),
+                )
+              ],
+            ),
           );
         },
       ),
@@ -490,59 +499,66 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
       bottom: false,
       child: Builder(
         builder: (context) {
-          return CustomScrollView(
-            key: key,
-            // controller: controller, 이거 넣으면 sliver 효과 없어서 중첩 스크롤이 안된다.
-            slivers: [
-              SliverOverlapInjector(
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-              ),
+          // FIXME Duplicated GlobalKey detected
+          return RefreshIndicator(
+            key: _refreshIndicatorKey,
+            displacement: 50,
+            onRefresh: () =>
+                provider.refreshComments(userName: widget.userName),
+            child: CustomScrollView(
+              key: key,
+              // controller: controller, 이거 넣으면 sliver 효과 없어서 중첩 스크롤이 안된다.
+              slivers: [
+                SliverOverlapInjector(
+                  handle:
+                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                ),
 
-              // FIXME 비효율적인 방식 리스트 아래 두개를 합쳐야한다.
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                  return Text("${provider.commentCounts} 개의 댓글이 있습니다");
-                }, childCount: 1)),
-              ),
+                // FIXME 비효율적인 방식 리스트 아래 두개를 합쳐야한다.
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                    return Text("${provider.commentCounts} 개의 댓글이 있습니다");
+                  }, childCount: 1)),
+                ),
 
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                  childCount: provider.userComments.length + 1,
-                  (context, index) {
-                    if (index < provider.userComments.length) {
-                      return _commentItemRow(provider.userComments[index]);
-                    }
-                    return InkWell(
-                      onTap: () {
-                        provider
-                            .fetchComments(
-                                userName: widget.userName,
-                                nextId:
-                                    provider.userComments[index - 1].commentId)
-                            .then((value) {
-                          if (!provider.hasMoreComment) {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(_makeSnackBar("마지막 댓글"));
-                          }
-                        });
-                      },
-                      child: SizedBox(
-                        height: 50,
-                        child: Center(
-                            child: provider.isLoadingComment
-                                ? const CircularProgressIndicator()
-                                : const Text("더보기")),
-                      ),
-                    );
-                  },
-                )),
-              )
-            ],
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                    childCount: provider.userComments.length + 1,
+                    (context, index) {
+                      if (index < provider.userComments.length) {
+                        return _commentItemRow(provider.userComments[index]);
+                      }
+                      return InkWell(
+                        onTap: () {
+                          provider
+                              .fetchComments(
+                                  userName: widget.userName,
+                                  nextId: provider
+                                      .userComments[index - 1].commentId)
+                              .then((value) {
+                            if (!provider.hasMoreComment) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(_makeSnackBar("마지막 댓글"));
+                            }
+                          });
+                        },
+                        child: SizedBox(
+                          height: 50,
+                          child: Center(
+                              child: provider.isLoadingComment
+                                  ? const CircularProgressIndicator()
+                                  : const Text("더보기")),
+                        ),
+                      );
+                    },
+                  )),
+                )
+              ],
+            ),
           );
         },
       ),
