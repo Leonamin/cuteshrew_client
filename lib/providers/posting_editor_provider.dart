@@ -35,7 +35,7 @@ class PostingEditorProvider extends ChangeNotifier {
 
   Future<void> selectCommuinty(String communityName) async {
     selectedCommunityIndex = communities
-        .indexWhere((element) => element.communityName == communityName);
+        .indexWhere((element) => element.communityShowName == communityName);
     if (selectedCommunityIndex < 0) {
       selectedCommunityIndex = 0;
     }

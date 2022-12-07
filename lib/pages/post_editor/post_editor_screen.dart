@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:provider/provider.dart';
+import 'package:searchfield/searchfield.dart';
+import 'package:collection/collection.dart';
 
 // FIXME
 //Assertion failed: file:///C:/flutter/packages/flutter/lib/src/services/hardware_keyboard.dart:444:16
@@ -39,6 +41,8 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
   final OutlineInputBorder _border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(8.0),
       borderSide: const BorderSide(color: Colors.black, width: 1));
+
+  final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _communitySeletController =
       TextEditingController();
@@ -91,6 +95,9 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                           onPressed: () {
                             //TODO Event 체크 하는 함수를 만들어서 onPressd() 내부를 좀 줄이자
                             if (loginState is AuthorizedState) {
+                              if (!_formKey.currentState!.validate()) {
+                                return;
+                              }
                               if (_titleController.text.isEmpty) {
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(_makeSnackBar("제목이 비어있습니다."));
@@ -196,15 +203,57 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
   Widget _makeBody() {
     return Column(
       children: [
+        // Consumer<PostingEditorProvider>(
+        //   builder: (context, provider, child) {
+        //     _communitySeletController.text =
+        //         provider.selectedCommunity?.communityShowName ?? "";
+        //     return _buildTextFormField(
+        //       _communitySeletController,
+        //       "게시판",
+        //       "게시판",
+        //       false,
+        //     );
+        //   },
+        // ),
+
+        // ChangeNotifierProvider 생성 시 fectchCommunities -> 이거 위젯 빌드 이때 provider.selectedCommunity null -> selectCommunity -> 위젯 다시 빌드
+        //
         Consumer<PostingEditorProvider>(
           builder: (context, provider, child) {
             _communitySeletController.text =
                 provider.selectedCommunity?.communityShowName ?? "";
-            return _buildTextFormField(
-              _communitySeletController,
-              "게시판",
-              "게시판",
-              false,
+            return Form(
+              key: _formKey,
+              child: SearchField(
+                controller: _communitySeletController,
+                suggestions: provider.communities
+                    .map((community) => SearchFieldListItem(
+                          community.communityShowName,
+                        ))
+                    .toList(),
+                autoCorrect: true,
+                validator: (x) {
+                  if ((provider.communities.firstWhereOrNull(
+                          (it) => it.communityShowName == x)) ==
+                      null) {
+                    return "커뮤니티를 선택하세요";
+                  }
+                  provider.selectCommuinty(x!);
+                  return null;
+                },
+                searchInputDecoration: InputDecoration(
+                    hintStyle: const TextStyle(color: Colors.black),
+                    labelStyle: const TextStyle(color: Colors.black),
+                    border: _border,
+                    errorBorder: _border,
+                    enabledBorder: _border,
+                    focusedBorder: _border,
+                    filled: true,
+                    fillColor: Colors.transparent,
+                    errorStyle: const TextStyle(
+                        color: Colors.redAccent, fontWeight: FontWeight.bold),
+                    floatingLabelBehavior: FloatingLabelBehavior.never),
+              ),
             );
           },
         ),

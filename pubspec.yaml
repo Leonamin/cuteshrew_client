@@ -50,6 +50,7 @@ dependencies:
   validators: ^3.0.0
   intl: ^0.17.0
 
+  searchfield: ^0.7.2
   flutter_web_plugins:
     sdk: flutter
 
