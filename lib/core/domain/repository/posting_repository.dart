@@ -1,6 +1,7 @@
 import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
 import 'package:cuteshrew/core/domain/entity/posting_create_entity.dart';
 import 'package:cuteshrew/core/domain/entity/posting_entity.dart';
+import 'package:cuteshrew/core/domain/entity/posting_preview_entity.dart';
 import 'package:cuteshrew/core/resources/failure.dart';
 import 'package:dartz/dartz.dart';
 
@@ -10,6 +11,20 @@ abstract class PostingRepository {
     required String communityPath,
     required int postId,
     String? password,
+  });
+
+  // 페이지 단위로 게시글 가져오기
+  Future<Either<Failure, List<PostingPreviewEntity>>> getPostingPage({
+    required String communityPath,
+    required int pageNum,
+    required int loadCount,
+  });
+
+  // 유저 이름으로 게시글 가져오기
+  Future<Either<Failure, List<PostingPreviewEntity>>> getPostingsByUser({
+    required String userName,
+    required int startAtId,
+    required int loadCount,
   });
 
   // 게시글 생성하기
