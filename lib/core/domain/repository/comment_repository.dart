@@ -40,6 +40,7 @@ abstract class CommentRepository {
   Future<Either<Failure, void>> createReply({
     required int postId,
     required int groupId,
+    required int commentClass,
     required CommentCreateEntity newComment,
     String? password,
     required LoginTokenEntity loginToken,
