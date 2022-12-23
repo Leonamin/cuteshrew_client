@@ -8,7 +8,6 @@ abstract class CommunityRepository {
     required String communityName,
   });
 
-  Future<Either<Failure, List<CommunityEntity>>> getCommunityList({
-    required String communityName,
-  });
+  Future<Either<Failure, List<CommunityEntity>>> getCommunityList(
+      {required int loadCount});
 }
