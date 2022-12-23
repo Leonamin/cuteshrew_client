@@ -1,4 +1,5 @@
 import 'package:cuteshrew/api/cuteshrew_api_client.dart';
+import 'package:cuteshrew/feature/home/page/home_page.dart';
 import 'package:cuteshrew/helpers/no_transition_builder.dart';
 import 'package:cuteshrew/providers/login_notifier.dart';
 import 'package:cuteshrew/routing/router.dart';
@@ -50,8 +51,8 @@ class MyApp extends StatelessWidget {
                 },
         ),
       ),
-      onGenerateRoute: generateRoute,
-      initialRoute: Routes.HomePageRoute,
+      // onGenerateRoute: generateRoute,
+      home: HomePage(),
     );
   }
 }
