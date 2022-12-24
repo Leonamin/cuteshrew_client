@@ -57,7 +57,7 @@ class CommentRemoteDataSource extends CuteShrewRemoteDataSource {
 
   // TODO 나중에 커뮤니티이름 부분이 없어질 수 있다.
   Future<void> deleteComment(String communityName, int postId, int commentId,
-      LoginTokenDTO token, CommentCreateDTO comment) async {
+      LoginTokenDTO token) async {
     try {
       await delete(
         HttpConstants.basicCommentUrl(communityName, postId, commentId),
