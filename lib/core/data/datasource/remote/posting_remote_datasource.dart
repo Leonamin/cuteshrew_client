@@ -86,16 +86,15 @@ class PostingRemoteDataSource extends CuteShrewRemoteDataSource {
     String communityName,
     int postId,
     LoginTokenDTO token,
-    PostingCreateDTO posting,
   ) async {
     try {
-      await post(HttpConstants.deletePosting(communityName, postId),
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "${token.tokenType} ${token.accessToken}"
-          },
-          encoding: Encoding.getByName('utf-8'),
-          body: jsonEncode(posting.toJson()));
+      await delete(
+        HttpConstants.deletePosting(communityName, postId),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "${token.tokenType} ${token.accessToken}"
+        },
+      );
     } catch (e) {
       rethrow;
     }
