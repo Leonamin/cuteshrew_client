@@ -1,3 +1,4 @@
+import 'package:cuteshrew/core/domain/entity/community_entity.dart';
 import 'package:cuteshrew/core/domain/entity/user_entity.dart';
 import 'package:equatable/equatable.dart';
 
@@ -9,6 +10,8 @@ class PostingPreviewEntity extends Equatable {
   final int publishedAt;
   final int updatedAt;
   final UserEntity writer;
+  final CommunityEntity ownCommunity;
+
   final int commentCount;
 
   const PostingPreviewEntity({
@@ -18,6 +21,7 @@ class PostingPreviewEntity extends Equatable {
     required this.publishedAt,
     required this.updatedAt,
     required this.writer,
+    required this.ownCommunity,
     required this.commentCount,
   });
 
@@ -29,6 +33,7 @@ class PostingPreviewEntity extends Equatable {
         publishedAt,
         updatedAt,
         writer,
+        ownCommunity,
         commentCount,
       ];
 }
