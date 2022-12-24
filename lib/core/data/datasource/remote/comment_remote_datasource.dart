@@ -6,7 +6,7 @@ import 'package:cuteshrew/core/data/dto/comment_dto.dart';
 import 'package:cuteshrew/core/data/dto/login_token_dto.dart';
 import 'package:http/http.dart';
 
-class CommentRemoteDatasource extends CuteShrewRemoteDataSource {
+class CommentRemoteDataSource extends CuteShrewRemoteDataSource {
   // TODO 나중에 커뮤니티이름 부분이 없어질 수 있다.
   Future<List<CommentDTO>> getCommentPage(
       String communityName, int postId, int pageNum, int commentCount) async {
