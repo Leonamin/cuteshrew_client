@@ -10,6 +10,7 @@ class PostingDTO {
   final int? updatedAt;
   final UserDTO? writerInfo;
   final CommunityDTO? ownCommunity;
+  final int? commnetCount;
 
   const PostingDTO({
     required this.postId,
@@ -20,18 +21,21 @@ class PostingDTO {
     this.updatedAt,
     this.writerInfo,
     this.ownCommunity,
+    this.commnetCount,
   });
 
   factory PostingDTO.fromJson(Map<String, dynamic> json) {
     return PostingDTO(
-        postId: json['id'],
-        title: json['title'],
-        body: json['body'],
-        isLocked: json['is_locked'],
-        publishedAt: json['published_at'],
-        updatedAt: json['updated_at'],
-        writerInfo: UserDTO.fromJson(json['creator']),
-        ownCommunity: CommunityDTO.fromJson(json['own_community']));
+      postId: json['id'],
+      title: json['title'],
+      body: json['body'],
+      isLocked: json['is_locked'],
+      publishedAt: json['published_at'],
+      updatedAt: json['updated_at'],
+      writerInfo: UserDTO.fromJson(json['creator']),
+      ownCommunity: CommunityDTO.fromJson(json['own_community']),
+      commnetCount: json['comment_count'],
+    );
   }
 
   Map<String, dynamic> toJson() => {
@@ -43,5 +47,6 @@ class PostingDTO {
         'updated_at': updatedAt,
         'creator': writerInfo,
         'own_community': ownCommunity,
+        'comment_count': commnetCount,
       };
 }
