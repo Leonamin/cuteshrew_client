@@ -5,6 +5,7 @@ class HttpConstants {
   static const String endpointCommunity = "/community";
   static const String endpointLogin = "/login";
   static const String endpointUser = "/user/general";
+  static const String endpointPosting = "/posting";
   static const String endpointComment = '/comment';
   static const String endpointSearch = '/search';
   static const String pageUrl = '/page';
