@@ -8,11 +8,8 @@ import 'package:http/http.dart';
 class CommunityRemoteDataSource extends CuteShrewRemoteDataSource {
   // 한개의 커뮤니티만 가져온다.
   Future<CommunityDTO> getCommunity(String communityName) async {
-    final url = super
-        .urlCreate(endpoint: HttpConstants.endpointCommunity + communityName);
-
     try {
-      Response response = await get(url);
+      Response response = await get(HttpConstants.getCommunity(communityName));
       return CommunityDTO.fromJson(
           json.decode(utf8.decode(response.bodyBytes)));
     } catch (e) {
@@ -22,16 +19,9 @@ class CommunityRemoteDataSource extends CuteShrewRemoteDataSource {
 
   // 정확한 개수를 안보내면 모든 커뮤니티 가져온다.
   Future<List<CommunityDTO>> getCommunities([int? loadCommunityCount]) async {
-    final Map<String, dynamic> params = {
-      if (loadCommunityCount != null)
-        HttpConstants.queryCommunityCount: loadCommunityCount.toString(),
-    };
-
-    final url = super.urlCreate(
-        endpoint: HttpConstants.endpointCommunity, queryParams: params);
-
     try {
-      Response response = await get(url);
+      Response response =
+          await get(HttpConstants.getCommunities(loadCommunityCount));
       return [
         for (final e in json.decode(utf8.decode(response.bodyBytes)))
           CommunityDTO.fromJson(e)

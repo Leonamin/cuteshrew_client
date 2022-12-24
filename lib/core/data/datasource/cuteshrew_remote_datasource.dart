@@ -12,7 +12,7 @@ class CuteShrewRemoteDataSource extends RemoteDataSource {
     return Uri(
         host: baseUrl,
         scheme: scheme,
-        path: HttpConstants.apiUrl + endpoint,
+        path: HttpConstants.endpointApi + endpoint,
         queryParameters: queryParams);
   }
 }
