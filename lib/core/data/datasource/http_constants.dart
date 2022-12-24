@@ -1,4 +1,4 @@
-class Constants {
+class HttpConstants {
   static const String cuteshrewScheme = "http";
   static const String cuteshrewBaseUrl = "cuteshrew.xyz";
   static const String apiUrl = "/api";
