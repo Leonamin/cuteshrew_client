@@ -4,8 +4,10 @@ class CommunityDTO {
   final String? communityShowName;
   final int? postingsCount;
   final int? createdAt;
+  // 이거 너흐면 순환참조인데 어캐해결해야할지 모르겠다.
+  // final List<PostingDTO> postings
 
-  CommunityDTO({
+  const CommunityDTO({
     required this.id,
     this.communityShowName,
     this.communityName,
