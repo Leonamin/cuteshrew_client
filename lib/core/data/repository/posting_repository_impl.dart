@@ -1,5 +1,7 @@
 import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.dart';
 import 'package:cuteshrew/core/data/dto/posting_dto.dart';
+import 'package:cuteshrew/core/data/mapper/login_token_mapper.dart';
+import 'package:cuteshrew/core/data/mapper/posting_create_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/posting_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/posting_preview_mapper.dart';
 import 'package:cuteshrew/core/domain/entity/posting_preview_entity.dart';
@@ -19,21 +21,36 @@ class PostingRepositoryImpl extends PostingRepository {
   }
 
   @override
-  Future<Either<Failure, void>> createPosting(
-      {required String communityPath,
-      required PostingCreateEntity newPosting,
-      required LoginTokenEntity loginToken}) {
-    // TODO: implement createPosting
-    throw UnimplementedError();
+  Future<Either<Failure, void>> createPosting({
+    required String communityPath,
+    required PostingCreateEntity newPosting,
+    required LoginTokenEntity loginToken,
+  }) async {
+    try {
+      PostingCreateMapper postingMapper = PostingCreateMapper();
+      LoginTokenMapper tokenMapper = LoginTokenMapper();
+
+      return Right(_postingRemoteDataSource.uploadPosting(communityPath,
+          tokenMapper.toDTO(loginToken), postingMapper.map(newPosting)));
+    } on Exception catch (e) {
+      return Left(Failure(e.toString()));
+    }
   }
 
   @override
-  Future<Either<Failure, void>> deletePosting(
-      {required String communityPath,
-      required int postId,
-      required LoginTokenEntity loginToken}) {
-    // TODO: implement deletePosting
-    throw UnimplementedError();
+  Future<Either<Failure, void>> deletePosting({
+    required String communityPath,
+    required int postId,
+    required LoginTokenEntity loginToken,
+  }) async {
+    try {
+      LoginTokenMapper tokenMapper = LoginTokenMapper();
+
+      return Right(_postingRemoteDataSource.deletePosting(
+          communityPath, postId, tokenMapper.toDTO(loginToken)));
+    } on Exception catch (e) {
+      return Left(Failure(e.toString()));
+    }
   }
 
   @override
@@ -95,8 +112,15 @@ class PostingRepositoryImpl extends PostingRepository {
       {required String communityPath,
       required PostingCreateEntity newPosting,
       required int postId,
-      required LoginTokenEntity loginToken}) {
-    // TODO: implement updatePosting
-    throw UnimplementedError();
+      required LoginTokenEntity loginToken}) async {
+    try {
+      PostingCreateMapper postingMapper = PostingCreateMapper();
+      LoginTokenMapper tokenMapper = LoginTokenMapper();
+
+      return Right(_postingRemoteDataSource.updatePosting(communityPath, postId,
+          tokenMapper.toDTO(loginToken), postingMapper.map(newPosting)));
+    } on Exception catch (e) {
+      return Left(Failure(e.toString()));
+    }
   }
 }
