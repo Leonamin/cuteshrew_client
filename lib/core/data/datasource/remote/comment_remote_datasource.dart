@@ -73,15 +73,14 @@ class CommentRemoteDataSource extends CuteShrewRemoteDataSource {
 
   // TODO 나중에 검색 쪽으로 분리 될 수 있다.
   // FIXME 서버 바꿀 때 임시로
-  Future<List<CommentDTO>> searchPostings([
-    int? userId,
+  Future<List<CommentDTO>> searchComments([
     String? userName,
     int? startId,
     int? loadPageNum,
   ]) async {
     try {
       final response = await get(
-          HttpConstants.searchComments(userId, userName, startId, loadPageNum));
+          HttpConstants.searchComments(null, userName, startId, loadPageNum));
 
       // FIXME 서버 바꿀 때 까지 임시로
       final decodedData = json.decode(utf8.decode(response.bodyBytes));
