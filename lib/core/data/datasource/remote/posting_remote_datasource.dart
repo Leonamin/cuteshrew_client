@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:cuteshrew/core/data/datasource/cuteshrew_remote_datasource.dart';
-import 'package:cuteshrew/core/data/datasource/http_constants.dart';
+import 'package:cuteshrew/core/data/datasource/remote/cuteshrew_remote_datasource.dart';
+import 'package:cuteshrew/core/data/datasource/remote/http_constants.dart';
 import 'package:cuteshrew/core/data/dto/login_token_dto.dart';
 import 'package:cuteshrew/core/data/dto/posting_create_dto.dart';
 import 'package:cuteshrew/core/data/dto/posting_dto.dart';

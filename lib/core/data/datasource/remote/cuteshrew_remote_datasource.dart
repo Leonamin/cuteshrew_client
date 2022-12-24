@@ -1,5 +1,5 @@
-import 'package:cuteshrew/core/data/datasource/http_constants.dart';
-import 'package:cuteshrew/core/data/datasource/remote_datasource.dart';
+import 'package:cuteshrew/core/data/datasource/remote/http_constants.dart';
+import 'package:cuteshrew/core/data/datasource/remote/remote_datasource.dart';
 
 class CuteShrewRemoteDataSource extends RemoteDataSource {
   CuteShrewRemoteDataSource()

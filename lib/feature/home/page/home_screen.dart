@@ -1,4 +1,4 @@
-import 'package:cuteshrew/core/data/datasource/community_remote_datasource.dart';
+import 'package:cuteshrew/core/data/datasource/remote/community_remote_datasource.dart';
 import 'package:cuteshrew/core/data/repository/community_repository_impl.dart';
 import 'package:cuteshrew/core/data/repository/posting_repository_impl.dart';
 import 'package:cuteshrew/core/domain/entity/community_entity.dart';
