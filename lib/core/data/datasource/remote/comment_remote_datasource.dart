@@ -60,13 +60,12 @@ class CommentRemoteDataSource extends CuteShrewRemoteDataSource {
       LoginTokenDTO token, CommentCreateDTO comment) async {
     try {
       await delete(
-          HttpConstants.basicCommentUrl(communityName, postId, commentId),
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "${token.tokenType} ${token.accessToken}",
-          },
-          encoding: Encoding.getByName('utf-8'),
-          body: jsonEncode(comment.toJson()));
+        HttpConstants.basicCommentUrl(communityName, postId, commentId),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "${token.tokenType} ${token.accessToken}",
+        },
+      );
     } catch (e) {
       rethrow;
     }
