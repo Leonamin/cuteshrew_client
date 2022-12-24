@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-// 커뮤티니 정보가 있는 엔티티
-class CommunityEntity extends Equatable {
+// 커뮤니티 기본 정보가 담긴 엔티티
+// 의존성 역전으로 영향 최소화시킨다.
+abstract class CommunityEntity extends Equatable {
   final String communityName;
   final String communityShowName;
   final int postingCount;
