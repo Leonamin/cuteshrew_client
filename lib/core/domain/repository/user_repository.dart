@@ -5,7 +5,7 @@ import 'package:dartz/dartz.dart';
 
 abstract class UserRepository {
   // 유저 생성하기
-  Future<Either<Failure, void>> createUser({UserCreateEntity newUser});
+  Future<Either<Failure, void>> createUser({required UserCreateEntity newUser});
   // 유저 기본 정보 가져오기
-  Future<Either<Failure, UserEntity>> getUser({String userName});
+  Future<Either<Failure, UserEntity>> getUser({required String userName});
 }
