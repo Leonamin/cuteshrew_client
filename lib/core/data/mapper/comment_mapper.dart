@@ -2,6 +2,7 @@ import 'package:cuteshrew/core/data/dto/comment_dto.dart';
 import 'package:cuteshrew/core/data/dto/user_dto.dart';
 import 'package:cuteshrew/core/data/mapper/mapper.dart';
 import 'package:cuteshrew/core/data/mapper/user_mapper.dart';
+import 'package:cuteshrew/core/domain/entity/comment_detail_entity.dart';
 import 'package:cuteshrew/core/domain/entity/comment_entity.dart';
 
 class CommentMapper extends Mapper<CommentDTO, CommentEntity> {
@@ -20,7 +21,7 @@ class CommentMapper extends Mapper<CommentDTO, CommentEntity> {
       postId: 1번 게시글
       writer: 그냥 nickname, email로
     */
-    return CommentEntity(
+    return CommentDetailEntity(
         commentId: object.commentId,
         comment: object.comment ?? "",
         writerId: object.writerId ?? 1,
