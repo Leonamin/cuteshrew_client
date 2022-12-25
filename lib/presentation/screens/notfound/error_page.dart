@@ -1,4 +1,4 @@
-import 'package:cuteshrew/widgets/custom_text.dart';
+import 'package:cuteshrew/presentation/widgets/common_widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 
 class PageNotFound extends StatelessWidget {
@@ -14,19 +14,29 @@ class PageNotFound extends StatelessWidget {
             "assets/images/404.png",
             width: 350,
           ),
-          SizedBox(
-            height: 10,
+          const SizedBox(
+            height: 16,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: const [
               CustomText(
                 text: "Page not found",
                 size: 24,
                 weight: FontWeight.bold,
               )
             ],
-          )
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          OutlinedButton(
+            onPressed: () {},
+            // FIXME 하드코딩 언어
+            child: const CustomText(
+              text: "메인 페이지로 가기",
+            ),
+          ),
         ],
       ),
     );
