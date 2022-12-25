@@ -62,7 +62,7 @@ class PostingRepositoryImpl extends PostingRepository {
     try {
       PostingDTO postingDTO = await _postingRemoteDataSource.getPosting(
           communityPath, postId, password);
-      PostingMapper mapper = PostingMapper();
+      PostingDetailMapper mapper = PostingDetailMapper();
       PostingEntity result = mapper.map(postingDTO);
       return Right(result);
     } on Exception catch (e) {
