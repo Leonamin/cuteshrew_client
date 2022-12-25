@@ -4,8 +4,8 @@ import 'package:cuteshrew/presentation/data/user_data.dart';
 
 // 미리보기 정보만 담긴 게시글 데이터
 class PostingPreviewData extends PostingData {
-  final UserData writer;
-  final CommunityData ownCommunity;
+  final UserData? writer;
+  final CommunityData? ownCommunity;
 
   const PostingPreviewData({
     required int postId,
