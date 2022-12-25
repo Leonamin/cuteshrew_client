@@ -1,10 +1,10 @@
 import 'package:cuteshrew/api/cuteshrew_api_client.dart';
-import 'package:cuteshrew/feature/home/page/home_page.dart';
-import 'package:cuteshrew/helpers/no_transition_builder.dart';
-import 'package:cuteshrew/providers/login_notifier.dart';
+import 'package:cuteshrew/presentation/screens/home/page/home_page.dart';
+import 'package:cuteshrew/presentation/helpers/no_transition_builder.dart';
+import 'package:cuteshrew/old/providers/login_notifier.dart';
 import 'package:cuteshrew/routing/router.dart';
 import 'package:cuteshrew/routing/routes.dart';
-import 'package:cuteshrew/service_locator.dart';
+import 'package:cuteshrew/old/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
