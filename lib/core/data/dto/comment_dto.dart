@@ -36,8 +36,11 @@ class CommentDTO {
       commentClass: json['comment_class'],
       order: json['order'],
       groupId: json['group_id'],
-      writerInfo: UserDTO.fromJson(json['creator']),
-      posting: PostingDTO.fromJson(json['positng']),
+      writerInfo:
+          (json['creator'] != null) ? UserDTO.fromJson(json['creator']) : null,
+      posting: (json['posting'] != null)
+          ? PostingDTO.fromJson(json['positng'])
+          : null,
     );
   }
 
@@ -50,7 +53,7 @@ class CommentDTO {
         'comment_class': commentClass,
         'order': order,
         'group_id': groupId,
-        'creator': writerInfo,
-        'posting': posting,
+        'creator': writerInfo?.toJson(),
+        'posting': posting?.toJson(),
       };
 }

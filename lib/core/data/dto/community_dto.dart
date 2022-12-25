@@ -25,7 +25,10 @@ class CommunityDTO {
       communityShowName: json['showname'],
       postingsCount: json['posting_count'],
       createdAt: json['created_at'],
-      postings: json['postings'],
+      postings: (json['postings'] != null)
+          ? List.from(
+              (json['postings'] ?? []).map((e) => PostingDTO.fromJson(e)))
+          : null,
     );
   }
 
@@ -35,6 +38,6 @@ class CommunityDTO {
         'showname': communityShowName,
         'postings_count': postingsCount,
         'created_at': createdAt,
-        'postings': postings,
+        'postings': List.from((postings ?? []).map((e) => e.toJson())),
       };
 }
