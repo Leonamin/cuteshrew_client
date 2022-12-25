@@ -1,8 +1,8 @@
 import 'package:cuteshrew/constants/style.dart';
+import 'package:cuteshrew/presentation/strings/strings.dart';
 import 'package:cuteshrew/presentation/widgets/common_widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cuteshrew/old/strings/strings.dart';
 
 AppBar mainAppBar(BuildContext context, GlobalKey<ScaffoldState> key) => AppBar(
       leading: //!ResponsiveWidget.isSmallScreen(context)
@@ -87,7 +87,7 @@ class MainNavTitle extends StatelessWidget {
         ),
         InkWell(
           onTap: () {},
-          child: CustomText(
+          child: const CustomText(
             text: Strings.login,
             color: lightGrey,
           ),
