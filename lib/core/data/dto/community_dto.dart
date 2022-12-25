@@ -1,3 +1,5 @@
+import 'package:cuteshrew/core/data/dto/posting_dto.dart';
+
 class CommunityDTO {
   final int id;
   final String? communityName;
@@ -5,7 +7,7 @@ class CommunityDTO {
   final int? postingsCount;
   final int? createdAt;
   // 이거 너흐면 순환참조인데 어캐해결해야할지 모르겠다.
-  // final List<PostingDTO> postings
+  final List<PostingDTO>? postings;
 
   const CommunityDTO({
     required this.id,
@@ -13,15 +15,18 @@ class CommunityDTO {
     this.communityName,
     this.postingsCount,
     this.createdAt,
+    this.postings,
   });
 
   factory CommunityDTO.fromJson(Map<String, dynamic> json) {
     return CommunityDTO(
-        id: json['id'],
-        communityName: json['name'],
-        communityShowName: json['showname'],
-        postingsCount: json['posting_count'],
-        createdAt: json['created_at']);
+      id: json['id'],
+      communityName: json['name'],
+      communityShowName: json['showname'],
+      postingsCount: json['posting_count'],
+      createdAt: json['created_at'],
+      postings: json['postings'],
+    );
   }
 
   Map<String, dynamic> toJson() => {
@@ -30,5 +35,6 @@ class CommunityDTO {
         'showname': communityShowName,
         'postings_count': postingsCount,
         'created_at': createdAt,
+        'postings': postings,
       };
 }
