@@ -1,27 +1,31 @@
-import 'package:cuteshrew/api/cuteshrew_api_client.dart';
-import 'package:cuteshrew/presentation/screens/home/page/home_page.dart';
-import 'package:cuteshrew/presentation/helpers/no_transition_builder.dart';
-import 'package:cuteshrew/old/providers/login_notifier.dart';
-import 'package:cuteshrew/routing/router.dart';
-import 'package:cuteshrew/routing/routes.dart';
-import 'package:cuteshrew/old/service_locator.dart';
+import 'package:cuteshrew/core/data/datasource/remote/authentication_remote_datasource.dart';
+import 'package:cuteshrew/core/data/repository/authentication_repository_impl.dart';
+import 'package:cuteshrew/core/domain/usecase/login_usecase.dart';
+import 'package:cuteshrew/presentation/providers/authentication/authentication_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 // import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+import 'package:cuteshrew/di/service_locator.dart';
+import 'package:cuteshrew/presentation/helpers/no_transition_builder.dart';
+import 'package:cuteshrew/config/routing/router.dart';
+import 'package:cuteshrew/config/routing/routes.dart';
+
 void main() {
   // usePathUrlStrategy();
   setupLocator();
   runApp(MultiProvider(
     providers: [
-      Provider<CuteshrewApiClient>(
-        create: (_) => const CuteshrewApiClient(),
-      ),
-      ChangeNotifierProvider<LoginNotifier>(
-        create: (context) =>
-            LoginNotifier(api: context.read<CuteshrewApiClient>()),
+      ChangeNotifierProvider<AuthenticationProvider>(
+        create: (context) => AuthenticationProvider(
+          loginUseCase: LoginUseCase(
+            authenticationRepository: AuthenticationRepositoryImpl(
+              authenticationRemoteDataSource: AuthenticationRemoteDataSource(),
+            ),
+          ),
+        ),
       )
     ],
     child: const MyApp(),
@@ -51,8 +55,8 @@ class MyApp extends StatelessWidget {
                 },
         ),
       ),
-      // onGenerateRoute: generateRoute,
-      home: HomePage(),
+      onGenerateRoute: generateRoute,
+      initialRoute: Routes.HomePageRoute,
     );
   }
 }
