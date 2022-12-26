@@ -1,7 +1,5 @@
 import 'package:cuteshrew/core/domain/entity/community_entity.dart';
-import 'package:cuteshrew/core/domain/entity/community_preview_entity.dart';
 import 'package:cuteshrew/core/domain/entity/posting_entity.dart';
-import 'package:cuteshrew/core/domain/entity/posting_preview_entity.dart';
 import 'package:cuteshrew/presentation/data/posting_data.dart';
 import 'package:cuteshrew/presentation/mappers/posting_preview_data_mapper.dart';
 import 'package:cuteshrew/presentation/utils/utils.dart';
