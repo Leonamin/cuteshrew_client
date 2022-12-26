@@ -1,6 +1,6 @@
 import 'package:cuteshrew/core/domain/entity/comment_create_entity.dart';
+import 'package:cuteshrew/core/domain/entity/comment_detail_entity.dart';
 import 'package:cuteshrew/core/domain/entity/comment_entity.dart';
-import 'package:cuteshrew/core/domain/entity/comment_preview_entity.dart';
 import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
 import 'package:cuteshrew/core/resources/failure.dart';
 import 'package:dartz/dartz.dart';
@@ -22,7 +22,7 @@ abstract class CommentRepository {
   });
 
   // 유저 이름으로 댓글 가져오기
-  Future<Either<Failure, List<CommentPreviewEntity>>> getCommentsByUser({
+  Future<Either<Failure, List<CommentDetailEntity>>> getCommentsByUser({
     required String userName,
     required int startAtId,
     required int loadCount,

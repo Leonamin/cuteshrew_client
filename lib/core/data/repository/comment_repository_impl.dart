@@ -1,11 +1,11 @@
 import 'package:cuteshrew/core/data/datasource/remote/comment_remote_datasource.dart';
 import 'package:cuteshrew/core/data/dto/comment_dto.dart';
 import 'package:cuteshrew/core/data/mapper/comment_create_mapper.dart';
+import 'package:cuteshrew/core/data/mapper/comment_detail_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/comment_mapper.dart';
-import 'package:cuteshrew/core/data/mapper/comment_preview_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/login_token_mapper.dart';
+import 'package:cuteshrew/core/domain/entity/comment_detail_entity.dart';
 import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
-import 'package:cuteshrew/core/domain/entity/comment_preview_entity.dart';
 import 'package:cuteshrew/core/domain/entity/comment_entity.dart';
 import 'package:cuteshrew/core/domain/entity/comment_create_entity.dart';
 import 'package:cuteshrew/core/domain/repository/comment_repository.dart';
@@ -106,15 +106,15 @@ class CommentRepositoryImpl extends CommentRepository {
   }
 
   @override
-  Future<Either<Failure, List<CommentPreviewEntity>>> getCommentsByUser(
+  Future<Either<Failure, List<CommentDetailEntity>>> getCommentsByUser(
       {required String userName,
       required int startAtId,
       required int loadCount}) async {
     try {
-      CommentPreviewMapper mapper = CommentPreviewMapper();
+      CommentDetailMapper mapper = CommentDetailMapper();
       List<CommentDTO> commentDTO = await _commentRemoteDataSource
           .searchComments(userName, startAtId, loadCount);
-      List<CommentPreviewEntity> result = [
+      List<CommentDetailEntity> result = [
         for (final e in commentDTO) mapper.map(e)
       ];
       return Right(result);

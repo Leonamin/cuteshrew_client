@@ -1,4 +1,4 @@
-import 'package:cuteshrew/core/domain/entity/comment_preview_entity.dart';
+import 'package:cuteshrew/core/domain/entity/comment_detail_entity.dart';
 import 'package:cuteshrew/core/domain/entity/posting_preview_entity.dart';
 import 'package:cuteshrew/core/domain/entity/user_entity.dart';
 import 'package:cuteshrew/core/domain/repository/comment_repository.dart';
@@ -32,7 +32,7 @@ class ShowUserPageUsecase {
 
   // 유저의 댓글들을 가져온다.
 
-  Future<Either<Failure, List<CommentPreviewEntity>>> loadComments(
+  Future<Either<Failure, List<CommentDetailEntity>>> loadComments(
       String userName, int startAtId, int loadCount) {
     return commentRepository.getCommentsByUser(
         userName: userName, startAtId: startAtId, loadCount: loadCount);
