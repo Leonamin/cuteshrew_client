@@ -2,9 +2,7 @@ import 'package:cuteshrew/core/domain/entity/comment_entity.dart';
 import 'package:cuteshrew/core/domain/entity/posting_entity.dart';
 import 'package:cuteshrew/core/domain/usecase/show_user_page_usecase.dart';
 import 'package:cuteshrew/core/resources/failure.dart';
-import 'package:cuteshrew/presentation/data/comment_data.dart';
 import 'package:cuteshrew/presentation/data/comment_detail_data.dart';
-import 'package:cuteshrew/presentation/data/posting_data.dart';
 import 'package:cuteshrew/presentation/data/posting_preview_data.dart';
 import 'package:cuteshrew/presentation/mappers/comment_detail_data_mapper.dart';
 import 'package:cuteshrew/presentation/mappers/posting_preview_data_mapper.dart';
@@ -26,15 +24,17 @@ class UserPageProvider extends ChangeNotifier {
   UserPageState _state = UserPageState.INIT;
   UserPageState get state => _state;
 
-  PostingPreviewDataMapper _postingMapper = PostingPreviewDataMapper();
-  CommentDetailDataMapper _commentMapper = CommentDetailDataMapper();
+  final PostingPreviewDataMapper _postingMapper = PostingPreviewDataMapper();
+  final CommentDetailDataMapper _commentMapper = CommentDetailDataMapper();
 
-  List<PostingEntity> _userPostings = [];
-  List<CommentEntity> _userComments = [];
+  final List<PostingEntity> _userPostings = [];
+  final List<CommentEntity> _userComments = [];
 
-  List<PostingData> get userPostings => List<PostingPreviewData>.from(
+  // 위젯단에서는 추상화된 데이터를 검사하는걸 최대한 피하자
+  // 최대한 위젯단은 받아먹기만 하는거다.
+  List<PostingPreviewData> get userPostings => List<PostingPreviewData>.from(
       _userPostings.map((e) => _postingMapper.map(e)));
-  List<CommentData> get userComments => List<CommentDetailData>.from(
+  List<CommentDetailData> get userComments => List<CommentDetailData>.from(
       _userComments.map((e) => _commentMapper.map(e)));
 
   int postingCounts = 0;
