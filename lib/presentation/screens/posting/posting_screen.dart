@@ -1,16 +1,18 @@
-import 'package:cuteshrew/api/cuteshrew_api_client.dart';
+import 'package:cuteshrew/config/routing/routes.dart';
 import 'package:cuteshrew/constants/style.dart';
-import 'package:cuteshrew/model/models.dart';
-import 'package:cuteshrew/models/login_token.dart';
-import 'package:cuteshrew/old/pages/posting/posting_screen/password_certification_posting_page_screen.dart';
+import 'package:cuteshrew/core/data/datasource/remote/comment_remote_datasource.dart';
+import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.dart';
+import 'package:cuteshrew/core/data/repository/comment_repository_impl.dart';
+import 'package:cuteshrew/core/data/repository/posting_repository_impl.dart';
+import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
+import 'package:cuteshrew/core/domain/usecase/show_posting_page_usecase.dart';
+import 'package:cuteshrew/presentation/screens/comment_editor/post_editor_page.dart';
+import 'package:cuteshrew/presentation/screens/posting/posting_screen/password_certification_posting_page_screen.dart';
 import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_provider.dart';
-import 'package:cuteshrew/old/pages/post_editor/post_editor_page.dart';
 import 'package:cuteshrew/presentation/screens/comment/comment_screen.dart';
-import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_state.dart';
-import 'package:cuteshrew/old/utils/utils.dart';
-import 'package:cuteshrew/widgets/clickable_text.dart';
+import 'package:cuteshrew/presentation/widgets/common_widgets/clickable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
@@ -33,13 +35,17 @@ class _PostingScreenState extends State<PostingScreen> {
       return ChangeNotifierProvider(
         create: (context) {
           final notifier = PostingPageProvider(
-              postId: widget.postId,
-              communityName: Community(
-                  communityName: widget.communityName,
-                  communityShowName: widget.communityName,
-                  latestPostingList: [],
-                  postingsCount: 0),
-              api: context.read<CuteshrewApiClient>());
+            postingPageUseCase: ShowPostingPageUseCase(
+              postingRepository: PostingRepositoryImpl(
+                postingRemoteDataSource: PostingRemoteDataSource(),
+              ),
+              commentRepository: CommentRepositoryImpl(
+                commentRemoteDatasource: CommentRemoteDataSource(),
+              ),
+            ),
+            postId: widget.postId,
+            communityName: widget.communityName,
+          );
           notifier.getPosting();
           return notifier;
         },
@@ -142,7 +148,7 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
         child: Row(
           children: [
             Text(
-              postingPageState._postDetail.ownCommunity.communityShowName,
+              postingPageState.communityShowName,
               style: const TextStyle(
                 fontSize: 16,
                 color: Colors.blue,
@@ -159,7 +165,8 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
           Navigator.pushNamed(
               context,
               Routes.CommuintyNamePageRoute(
-                  postingPageState.communityName.communityName));
+                postingPageState.communityName,
+              ));
         },
       ),
       const SizedBox(
@@ -167,7 +174,7 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
       ),
       // 제목
       Text(
-        postingPageState._postDetail.title,
+        postingPageState.title,
         style: const TextStyle(
             color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),
       ),
@@ -199,9 +206,10 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
                 onTap: () => Navigator.pushNamed(
                     context,
                     Routes.UserPageRoute(
-                        postingPageState._postDetail.userInfo.name)),
+                      postingPageState.writerName,
+                    )),
                 child: Text(
-                  postingPageState._postDetail.userInfo.name,
+                  postingPageState.writerName,
                   style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -209,7 +217,7 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
                 ),
               ),
               Text(
-                Utils.formatTimeStamp(postingPageState._postDetail.publishedAt),
+                postingPageState.publishedDateTime,
                 style: TextStyle(
                     color: Colors.black.withOpacity(0.8), fontSize: 14),
               )
@@ -222,7 +230,7 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LoginToken? token = loginState is AuthorizedState
+    final LoginTokenEntity? token = loginState is AuthorizedState
         ? (loginState as AuthorizedState).loginToken
         : null;
     return ListView(
@@ -244,9 +252,9 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
                         Navigator.pushNamed(
                             context,
                             Routes.PostEditorPageRoute(
-                                postingPageState.communityName.communityName),
+                                postingPageState.communityName),
                             arguments: PostEditorPageArguments(
-                                postingPageState._postDetail, true));
+                                postingPageState.postingDetailData, true));
                       },
                       child: Row(
                         children: const [
@@ -287,13 +295,13 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
         const Divider(
           height: 5,
         ),
-        Html(data: postingPageState._postDetail.body),
+        Html(data: postingPageState.content),
         const Divider(
           height: 5,
         ),
         // Expanded 위젯은 Column, Row, Flex 내에서만 사용 가능하다.
         CommentScreen(
-            communityInfo: postingPageState.communityName,
+            communityName: postingPageState.communityName,
             postId: postingPageState.postId),
       ],
     );

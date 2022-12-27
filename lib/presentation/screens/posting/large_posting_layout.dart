@@ -1,12 +1,12 @@
 import 'package:cuteshrew/constants/style.dart';
-import 'package:cuteshrew/old/pages/posting/posting_screen.dart';
+import 'package:cuteshrew/presentation/screens/posting/posting_screen.dart';
 import 'package:flutter/material.dart';
 
 class LargePostingLayout extends StatelessWidget {
-  String communityName;
-  int postId;
+  final String communityName;
+  final int postId;
 
-  LargePostingLayout(
+  const LargePostingLayout(
       {Key? key, required this.communityName, required this.postId})
       : super(key: key);
 

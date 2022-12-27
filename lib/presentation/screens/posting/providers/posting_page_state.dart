@@ -1,5 +1,7 @@
 import 'package:cuteshrew/core/domain/entity/posting_detail_entity.dart';
 import 'package:cuteshrew/core/domain/entity/posting_entity.dart';
+import 'package:cuteshrew/presentation/data/posting_detail_data.dart';
+import 'package:cuteshrew/presentation/mappers/posting_detail_data_mapper.dart';
 import 'package:cuteshrew/presentation/utils/utils.dart';
 import 'package:equatable/equatable.dart';
 
@@ -89,6 +91,10 @@ class LoadedDataPostingPageState extends PostingPageState {
 
   late PostingEntity _postingEntity;
 
+  final PostingDetailDataMapper _mapper = PostingDetailDataMapper();
+
+  PostingDetailData get postingDetailData => _mapper.map(_postingEntity);
+
   String get communityShowName => (_postingEntity is PostingDetailEntity)
       ? (_postingEntity as PostingDetailEntity).ownCommunity.communityShowName
       : communityName;
@@ -97,6 +103,9 @@ class LoadedDataPostingPageState extends PostingPageState {
       Utils.formatTimeStamp(_postingEntity.publishedAt);
   String get updatedDateTime => Utils.formatTimeStamp(_postingEntity.updatedAt);
   String get title => _postingEntity.title;
+  String get content => (_postingEntity is PostingDetailEntity)
+      ? (_postingEntity as PostingDetailEntity).body
+      : "";
   int get commentCount => _postingEntity.commentCount;
   String get showCommentCount =>
       (commentCount <= 99 ? commentCount.toString() : "99+");

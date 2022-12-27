@@ -1,4 +1,8 @@
-import 'package:cuteshrew/api/cuteshrew_api_client.dart';
+import 'package:cuteshrew/core/data/datasource/remote/comment_remote_datasource.dart';
+import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.dart';
+import 'package:cuteshrew/core/data/repository/comment_repository_impl.dart';
+import 'package:cuteshrew/core/data/repository/posting_repository_impl.dart';
+import 'package:cuteshrew/core/domain/usecase/show_posting_page_usecase.dart';
 import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_provider.dart';
 import 'package:cuteshrew/presentation/screens/posting/providers/posting_password_provider.dart';
 import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_state.dart';
@@ -56,7 +60,14 @@ class PasswordCertificationPostingPageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => PostingPasswordProvider(
-          api: context.read<CuteshrewApiClient>(),
+          useCase: ShowPostingPageUseCase(
+            commentRepository: CommentRepositoryImpl(
+              commentRemoteDatasource: CommentRemoteDataSource(),
+            ),
+            postingRepository: PostingRepositoryImpl(
+              postingRemoteDataSource: PostingRemoteDataSource(),
+            ),
+          ),
           communityName: postingPageState.communityName,
           postId: postingPageState.postId),
       builder: (context, child) => Column(

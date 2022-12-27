@@ -14,6 +14,7 @@ import 'package:cuteshrew/presentation/screens/comment_editor/post_editor_page.d
 import 'package:cuteshrew/presentation/screens/community/community_page.dart';
 import 'package:cuteshrew/presentation/screens/home/page/home_page.dart';
 import 'package:cuteshrew/presentation/screens/notfound/error_page.dart';
+import 'package:cuteshrew/presentation/screens/posting/posting_page.dart';
 import 'package:cuteshrew/presentation/screens/user/user_page.dart';
 import 'package:flutter/material.dart';
 
@@ -88,29 +89,28 @@ Route<dynamic> generateRoute(RouteSettings settings) {
               originPost: args.originPost,
               isModify: args.isModify),
         );
+      } else {
+        return MaterialPageRoute(
+          builder: (context) => PostingPage(
+            communityName: communityName,
+            postId: int.parse(uri.pathSegments[2]),
+          ),
+        );
       }
-      // else {
-      //   return MaterialPageRoute(
-      //     builder: (context) => PostingPage(
-      //       communityName: communityName,
-      //       postId: int.parse(uri.pathSegments[2]),
-      //     ),
-      //   );
-      // }
     }
   }
 
-  // if (uri.pathSegments.length == 4) {
-  //   if (uri.pathSegments.first == Routes.CommunityPageName &&
-  //       uri.pathSegments[2] == 'page') {
-  //     String communityName = uri.pathSegments[1];
-  //     return MaterialPageRoute(
-  //       builder: (context) => CommunityPage(
-  //           communityName: communityName,
-  //           currentPageNum: int.parse(uri.pathSegments[3])),
-  //     );
-  //   }
-  // }
+  if (uri.pathSegments.length == 4) {
+    if (uri.pathSegments.first == Routes.CommunityPageName &&
+        uri.pathSegments[2] == 'page') {
+      String communityName = uri.pathSegments[1];
+      return MaterialPageRoute(
+        builder: (context) => CommunityPage(
+            communityName: communityName,
+            currentPageNum: int.parse(uri.pathSegments[3])),
+      );
+    }
+  }
 
   return MaterialPageRoute(
     builder: (context) => const PageNotFound(),

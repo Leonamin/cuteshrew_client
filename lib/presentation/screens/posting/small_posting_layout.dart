@@ -1,10 +1,10 @@
-import 'package:cuteshrew/old/pages/posting/posting_screen.dart';
+import 'package:cuteshrew/presentation/screens/posting/posting_screen.dart';
 import 'package:flutter/material.dart';
 
 class SmallPostingLayout extends StatelessWidget {
-  String communityName;
-  int postId;
-  SmallPostingLayout(
+  final String communityName;
+  final int postId;
+  const SmallPostingLayout(
       {Key? key, required this.communityName, required this.postId})
       : super(key: key);
 
