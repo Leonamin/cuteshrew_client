@@ -2,6 +2,7 @@ import 'package:cuteshrew/core/data/datasource/remote/authentication_remote_data
 import 'package:cuteshrew/core/data/repository/authentication_repository_impl.dart';
 import 'package:cuteshrew/core/domain/usecase/login_usecase.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_provider.dart';
+import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +27,9 @@ void main() {
             ),
           ),
         ),
-      )
+      ),
+      ProxyProvider<AuthenticationProvider, AuthenticationState>(
+          update: ((context, value, previous) => value.value))
     ],
     child: const MyApp(),
   ));
