@@ -5,10 +5,10 @@ import 'package:cuteshrew/core/resources/failure.dart';
 import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_state.dart';
 import 'package:flutter/widgets.dart';
 
-class PostingNotifier extends ValueNotifier<PostingPageState> {
+class PostingPageProvider extends ValueNotifier<PostingPageState> {
   late ShowPostingPageUseCase _postingPageUseCase;
 
-  PostingNotifier({
+  PostingPageProvider({
     required int postId,
     required String communityName,
     required ShowPostingPageUseCase postingPageUseCase,

@@ -3,8 +3,8 @@ import 'package:cuteshrew/core/resources/failure.dart';
 import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_state.dart';
 import 'package:flutter/cupertino.dart';
 
-class CommentPageNotifier extends ValueNotifier<CommentPageState> {
-  CommentPageNotifier({
+class CommentPageProvider extends ValueNotifier<CommentPageState> {
+  CommentPageProvider({
     required ShowPostingPageUseCase postingPageUseCase,
     required int postId,
     required String communityName,
