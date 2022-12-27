@@ -10,6 +10,7 @@
 
 import 'package:cuteshrew/config/routing/routes.dart';
 import 'package:cuteshrew/presentation/screens/auth/auth_page.dart';
+import 'package:cuteshrew/presentation/screens/comment_editor/post_editor_page.dart';
 import 'package:cuteshrew/presentation/screens/community/community_page.dart';
 import 'package:cuteshrew/presentation/screens/home/page/home_page.dart';
 import 'package:cuteshrew/presentation/screens/notfound/error_page.dart';
@@ -35,23 +36,19 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         return MaterialPageRoute(
           builder: (context) => const AuthPage(),
         );
-      // case Routes.PostEditorPageName:
-      //   var args;
-      //   if (settings.arguments != null) {
-      //     args = settings.arguments;
-      //   } else {
-      //     args = PostEditorPageArguments(null, false);
-      //   }
-      //   return MaterialPageRoute(
-      //     builder: (context) => PostEditorPage(
-      //         communityInfo: Community(
-      //             communityName: "",
-      //             communityShowName: "",
-      //             latestPostingList: [],
-      //             postingsCount: 0),
-      //         originPost: args.originPost,
-      //         isModify: args.isModify),
-      //   );
+      case Routes.PostEditorPageName:
+        var args;
+        if (settings.arguments != null) {
+          args = settings.arguments;
+        } else {
+          args = PostEditorPageArguments(null, false);
+        }
+        return MaterialPageRoute(
+          builder: (context) => PostEditorPage(
+              communityName: "",
+              originPost: args.originPost,
+              isModify: args.isModify),
+        );
       default:
     }
   }
@@ -74,37 +71,34 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     }
   }
 
-  // if (uri.pathSegments.length == 3) {
-  //   if (uri.pathSegments.first == Routes.CommunityPageName) {
-  //     String communityName = uri.pathSegments[1];
+  if (uri.pathSegments.length == 3) {
+    if (uri.pathSegments.first == Routes.CommunityPageName) {
+      String communityName = uri.pathSegments[1];
 
-  //     if (uri.pathSegments[2] == Routes.PostEditorPageName) {
-  //       var args;
-  //       if (settings.arguments != null) {
-  //         args = settings.arguments;
-  //       } else {
-  //         args = PostEditorPageArguments(null, false);
-  //       }
-  //       return MaterialPageRoute(
-  //         builder: (context) => PostEditorPage(
-  //             communityInfo: Community(
-  //                 communityName: communityName,
-  //                 communityShowName: communityName,
-  //                 latestPostingList: [],
-  //                 postingsCount: 0),
-  //             originPost: args.originPost,
-  //             isModify: args.isModify),
-  //       );
-  //     } else {
-  //       return MaterialPageRoute(
-  //         builder: (context) => PostingPage(
-  //           communityName: communityName,
-  //           postId: int.parse(uri.pathSegments[2]),
-  //         ),
-  //       );
-  //     }
-  //   }
-  // }
+      if (uri.pathSegments[2] == Routes.PostEditorPageName) {
+        var args;
+        if (settings.arguments != null) {
+          args = settings.arguments;
+        } else {
+          args = PostEditorPageArguments(null, false);
+        }
+        return MaterialPageRoute(
+          builder: (context) => PostEditorPage(
+              communityName: communityName,
+              originPost: args.originPost,
+              isModify: args.isModify),
+        );
+      }
+      // else {
+      //   return MaterialPageRoute(
+      //     builder: (context) => PostingPage(
+      //       communityName: communityName,
+      //       postId: int.parse(uri.pathSegments[2]),
+      //     ),
+      //   );
+      // }
+    }
+  }
 
   // if (uri.pathSegments.length == 4) {
   //   if (uri.pathSegments.first == Routes.CommunityPageName &&
