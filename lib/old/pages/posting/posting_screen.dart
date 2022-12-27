@@ -3,12 +3,12 @@ import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/login_token.dart';
 import 'package:cuteshrew/old/pages/posting/posting_screen/password_certification_posting_page_screen.dart';
-import 'package:cuteshrew/old/providers/posting_page_notifier.dart';
+import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_provider.dart';
 import 'package:cuteshrew/old/pages/post_editor/post_editor_page.dart';
-import 'package:cuteshrew/old/pages/posting/comment_screen.dart';
+import 'package:cuteshrew/presentation/screens/comment/comment_screen.dart';
 import 'package:cuteshrew/routing/routes.dart';
-import 'package:cuteshrew/old/states/login_state.dart';
-import 'package:cuteshrew/old/states/posting_page_state.dart';
+import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
+import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_state.dart';
 import 'package:cuteshrew/old/utils/utils.dart';
 import 'package:cuteshrew/widgets/clickable_text.dart';
 import 'package:flutter/material.dart';
@@ -29,12 +29,12 @@ class PostingScreen extends StatefulWidget {
 class _PostingScreenState extends State<PostingScreen> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<LoginState>(builder: (context, loginState, child) {
+    return Consumer<AuthenticationState>(builder: (context, loginState, child) {
       return ChangeNotifierProvider(
         create: (context) {
-          final notifier = PostingNotifier(
+          final notifier = PostingPageProvider(
               postId: widget.postId,
-              communityInfo: Community(
+              communityName: Community(
                   communityName: widget.communityName,
                   communityShowName: widget.communityName,
                   latestPostingList: [],
@@ -43,7 +43,7 @@ class _PostingScreenState extends State<PostingScreen> {
           notifier.getPosting();
           return notifier;
         },
-        child: ProxyProvider<PostingNotifier, PostingPageState>(
+        child: ProxyProvider<PostingPageProvider, PostingPageState>(
           update: (context, value, previous) => value.value,
           child: PostingPageScreen(
             loginState: loginState,
@@ -58,7 +58,7 @@ class PostingPageScreen extends StatelessWidget {
   const PostingPageScreen({Key? key, required this.loginState})
       : super(key: key);
 
-  final LoginState loginState;
+  final AuthenticationState loginState;
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +133,7 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
   }) : super(key: key);
 
   final LoadedDataPostingPageState postingPageState;
-  final LoginState loginState;
+  final AuthenticationState loginState;
 
   Widget _makePostingHeader(context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -142,7 +142,7 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
         child: Row(
           children: [
             Text(
-              postingPageState.postDetail.ownCommunity.communityShowName,
+              postingPageState._postDetail.ownCommunity.communityShowName,
               style: const TextStyle(
                 fontSize: 16,
                 color: Colors.blue,
@@ -159,7 +159,7 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
           Navigator.pushNamed(
               context,
               Routes.CommuintyNamePageRoute(
-                  postingPageState.communityInfo.communityName));
+                  postingPageState.communityName.communityName));
         },
       ),
       const SizedBox(
@@ -167,7 +167,7 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
       ),
       // 제목
       Text(
-        postingPageState.postDetail.title,
+        postingPageState._postDetail.title,
         style: const TextStyle(
             color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),
       ),
@@ -199,9 +199,9 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
                 onTap: () => Navigator.pushNamed(
                     context,
                     Routes.UserPageRoute(
-                        postingPageState.postDetail.userInfo.name)),
+                        postingPageState._postDetail.userInfo.name)),
                 child: Text(
-                  postingPageState.postDetail.userInfo.name,
+                  postingPageState._postDetail.userInfo.name,
                   style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -209,7 +209,7 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
                 ),
               ),
               Text(
-                Utils.formatTimeStamp(postingPageState.postDetail.publishedAt),
+                Utils.formatTimeStamp(postingPageState._postDetail.publishedAt),
                 style: TextStyle(
                     color: Colors.black.withOpacity(0.8), fontSize: 14),
               )
@@ -244,9 +244,9 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
                         Navigator.pushNamed(
                             context,
                             Routes.PostEditorPageRoute(
-                                postingPageState.communityInfo.communityName),
+                                postingPageState.communityName.communityName),
                             arguments: PostEditorPageArguments(
-                                postingPageState.postDetail, true));
+                                postingPageState._postDetail, true));
                       },
                       child: Row(
                         children: const [
@@ -268,7 +268,9 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
                       onPressed: () {
                         //TODO 임시로
                         // _showDialog(context, loginState);
-                        context.read<PostingNotifier>().deletePosting(token);
+                        context
+                            .read<PostingPageProvider>()
+                            .deletePosting(token);
                       },
                       child: Row(
                         children: const [
@@ -285,13 +287,13 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
         const Divider(
           height: 5,
         ),
-        Html(data: postingPageState.postDetail.body),
+        Html(data: postingPageState._postDetail.body),
         const Divider(
           height: 5,
         ),
         // Expanded 위젯은 Column, Row, Flex 내에서만 사용 가능하다.
         CommentScreen(
-            communityInfo: postingPageState.communityInfo,
+            communityInfo: postingPageState.communityName,
             postId: postingPageState.postId),
       ],
     );

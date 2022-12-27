@@ -1,8 +1,8 @@
 import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/models/post_detail.dart';
-import 'package:cuteshrew/old/providers/posting_editor_provider.dart';
-import 'package:cuteshrew/old/states/login_state.dart';
+import 'package:cuteshrew/presentation/screens/posting_editor/providers/posting_editor_provider.dart';
+import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
@@ -65,7 +65,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
     }
   }
 
-  Widget _makeHeader(LoginState loginState) {
+  Widget _makeHeader(AuthenticationState loginState) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Column(
@@ -283,7 +283,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
     _communitySeletController.text = widget.communityInfo.communityShowName;
     _titleController.text = widget.originPost?.title ?? "";
 
-    return Consumer<LoginState>(
+    return Consumer<AuthenticationState>(
       builder: (context, loginState, child) {
         return ChangeNotifierProvider(
             create: (context) {

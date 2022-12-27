@@ -3,7 +3,7 @@ import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/old/providers/login_notifier.dart';
 import 'package:cuteshrew/old/pages/community/large_community_layout.dart';
 import 'package:cuteshrew/old/pages/community/small_community_layout.dart';
-import 'package:cuteshrew/old/states/login_state.dart';
+import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:cuteshrew/presentation/common_widgets/main_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +21,7 @@ class CommunityPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-    return ProxyProvider<LoginNotifier, LoginState>(
+    return ProxyProvider<LoginNotifier, AuthenticationState>(
       update: (context, value, previous) => value.value,
       child: Scaffold(
           key: scaffoldKey,

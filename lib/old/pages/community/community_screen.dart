@@ -1,10 +1,10 @@
 import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/constants/values.dart';
 import 'package:cuteshrew/model/models.dart';
-import 'package:cuteshrew/old/providers/community_page_notifier.dart';
+import 'package:cuteshrew/presentation/screens/community/providers/community_page_provider.dart';
 import 'package:cuteshrew/routing/routes.dart';
-import 'package:cuteshrew/old/states/community_page_state.dart';
-import 'package:cuteshrew/old/states/login_state.dart';
+import 'package:cuteshrew/presentation/screens/community/providers/community_page_state.dart';
+import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:cuteshrew/presentation/widgets/common_widgets/list_button.dart';
 import 'package:cuteshrew/presentation/screens/posting/widgets/posting_panel.dart';
 import 'package:flutter/material.dart';
@@ -28,9 +28,9 @@ class CommunityScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) {
-        final notifier = CommunityPageNotifier(
+        final notifier = CommunityPageProvider(
             api: context.read<CuteshrewApiClient>(),
-            communityInfo: Community(
+            communityName: Community(
                 communityName: communityName,
                 communityShowName: "",
                 latestPostingList: [],
@@ -40,14 +40,14 @@ class CommunityScreen extends StatelessWidget {
         notifier.getCommunityInfo(currentPageNum ?? 1);
         return notifier;
       },
-      child: ProxyProvider<CommunityPageNotifier, CommunityPageState>(
+      child: ProxyProvider<CommunityPageProvider, CommunityPageState>(
         update: (context, value, previous) => value.value,
         child: Consumer<CommunityPageState>(builder: (context, value, child) {
           return Scaffold(
             body: () {
               if (value is LoadedDataCommunityPageState) {
                 return LoadedDataCommunityScreen(
-                  communityInfo: value.communityInfo,
+                  communityInfo: value.communityName,
                   currentPageNum: value.currentPageNum,
                   countPerPage: value.countPerPage,
                 );
@@ -116,14 +116,14 @@ class _LoadedDataCommunityScreenState extends State<LoadedDataCommunityScreen> {
             color: Colors.blue,
             onPressed: () {
               context
-                  .read<CommunityPageNotifier>()
+                  .read<CommunityPageProvider>()
                   .getCommunityInfo(_pageButtonProperties[index].id);
             }));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LoginState>(builder: (context, state, child) {
+    return Consumer<AuthenticationState>(builder: (context, state, child) {
       return Scaffold(
         backgroundColor: Colors.white,
         body: ListView(

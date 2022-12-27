@@ -1,11 +1,9 @@
-import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/constants/values.dart';
-import 'package:cuteshrew/model/models.dart';
-import 'package:cuteshrew/models/comment_detail.dart';
-import 'package:cuteshrew/old/pages/posting/comment_editor.dart';
-import 'package:cuteshrew/old/providers/comment_page_notifier.dart';
-import 'package:cuteshrew/old/pages/posting/comment_card.dart';
-import 'package:cuteshrew/old/states/comment_page_state.dart';
+import 'package:cuteshrew/presentation/data/comment_detail_data.dart';
+import 'package:cuteshrew/presentation/screens/comment/widgets/comment_editor.dart';
+import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_provider.dart';
+import 'package:cuteshrew/presentation/screens/comment/widgets/comment_card.dart';
+import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_state.dart';
 import 'package:cuteshrew/presentation/widgets/common_widgets/list_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,21 +24,21 @@ class CommentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) {
-        final notifier = CommentPageNotifier(
+        final notifier = CommentPageProvider(
             postId: postId,
-            communityInfo: communityInfo,
+            communityName: communityInfo,
             currentPageNum: currentPageNum ?? 1,
             countPerPage: defaultCommentsCountPerPage,
             api: context.read<CuteshrewApiClient>());
         notifier.getCommentPage(currentPageNum ?? 1);
         return notifier;
       },
-      child: ProxyProvider<CommentPageNotifier, CommentPageState>(
+      child: ProxyProvider<CommentPageProvider, CommentPageState>(
         update: (context, value, previous) => value.value,
         child: Consumer<CommentPageState>(builder: (context, state, child) {
           if (state is LoadedCommentPageState) {
             return LoadedCommentScreen(
-              communityInfo: state.communityInfo,
+              communityInfo: state.communityName,
               postId: postId,
               currentPageNum: state.currentPageNum,
               countPerPage: state.countPerPage,
@@ -58,14 +56,14 @@ class CommentScreen extends StatelessWidget {
 }
 
 class LoadedCommentScreen extends StatefulWidget {
-  Community communityInfo; // 현재 커뮤니티 정보
+  String communityName; // 현재 커뮤니티 정보
   int postId;
   int currentPageNum; // 현재 페이지 번호
   int countPerPage; // 한 페이지에 표시할 게시물 수
-  List<CommentDetail> comments;
+  List<CommentDetailData> comments;
 
   LoadedCommentScreen({
-    required this.communityInfo,
+    required this.communityName,
     required this.postId,
     required this.currentPageNum,
     required this.countPerPage,
@@ -114,12 +112,12 @@ class _LoadedCommentScreenState extends State<LoadedCommentScreen> {
             color: Colors.blue,
             onPressed: () {
               context
-                  .read<CommentPageNotifier>()
+                  .read<CommentPageProvider>()
                   .getCommentPage(_pageButtonProperties[index].id);
             }));
   }
 
-  Widget _makeCommentPanel(List<CommentDetail> comments) {
+  Widget _makeCommentPanel(List<CommentDetailData> comments) {
     if (comments.isEmpty) {
       // 이렇게 하면 width를 부모의 크기만큼 사용한다. Expanded를 쓰면 ListView라서 에러발생
       return Card(
@@ -140,7 +138,7 @@ class _LoadedCommentScreenState extends State<LoadedCommentScreen> {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: ((context, index) {
           return CommentCard(
-              communityInfo: widget.communityInfo,
+              communityName: widget.communityName,
               postId: widget.postId,
               comment: comments[index]);
         }),

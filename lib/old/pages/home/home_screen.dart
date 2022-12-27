@@ -58,14 +58,14 @@ class LoadedDataHomeScreen extends StatelessWidget {
             shrinkWrap: true,
             itemCount: communities.length,
             itemBuilder: (BuildContext context, int index) {
-              return CommunityPanel(communityInfo: communities[index]);
+              return CommunityPanel(communityName: communities[index]);
             },
           )
         : ListView.builder(
             shrinkWrap: true,
             itemCount: communities.length,
             itemBuilder: (BuildContext context, int index) {
-              return CommunityPanel(communityInfo: communities[index]);
+              return CommunityPanel(communityName: communities[index]);
             },
           );
   }

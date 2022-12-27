@@ -1,14 +1,9 @@
-import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/constants/values.dart';
-import 'package:cuteshrew/model/models.dart';
-import 'package:cuteshrew/models/comment_create.dart';
-import 'package:cuteshrew/old/pages/posting/posting_page.dart';
-import 'package:cuteshrew/old/providers/comment_editor_provider.dart';
-import 'package:cuteshrew/old/providers/comment_page_notifier.dart';
-import 'package:cuteshrew/old/states/comment_page_state.dart';
-import 'package:cuteshrew/old/states/login_state.dart';
-import 'package:cuteshrew/widgets/circle_user_icon.dart';
+import 'package:cuteshrew/presentation/screens/comment_editor/provider/comment_editor_provider.dart';
+import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_provider.dart';
+import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_state.dart';
+import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -41,15 +36,15 @@ class _CommentEditorState extends State<CommentEditor> {
       CommentEdiorState state, CommentPageState commentPageState) {
     if (state == CommentEdiorState.COMPLETED) {
       context
-          .read<CommentPageNotifier>()
+          .read<CommentPageProvider>()
           .getCommentPage(commentPageState.currentPageNum);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(_makeSnackBar("댓글 업로드 실패"));
     }
   }
 
-  void _sendComment(LoginState loginState, CommentPageState commentPageState,
-      CommentEditorProvider provider) {
+  void _sendComment(AuthenticationState loginState,
+      CommentPageState commentPageState, CommentEditorProvider provider) {
     if (loginState is AuthorizedState) {
       if (_commentController.text.isEmpty) {
         ScaffoldMessenger.of(context)
@@ -153,7 +148,7 @@ class _CommentEditorState extends State<CommentEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LoginState>(
+    return Consumer<AuthenticationState>(
       builder: (context, loginState, child) {
         return ChangeNotifierProvider(
           create: (context) =>

@@ -1,28 +1,32 @@
-import 'package:cuteshrew/api/cuteshrew_api_client.dart';
+import 'package:cuteshrew/config/routing/routes.dart';
 import 'package:cuteshrew/constants/style.dart';
-import 'package:cuteshrew/model/models.dart';
-import 'package:cuteshrew/models/comment_detail.dart';
-import 'package:cuteshrew/old/providers/comment_editor_provider.dart';
-import 'package:cuteshrew/old/providers/comment_page_notifier.dart';
-import 'package:cuteshrew/routing/routes.dart';
-import 'package:cuteshrew/old/states/comment_page_state.dart';
-import 'package:cuteshrew/old/states/login_state.dart';
-import 'package:cuteshrew/old/utils/utils.dart';
+import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_provider.dart';
+import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_state.dart';
+import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
+import 'package:cuteshrew/presentation/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CommentCard extends StatelessWidget {
-  CommentCard(
-      {super.key,
-      required this.communityInfo,
-      required this.postId,
-      required this.comment});
+  // TODO deleteFunction, modifyFunction, voteFunction 등을 따로 받아서 완전히 독립적으로 동작할 수 있게하면 좋을것 같다.
+  const CommentCard({
+    super.key,
+    required this.communityName,
+    required this.postId,
+    required this.userName,
+    required this.createdAt,
+    required this.commentId,
+    required this.comment,
+  });
 
-  Community communityInfo;
-  int postId;
-  CommentDetail comment;
+  final String communityName;
+  final int postId;
+  final String userName;
+  final int createdAt;
+  final int commentId;
+  final String comment;
 
-  int voteCount = 0;
+  final int voteCount = 0;
 
   SnackBar _makeSnackBar(String content, [Color? backgroundColor]) {
     return SnackBar(
@@ -60,9 +64,9 @@ class CommentCard extends StatelessWidget {
               ),
               InkWell(
                 onTap: () => Navigator.pushNamed(
-                    context, Routes.UserPageRoute(comment.userInfo.name)),
+                    context, Routes.UserPageRoute(userName)),
                 child: Text(
-                  comment.userInfo.name,
+                  userName,
                   style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -75,7 +79,7 @@ class CommentCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
             child: Text(
-              Utils.formatTimeStamp(comment.createdAt),
+              Utils.formatTimeStamp(createdAt),
               style:
                   TextStyle(color: Colors.black.withOpacity(0.5), fontSize: 14),
             ),
@@ -86,10 +90,10 @@ class CommentCard extends StatelessWidget {
   }
 
   String formatVoteCount(int voteCount) {
-    final trillion = 1000000000000;
-    final billion = 1000000000;
-    final million = 1000000;
-    final kilo = 1000;
+    const trillion = 1000000000000;
+    const billion = 1000000000;
+    const million = 1000000;
+    const kilo = 1000;
 
     if (voteCount >= trillion) {
       return "999+b";
@@ -107,12 +111,12 @@ class CommentCard extends StatelessWidget {
     return voteCount.toString();
   }
 
-  void _checkCommentState(CommentEdiorState state,
-      CommentPageState commentPageState, BuildContext context) {
-    if (state == CommentEdiorState.COMPLETED) {
+  void _checkCommentState(
+      bool isDeleted, CommentPageState commentPageState, BuildContext context) {
+    if (isDeleted) {
       // FIXME 만약 현재 페이지가 마지막이고 댓글을 지울경우 페이지가 사라지는 경우 예외처리 필요
       context
-          .read<CommentPageNotifier>()
+          .read<CommentPageProvider>()
           .getCommentPage(commentPageState.currentPageNum);
       ScaffoldMessenger.of(context).showSnackBar(_makeSnackBar("댓글 삭제 완료"));
     } else {
@@ -120,13 +124,19 @@ class CommentCard extends StatelessWidget {
     }
   }
 
-  void _deleteComment(LoginState loginState, CommentPageState commentPageState,
-      BuildContext context) {
+  // FIXME 프로바이더 사용 문제 떄문에 CommentCard는 완전히 독립적이지 않다.
+  // deleteFunction 등의 인자를 받아서 아래의 _deleteComment를 대체해야한다.
+  void _deleteComment(AuthenticationState loginState,
+      CommentPageState commentPageState, BuildContext context) {
     if (loginState is AuthorizedState) {
       context
-          .read<CommentEditorProvider>()
-          .deleteComment(communityInfo.communityName, loginState.loginToken,
-              postId, comment.commentId)
+          .read<CommentPageProvider>()
+          .deleteComment(
+            // communityName,
+            postId,
+            commentId,
+            loginState.loginToken,
+          )
           .then(
               (value) => _checkCommentState(value, commentPageState, context));
     } else {
@@ -136,71 +146,65 @@ class CommentCard extends StatelessWidget {
     }
   }
 
-  Widget _bottom(LoginState loginState, CommentPageState commentPageState,
-      BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) =>
-          CommentEditorProvider(api: context.read<CuteshrewApiClient>()),
-      builder: (context, child) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            TextButton.icon(
-                style: TextButton.styleFrom(foregroundColor: Colors.green),
-                onPressed: () {},
-                icon: const Icon(Icons.thumb_up_alt_rounded),
-                label: Text(formatVoteCount(voteCount))),
-            TextButton.icon(
-                style: TextButton.styleFrom(foregroundColor: Colors.red),
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.thumb_down_rounded,
-                ),
-                label: Text(formatVoteCount(voteCount))),
-            TextButton.icon(
-              style: TextButton.styleFrom(foregroundColor: Colors.grey),
-              onPressed: () {},
-              icon: const Icon(
-                Icons.add_comment,
-              ),
-              label: const Text("답글"),
+  Widget _bottom(AuthenticationState loginState,
+      CommentPageState commentPageState, BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        TextButton.icon(
+            style: TextButton.styleFrom(foregroundColor: Colors.green),
+            onPressed: () {},
+            icon: const Icon(Icons.thumb_up_alt_rounded),
+            label: Text(formatVoteCount(voteCount))),
+        TextButton.icon(
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            onPressed: () {},
+            icon: const Icon(
+              Icons.thumb_down_rounded,
             ),
-            // TODO 공간부족
-            // TextButton.icon(
-            //   style: TextButton.styleFrom(foregroundColor: Colors.grey),
-            //   onPressed: () {},
-            //   icon: const Icon(
-            //     Icons.share,
-            //   ),
-            //   label: const Text("공유"),
-            // ),
-            // TextButton.icon(
-            //   style: TextButton.styleFrom(foregroundColor: Colors.grey),
-            //   onPressed: () {},
-            //   icon: const Icon(
-            //     Icons.edit,
-            //   ),
-            //   label: const Text("수정"),
-            // ),
-            TextButton.icon(
-              style: TextButton.styleFrom(foregroundColor: Colors.red),
-              onPressed: () {
-                _deleteComment(loginState, commentPageState, context);
-              },
-              icon: const Icon(
-                Icons.delete,
-              ),
-              label: const Text("삭제"),
-            )
-          ],
-        );
-      },
+            label: Text(formatVoteCount(voteCount))),
+        TextButton.icon(
+          style: TextButton.styleFrom(foregroundColor: Colors.grey),
+          onPressed: () {},
+          icon: const Icon(
+            Icons.add_comment,
+          ),
+          label: const Text("답글"),
+        ),
+        // TODO 공간부족
+        // TextButton.icon(
+        //   style: TextButton.styleFrom(foregroundColor: Colors.grey),
+        //   onPressed: () {},
+        //   icon: const Icon(
+        //     Icons.share,
+        //   ),
+        //   label: const Text("공유"),
+        // ),
+        // TextButton.icon(
+        //   style: TextButton.styleFrom(foregroundColor: Colors.grey),
+        //   onPressed: () {},
+        //   icon: const Icon(
+        //     Icons.edit,
+        //   ),
+        //   label: const Text("수정"),
+        // ),
+        TextButton.icon(
+          style: TextButton.styleFrom(foregroundColor: Colors.red),
+          onPressed: () {
+            _deleteComment(loginState, commentPageState, context);
+          },
+          icon: const Icon(
+            Icons.delete,
+          ),
+          label: const Text("삭제"),
+        )
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LoginState>(
+    return Consumer<AuthenticationState>(
       builder: (context, loginState, child) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,7 +216,7 @@ class CommentCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                comment.comment,
+                comment,
                 style: const TextStyle(color: Colors.black),
               ),
             ),

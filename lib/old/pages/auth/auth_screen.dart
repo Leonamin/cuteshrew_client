@@ -2,11 +2,11 @@ import 'package:cuteshrew/api/cuteshrew_api_client.dart';
 import 'package:cuteshrew/model/models.dart';
 import 'package:cuteshrew/old/providers/login_notifier.dart';
 import 'package:cuteshrew/old/pages/home/home_page.dart';
-import 'package:cuteshrew/old/providers/register_provider.dart';
+import 'package:cuteshrew/presentation/screens/register/providers/register_provider.dart';
 import 'package:cuteshrew/routing/routes.dart';
 import 'package:cuteshrew/old/strings/strings.dart';
 import 'package:flutter/material.dart';
-import 'package:cuteshrew/old/states/login_state.dart';
+import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
@@ -15,9 +15,9 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProxyProvider<LoginNotifier, LoginState>(
+    return ProxyProvider<LoginNotifier, AuthenticationState>(
       update: (context, value, previous) => value.value,
-      child: Consumer<LoginState>(builder: (context, state, child) {
+      child: Consumer<AuthenticationState>(builder: (context, state, child) {
         if (state is UnauthorizedState) {
           return UnauthorizedAuthScreen(state: state);
         }

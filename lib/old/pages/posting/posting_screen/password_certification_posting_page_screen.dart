@@ -1,7 +1,7 @@
 import 'package:cuteshrew/api/cuteshrew_api_client.dart';
-import 'package:cuteshrew/old/providers/posting_page_notifier.dart';
-import 'package:cuteshrew/old/providers/posting_password_provider.dart';
-import 'package:cuteshrew/old/states/posting_page_state.dart';
+import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_provider.dart';
+import 'package:cuteshrew/presentation/screens/posting/providers/posting_password_provider.dart';
+import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -35,8 +35,8 @@ class PasswordCertificationPostingPageScreen extends StatelessWidget {
   void _checkState(BuildContext context, PostingPasswordState state) {
     if (state == PostingPasswordState.VALID) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      context.read<PostingNotifier>().setPosting(
-          postingPageState.communityInfo,
+      context.read<PostingPageProvider>().setPosting(
+          postingPageState.communityName,
           postingPageState.postId,
           context.read<PostingPasswordProvider>().posting!);
     } else {
@@ -57,7 +57,7 @@ class PasswordCertificationPostingPageScreen extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => PostingPasswordProvider(
           api: context.read<CuteshrewApiClient>(),
-          communityInfo: postingPageState.communityInfo,
+          communityName: postingPageState.communityName,
           postId: postingPageState.postId),
       builder: (context, child) => Column(
         children: [
