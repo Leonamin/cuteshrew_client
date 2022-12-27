@@ -50,14 +50,17 @@ class HttpConstants {
       path: endpointApi + endpointUser);
 
   // Community URI
-  static getPostings(String communityName, int pageNum, int postingCount) =>
+  static getCommunityPage(
+          String communityName, int pageNum, int? postingCount) =>
       Uri(
           host: cuteshrewBaseUrl,
           scheme: cuteshrewScheme,
           path:
               "$endpointApi$endpointCommunity/$communityName$pageUrl/$pageNum",
-          queryParameters:
-              makeQuery(queryNameCountPerPage, postingCount.toString()));
+          queryParameters: {
+            if (postingCount != null)
+              queryNameCountPerPage: postingCount.toString()
+          });
 
   // Posting URI
   static getPosting(String communityName, int postId, [String? password]) =>

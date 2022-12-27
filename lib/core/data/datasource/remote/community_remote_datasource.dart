@@ -6,9 +6,13 @@ import 'package:http/http.dart';
 
 class CommunityRemoteDataSource extends CuteShrewRemoteDataSource {
   // 한개의 커뮤니티만 가져온다.
-  Future<CommunityDTO> getCommunity(String communityName) async {
+  Future<CommunityDTO> getCommunityPage(String communityName,
+      [int pageNum = 1, int? loadCount]) async {
     try {
-      Response response = await get(HttpConstants.getCommunity(communityName));
+      // Response response = await get(HttpConstants.getCommunity(communityName));
+      Response response = await get(
+          HttpConstants.getCommunityPage(communityName, pageNum, loadCount));
+
       return CommunityDTO.fromJson(
           json.decode(utf8.decode(response.bodyBytes)));
     } catch (e) {
