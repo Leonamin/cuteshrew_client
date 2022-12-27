@@ -1,4 +1,5 @@
 import 'package:cuteshrew/core/domain/entity/comment_entity.dart';
+import 'package:cuteshrew/core/domain/entity/posting_entity.dart';
 import 'package:cuteshrew/core/domain/entity/user_entity.dart';
 
 // 댓글 전문을 필요로 하는 곳에 사용하는 엔티티
@@ -6,6 +7,7 @@ import 'package:cuteshrew/core/domain/entity/user_entity.dart';
 // 다른 댓글 엔티티는 영향받지 않게 여기서만 UserEntity의 영향을 받게 수정한다.
 class CommentDetailEntity extends CommentEntity {
   final String comment;
+  final PostingEntity parentPosting;
   final UserEntity writer;
 
   const CommentDetailEntity({
@@ -17,6 +19,7 @@ class CommentDetailEntity extends CommentEntity {
     required int groupId,
     required int order,
     required int postId,
+    required this.parentPosting,
     required this.writer,
   }) : super(
           commentId: commentId,
@@ -37,6 +40,7 @@ class CommentDetailEntity extends CommentEntity {
         groupId,
         order,
         postId,
+        parentPosting,
         writer,
       ];
 }

@@ -1,12 +1,17 @@
 import 'package:cuteshrew/core/data/dto/comment_dto.dart';
 import 'package:cuteshrew/core/data/dto/user_dto.dart';
 import 'package:cuteshrew/core/data/mapper/mapper.dart';
+import 'package:cuteshrew/core/data/mapper/posting_preview_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/user_mapper.dart';
 import 'package:cuteshrew/core/domain/entity/comment_detail_entity.dart';
+import 'package:cuteshrew/core/domain/entity/community_preview_entity.dart';
+import 'package:cuteshrew/core/domain/entity/posting_preview_entity.dart';
+import 'package:cuteshrew/core/domain/entity/user_detail_entity.dart';
 
 class CommentDetailMapper extends Mapper<CommentDTO, CommentDetailEntity> {
   @override
   CommentDetailEntity map(CommentDTO object) {
+    PostingPreviewMapper postingPreviewMapper = PostingPreviewMapper();
     UserMapper userMapper = UserMapper();
 
     /*
@@ -20,17 +25,36 @@ class CommentDetailMapper extends Mapper<CommentDTO, CommentDetailEntity> {
       writer: 그냥 nickname, email로
     */
     return CommentDetailEntity(
-        commentId: object.commentId,
-        comment: object.comment ?? "",
-        writerId: object.writerId ?? 1,
-        commentClass: object.commentClass ?? 1,
-        createdAt: object.createdAt ?? 0,
-        groupId: object.groupId ?? object.commentId,
-        order: object.order ?? 1,
-        postId: object.postId ?? 1,
-        writer: userMapper.map(
-          object.writerInfo ??
-              const UserDTO(nickname: "nickname", email: "email"),
-        ));
+      commentId: object.commentId,
+      comment: object.comment ?? "",
+      writerId: object.writerId ?? 1,
+      commentClass: object.commentClass ?? 1,
+      createdAt: object.createdAt ?? 0,
+      groupId: object.groupId ?? object.commentId,
+      order: object.order ?? 1,
+      postId: object.postId ?? 1,
+      parentPosting: (object.posting != null)
+          ? postingPreviewMapper.map(object.posting!)
+          : const PostingPreviewEntity(
+              postId: 1,
+              title: "",
+              commentCount: 0,
+              isLocked: false,
+              publishedAt: 0,
+              updatedAt: 0,
+              writer: UserDetailEntity(
+                name: "unknown",
+                email: "",
+              ),
+              ownCommunity: CommunityPreviewEntity(
+                  communityName: "None",
+                  communityShowName: "None",
+                  postingCount: 0,
+                  postings: [])),
+      writer: userMapper.map(
+        object.writerInfo ??
+            const UserDTO(nickname: "nickname", email: "email"),
+      ),
+    );
   }
 }
