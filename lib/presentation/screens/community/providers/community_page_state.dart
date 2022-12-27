@@ -108,9 +108,11 @@ class LoadedDataCommunityPageState extends CommunityPageState {
       PostingPreviewDataMapper();
 
   String get communityShowName => _communityEntity.communityShowName;
-  // int get communityPostingCount => _communityEntity.postingCount;
-  // 커뮤니티 전체 게시글 수가 아니라 아니라 현재 페이지의 게시물 개수
-  int get currentPagePostingCount => _communityEntity.postingCount;
+  // FIXME 서버에서 전체 게시글을 주는게 아니라 보낸 게시물 수를 전달 중이라서 지금은 제대로 동작 안함
+  // 커뮤니티 전체 게시글 수
+  int get communityPostingCount => _communityEntity.postingCount;
+  // 현재 페이지의 게시물 개수
+  int get currentPagePostingCount => _postingEntityList.length;
 
   // DONE 이방법은 매우 편하지만 나중에 위젯까지 연결되서 매우 귀찮아지고 힘들어질것이다.
   // 엔티티(도메인) -> 유즈케이스 -> 상태 관리 -> 위젯 이렇게 될텐데

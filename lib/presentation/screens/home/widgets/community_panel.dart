@@ -1,3 +1,4 @@
+import 'package:cuteshrew/config/routing/routes.dart';
 import 'package:cuteshrew/core/domain/entity/community_entity.dart';
 import 'package:cuteshrew/core/domain/entity/posting_entity.dart';
 import 'package:cuteshrew/presentation/widgets/common_widgets/clickable_text.dart';
@@ -25,14 +26,15 @@ class CommunityPanel extends StatelessWidget {
       shrinkWrap: true,
       children: [
         ClickableText(
-            text: communityInfo.communityShowName,
-            size: 30,
-            weight: FontWeight.w800,
-            // onClick: () {
-            // Navigator.pushNamed(context,
-            //     Routes.CommuintyNamePageRoute(communityInfo.communityName));
-            // },
-            onClick: onPressed),
+          text: communityInfo.communityShowName,
+          size: 30,
+          weight: FontWeight.w800,
+          onClick: () {
+            Navigator.pushNamed(context,
+                Routes.CommuintyNamePageRoute(communityInfo.communityName));
+          },
+          // onClick: onPressed,
+        ),
 
         const Divider(
           thickness: 3,
@@ -55,10 +57,10 @@ class CommunityPanel extends StatelessWidget {
                 title: item.title,
                 commentCount: item.commentCount,
                 onClick: () {
-                  // Navigator.pushNamed(
-                  //     context,
-                  //     Routes.PostingPageRoute(
-                  //         communityInfo.communityName, item.postId));
+                  Navigator.pushNamed(
+                      context,
+                      Routes.PostingPageRoute(
+                          communityInfo.communityName, item.postId));
                 },
               )))
           .toList(),

@@ -1,13 +1,12 @@
 import 'package:cuteshrew/constants/style.dart';
-import 'package:cuteshrew/model/models.dart';
-import 'package:cuteshrew/old/pages/community/community_screen.dart';
+import 'package:cuteshrew/presentation/screens/community/community_screen.dart';
 import 'package:flutter/material.dart';
 
 class LargeCommunityLayout extends StatelessWidget {
-  String communityName;
-  int? currentPageNum;
+  final String communityName;
+  final int? currentPageNum;
 
-  LargeCommunityLayout(
+  const LargeCommunityLayout(
       {Key? key, required this.communityName, this.currentPageNum})
       : super(key: key);
 
