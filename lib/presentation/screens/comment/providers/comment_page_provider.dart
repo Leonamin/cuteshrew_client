@@ -1,3 +1,5 @@
+import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
+import 'package:cuteshrew/core/domain/usecase/delete_comment_usecase.dart';
 import 'package:cuteshrew/core/domain/usecase/show_posting_page_usecase.dart';
 import 'package:cuteshrew/core/resources/failure.dart';
 import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_state.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 class CommentPageProvider extends ValueNotifier<CommentPageState> {
   CommentPageProvider({
     required ShowPostingPageUseCase postingPageUseCase,
+    required DeleteCommentUseCase deleteCommentUseCase,
     required int postId,
     required String communityName,
     required int currentPageNum,
@@ -16,9 +19,11 @@ class CommentPageProvider extends ValueNotifier<CommentPageState> {
             currentPageNum: currentPageNum,
             countPerPage: countPerPage)) {
     _postingPageUseCase = postingPageUseCase;
+    _deleteCommentUseCase = deleteCommentUseCase;
   }
 
   late ShowPostingPageUseCase _postingPageUseCase;
+  late DeleteCommentUseCase _deleteCommentUseCase;
 
   int get postId => value.postId;
   String get communityName => value.communityName;
@@ -60,5 +65,20 @@ class CommentPageProvider extends ValueNotifier<CommentPageState> {
         );
       });
     }
+  }
+
+  Future<bool> deleteComment(
+    int postId,
+    int commentId,
+    LoginTokenEntity loginToken, [
+    String? password,
+  ]) async {
+    final result =
+        await _deleteCommentUseCase(postId, commentId, loginToken, password);
+    return result.fold((Failure failure) {
+      return false;
+    }, (data) {
+      return true;
+    });
   }
 }
