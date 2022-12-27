@@ -37,8 +37,9 @@ class UserPageProvider extends ChangeNotifier {
   List<CommentDetailData> get userComments => List<CommentDetailData>.from(
       _userComments.map((e) => _commentMapper.map(e)));
 
-  int postingCounts = 0;
-  int commentCounts = 0;
+  // TODO 유저의 전체 게시물을 가져오는 것 구현해야한다.
+  int get postingCounts => _userPostings.length;
+  int get commentCounts => _userComments.length;
 
   bool isLoadingPosting = false;
   bool isLoadingComment = false;
@@ -54,36 +55,32 @@ class UserPageProvider extends ChangeNotifier {
 // TODO 이거 posting, comment 분리 해야함
   final requestTerm = const Duration(minutes: 5);
 
+  final defaultLoadCount = 10;
+
   Future<void> refreshPostings({
     required String userName,
-    required int startAtId,
-    required int loadCount,
   }) async {
     isLoadingPosting = false;
     hasMorePosting = true;
     lastRequestTimePosting = 0;
     _userPostings.clear();
-    return fetchPostings(
-        userName: userName, startAtId: startAtId, loadCount: loadCount);
+    return fetchPostings(userName: userName);
   }
 
   Future<void> refreshComments({
     required String userName,
-    required int startAtId,
-    required int loadCount,
   }) async {
     isLoadingComment = false;
     hasMoreComment = true;
     lastRequestTimeComment = 0;
     _userComments.clear();
-    fetchComments(
-        userName: userName, startAtId: startAtId, loadCount: loadCount);
+    fetchComments(userName: userName);
   }
 
   Future<void> fetchPostings({
     required String userName,
-    required int startAtId,
-    required int loadCount,
+    int? startAtId,
+    int? loadCount,
   }) async {
     // 실행 조건 검사
     // 더이상 포스팅이 없고
@@ -97,8 +94,8 @@ class UserPageProvider extends ChangeNotifier {
     notifyListeners();
 
     // 가져오기
-    final result =
-        await _userPageUsecase.loadPostings(userName, startAtId, loadCount);
+    final result = await _userPageUsecase.loadPostings(
+        userName, startAtId, loadCount ?? defaultLoadCount);
     lastRequestTimePosting = DateTime.now().millisecondsSinceEpoch;
 
     // 검사
@@ -122,8 +119,8 @@ class UserPageProvider extends ChangeNotifier {
 
   Future<void> fetchComments({
     required String userName,
-    required int startAtId,
-    required int loadCount,
+    int? startAtId,
+    int? loadCount,
   }) async {
     // 실행 조건 검사
     // 더이상 포스팅이 없고
@@ -137,8 +134,8 @@ class UserPageProvider extends ChangeNotifier {
     notifyListeners();
 
     // 가져오기
-    final result =
-        await _userPageUsecase.loadComments(userName, startAtId, loadCount);
+    final result = await _userPageUsecase.loadComments(
+        userName, startAtId, loadCount ?? defaultLoadCount);
     lastRequestTimeComment = DateTime.now().millisecondsSinceEpoch;
 
     // 검사
