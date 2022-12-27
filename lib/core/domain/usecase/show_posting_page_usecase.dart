@@ -10,7 +10,10 @@ class ShowPostingPageUseCase {
   late PostingRepository postingRepository;
   late CommentRepository commentRepository;
 
-  ShowPostingPageUseCase({required this.postingRepository});
+  ShowPostingPageUseCase({
+    required this.postingRepository,
+    required this.commentRepository,
+  });
 
   // 포스팅 정보를 가져온다.
   Future<Either<Failure, PostingEntity>> call(
