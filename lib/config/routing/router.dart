@@ -9,6 +9,7 @@
 */
 
 import 'package:cuteshrew/config/routing/routes.dart';
+import 'package:cuteshrew/presentation/screens/community/community_page.dart';
 import 'package:cuteshrew/presentation/screens/home/page/home_page.dart';
 import 'package:cuteshrew/presentation/screens/notfound/error_page.dart';
 import 'package:cuteshrew/presentation/screens/user/user_page.dart';
@@ -55,13 +56,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   }
 
   if (uri.pathSegments.length == 2) {
-    // if (uri.pathSegments.first == Routes.CommunityPageName) {
-    //   String communityName = uri.pathSegments[1];
-    //   return MaterialPageRoute(
-    //     builder: (context) =>
-    //         CommunityPage(communityName: communityName, currentPageNum: 0),
-    //   );
-    // }
+    if (uri.pathSegments.first == Routes.CommunityPageName) {
+      String communityName = uri.pathSegments[1];
+      return MaterialPageRoute(
+        builder: (context) =>
+            CommunityPage(communityName: communityName, currentPageNum: 0),
+      );
+    }
     if (uri.pathSegments.first == Routes.UserPageName) {
       String userName = uri.pathSegments[1];
       return MaterialPageRoute(
