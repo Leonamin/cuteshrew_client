@@ -1,16 +1,15 @@
-import 'package:cuteshrew/model/models.dart';
-import 'package:cuteshrew/models/post_detail.dart';
-import 'package:cuteshrew/old/pages/post_editor/post_editor_screen.dart';
+import 'package:cuteshrew/presentation/data/posting_detail_data.dart';
+import 'package:cuteshrew/presentation/screens/comment_editor/post_editor_screen.dart';
 import 'package:flutter/material.dart';
 
 class SmallPostEditorLayout extends StatelessWidget {
-  Community communityInfo;
-  PostDetail? originPost;
-  bool isModify;
+  final String communityName;
+  final PostingDetailData? originPost;
+  final bool isModify;
 
-  SmallPostEditorLayout(
+  const SmallPostEditorLayout(
       {Key? key,
-      required this.communityInfo,
+      required this.communityName,
       this.originPost,
       required this.isModify})
       : super(key: key);
@@ -20,7 +19,7 @@ class SmallPostEditorLayout extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: PostEditorScreen(
-          communityInfo: communityInfo,
+          communityName: communityName,
           originPost: originPost,
           isModify: isModify,
         ));

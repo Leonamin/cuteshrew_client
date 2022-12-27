@@ -1,6 +1,10 @@
-import 'package:cuteshrew/api/cuteshrew_api_client.dart';
-import 'package:cuteshrew/model/models.dart';
-import 'package:cuteshrew/models/post_detail.dart';
+import 'package:cuteshrew/core/data/datasource/remote/community_remote_datasource.dart';
+import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.dart';
+import 'package:cuteshrew/core/data/repository/community_repository_impl.dart';
+import 'package:cuteshrew/core/data/repository/posting_repository_impl.dart';
+import 'package:cuteshrew/core/domain/usecase/create_posting_usecase.dart';
+import 'package:cuteshrew/presentation/data/posting_create_data.dart';
+import 'package:cuteshrew/presentation/data/posting_detail_data.dart';
 import 'package:cuteshrew/presentation/screens/posting_editor/providers/posting_editor_provider.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:flutter/material.dart';
@@ -20,13 +24,13 @@ import 'package:collection/collection.dart';
 // isModify: bool[Optional] 포스팅 새로작성, 수정인지 구분
 class PostEditorScreen extends StatefulWidget {
   static const pageName = '/write';
-  Community communityInfo;
-  PostDetail? originPost;
+  String communityName;
+  PostingDetailData? originPost;
   bool isModify;
 
   PostEditorScreen({
     Key? key,
-    required this.communityInfo,
+    required this.communityName,
     this.originPost,
     required this.isModify,
   }) : super(key: key);
@@ -110,17 +114,18 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                                       _makeSnackBar("내용이 비어있습니다."));
                                   return;
                                 }
-                                PostCreate newPosting = PostCreate(
-                                    title: _titleController.text,
-                                    body: bodyHtml,
-                                    isLocked:
-                                        _passwordController.text.isNotEmpty,
-                                    password: _passwordController.text);
+                                PostingCreateData newPosting =
+                                    PostingCreateData(
+                                        title: _titleController.text,
+                                        body: bodyHtml,
+                                        isLocked:
+                                            _passwordController.text.isNotEmpty,
+                                        password: _passwordController.text);
                                 widget.isModify
                                     ? context
                                         .read<PostingEditorProvider>()
                                         .updatePosting(
-                                            widget.communityInfo.communityName,
+                                            widget.communityName,
                                             loginState.loginToken,
                                             newPosting,
                                             widget.originPost!.postId)
@@ -128,7 +133,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                                     : context
                                         .read<PostingEditorProvider>()
                                         .uploadPosting(
-                                          widget.communityInfo.communityName,
+                                          widget.communityName,
                                           loginState.loginToken,
                                           newPosting,
                                         )
@@ -280,7 +285,6 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _communitySeletController.text = widget.communityInfo.communityShowName;
     _titleController.text = widget.originPost?.title ?? "";
 
     return Consumer<AuthenticationState>(
@@ -288,9 +292,14 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
         return ChangeNotifierProvider(
             create: (context) {
               final provider = PostingEditorProvider(
-                  api: context.read<CuteshrewApiClient>());
+                  useCase: CreatePostingUseCase(
+                      communityRepository: CommunityRepositoryImpl(
+                          communityRemoteDataSource:
+                              CommunityRemoteDataSource()),
+                      postingRepository: PostingRepositoryImpl(
+                          postingRemoteDataSource: PostingRemoteDataSource())));
               provider.fetchCommunities().then((value) {
-                provider.selectCommuinty(widget.communityInfo.communityName);
+                provider.selectCommuinty(widget.communityName);
               });
               return provider;
             },
