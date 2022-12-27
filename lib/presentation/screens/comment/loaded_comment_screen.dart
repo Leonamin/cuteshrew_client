@@ -1,5 +1,6 @@
 import 'package:cuteshrew/presentation/data/comment_detail_data.dart';
 import 'package:cuteshrew/presentation/screens/comment/widgets/comment_card.dart';
+import 'package:cuteshrew/presentation/screens/comment/widgets/comment_editor.dart';
 import 'package:cuteshrew/presentation/widgets/common_widgets/list_button.dart';
 import 'package:flutter/material.dart';
 
@@ -122,17 +123,16 @@ class _LoadedCommentScreenState extends State<LoadedCommentScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // CommentEditor(
-        //   communityInfo: widget.communityName,
-        //   postId: widget.postId,
-        // ),
+        CommentEditor(
+          communityName: widget.communityName,
+          postId: widget.postId,
+        ),
         _makeCommentPanel(widget.comments),
         ListButton(
           itemCount: _pageButtonProperties.length,
           propertyList: _pageButtonProperties,
           selectedIndex: _pageButtonProperties[0].id,
         ),
-        //CommentEditor()
       ],
     );
   }
