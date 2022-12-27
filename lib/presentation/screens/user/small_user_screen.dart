@@ -69,7 +69,9 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
     with TickerProviderStateMixin {
   ScrollController? _mainScrollController;
   TabController? _tabController;
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  final GlobalKey<RefreshIndicatorState> _postingRefreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _commentRefreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
   bool lastStatus = true; // 이거 사실 안씀
@@ -405,9 +407,8 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
       bottom: false,
       child: Builder(
         builder: (context) {
-          // FIXME Duplicated GlobalKey detected
           return RefreshIndicator(
-            key: _refreshIndicatorKey,
+            key: _postingRefreshIndicatorKey,
             displacement: 50,
             onRefresh: () =>
                 provider.refreshPostings(userName: widget.userName),
@@ -475,7 +476,7 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
   }
 
   _makeCommentListWidget(
-    PageStorageKey<String> key,
+    PageStorageKey<String> pageStorageKey,
     UserPageProvider provider,
   ) {
     // 로딩 중이면서 캐시가 없음
@@ -502,14 +503,13 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
       bottom: false,
       child: Builder(
         builder: (context) {
-          // FIXME Duplicated GlobalKey detected
           return RefreshIndicator(
-            key: _refreshIndicatorKey,
+            key: _commentRefreshIndicatorKey,
             displacement: 50,
             onRefresh: () =>
                 provider.refreshComments(userName: widget.userName),
             child: CustomScrollView(
-              key: key,
+              key: pageStorageKey,
               // controller: controller, 이거 넣으면 sliver 효과 없어서 중첩 스크롤이 안된다.
               slivers: [
                 SliverOverlapInjector(
@@ -602,8 +602,7 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
                     headerSliverBuilder: (context, innerBoxIsScrolled) {
                       return [
                         _appBar(UserPreviewData(
-                            name: widget.userName ?? "null",
-                            email: widget.userName ?? "null")),
+                            name: widget.userName, email: widget.userName)),
                         SliverOverlapAbsorber(
                           handle:
                               NestedScrollView.sliverOverlapAbsorberHandleFor(
