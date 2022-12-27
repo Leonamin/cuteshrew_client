@@ -40,6 +40,7 @@ class PostingPasswordProvider extends ChangeNotifier {
         // others error
         _state = PostingPasswordState.INVALID;
       }, (data) {
+        posting = data;
         _state = PostingPasswordState.VALID;
       });
     }
