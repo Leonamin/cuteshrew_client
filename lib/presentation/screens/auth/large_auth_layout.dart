@@ -1,5 +1,5 @@
 import 'package:cuteshrew/constants/style.dart';
-import 'package:cuteshrew/old/pages/auth/auth_screen.dart';
+import 'package:cuteshrew/presentation/screens/auth/auth_screen.dart';
 import 'package:flutter/material.dart';
 
 class LargeAuthLayout extends StatelessWidget {
@@ -19,7 +19,7 @@ class LargeAuthLayout extends StatelessWidget {
             flex: 4,
             child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: AuthScreen())),
+                child: const AuthScreen())),
         Expanded(
           flex: 1,
           child: Container(

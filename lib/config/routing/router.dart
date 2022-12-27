@@ -9,6 +9,7 @@
 */
 
 import 'package:cuteshrew/config/routing/routes.dart';
+import 'package:cuteshrew/presentation/screens/auth/auth_page.dart';
 import 'package:cuteshrew/presentation/screens/community/community_page.dart';
 import 'package:cuteshrew/presentation/screens/home/page/home_page.dart';
 import 'package:cuteshrew/presentation/screens/notfound/error_page.dart';
@@ -30,10 +31,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         return MaterialPageRoute(
           builder: (context) => const HomePage(),
         );
-      // case Routes.LoginPageName:
-      //   return MaterialPageRoute(
-      //     builder: (context) => const AuthPage(),
-      //   );
+      case Routes.LoginPageName:
+        return MaterialPageRoute(
+          builder: (context) => const AuthPage(),
+        );
       // case Routes.PostEditorPageName:
       //   var args;
       //   if (settings.arguments != null) {

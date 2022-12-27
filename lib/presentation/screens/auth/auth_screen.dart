@@ -1,10 +1,11 @@
-import 'package:cuteshrew/api/cuteshrew_api_client.dart';
-import 'package:cuteshrew/model/models.dart';
-import 'package:cuteshrew/old/providers/login_notifier.dart';
-import 'package:cuteshrew/old/pages/home/home_page.dart';
+import 'package:cuteshrew/config/routing/routes.dart';
+import 'package:cuteshrew/core/data/datasource/remote/user_remote_datasource.dart';
+import 'package:cuteshrew/core/data/repository/user_repository_impl.dart';
+import 'package:cuteshrew/core/domain/usecase/signin_usecase.dart';
+import 'package:cuteshrew/presentation/data/user_create_data.dart';
+import 'package:cuteshrew/presentation/providers/authentication/authentication_provider.dart';
 import 'package:cuteshrew/presentation/screens/register/providers/register_provider.dart';
-import 'package:cuteshrew/routing/routes.dart';
-import 'package:cuteshrew/old/strings/strings.dart';
+import 'package:cuteshrew/presentation/strings/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +16,7 @@ class AuthScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProxyProvider<LoginNotifier, AuthenticationState>(
+    return ProxyProvider<AuthenticationProvider, AuthenticationState>(
       update: (context, value, previous) => value.value,
       child: Consumer<AuthenticationState>(builder: (context, state, child) {
         if (state is UnauthorizedState) {
@@ -111,7 +112,7 @@ class _UnauthorizedAuthScreenState extends State<UnauthorizedAuthScreen> {
     }
   }
 
-  void _postSignIn(BuildContext context, UserCreate newUser) {
+  void _postSignIn(BuildContext context, UserCreateData newUser) {
     context
         .read<RegisterProvider>()
         .postSignIn(newUser)
@@ -131,8 +132,13 @@ class _UnauthorizedAuthScreenState extends State<UnauthorizedAuthScreen> {
         //       fit: BoxFit.cover),
         // ),
         child: ChangeNotifierProvider(
-          create: (context) =>
-              RegisterProvider(api: context.read<CuteshrewApiClient>()),
+          create: (context) => RegisterProvider(
+            signinUseCase: SigninUseCase(
+              userRepository: UserRepositoryImpl(
+                userRemoteDataSource: UserRemoteDataSource(),
+              ),
+            ),
+          ),
           builder: (context, child) => Scaffold(
               backgroundColor: Colors.transparent,
               body: SafeArea(
@@ -229,14 +235,14 @@ class _UnauthorizedAuthScreenState extends State<UnauthorizedAuthScreen> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             if (!isRegister) {
-                              context.read<LoginNotifier>().login(
+                              context.read<AuthenticationProvider>().login(
                                   _nicknameController.text,
                                   _passwordController.text);
                             } else {
-                              var newUser = UserCreate(
-                                  _nicknameController.text,
-                                  _emailController.text,
-                                  _passwordController.text);
+                              var newUser = UserCreateData(
+                                  name: _nicknameController.text,
+                                  email: _emailController.text,
+                                  password: _passwordController.text);
                               _postSignIn(context, newUser);
                             }
                           }

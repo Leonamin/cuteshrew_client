@@ -1,4 +1,4 @@
-import 'package:cuteshrew/old/pages/auth/auth_screen.dart';
+import 'package:cuteshrew/presentation/screens/auth/auth_screen.dart';
 import 'package:flutter/material.dart';
 
 class SmallAuthLayout extends StatelessWidget {
@@ -8,6 +8,6 @@ class SmallAuthLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: AuthScreen());
+        child: const AuthScreen());
   }
 }
