@@ -1,9 +1,7 @@
 import 'package:cuteshrew/core/domain/entity/community_preview_entity.dart';
-import 'package:cuteshrew/core/domain/entity/posting_entity.dart';
 import 'package:cuteshrew/core/domain/usecase/show_community_page_usecase.dart';
 import 'package:cuteshrew/core/resources/failure.dart';
 import 'package:cuteshrew/presentation/screens/community/providers/community_page_state.dart';
-import 'package:dartz/dartz.dart';
 import 'package:flutter/widgets.dart';
 
 class CommunityPageProvider extends ValueNotifier<CommunityPageState> {
