@@ -106,10 +106,11 @@ class CommentRepositoryImpl extends CommentRepository {
   }
 
   @override
-  Future<Either<Failure, List<CommentDetailEntity>>> getCommentsByUser(
-      {required String userName,
-      required int startAtId,
-      required int loadCount}) async {
+  Future<Either<Failure, List<CommentDetailEntity>>> getCommentsByUser({
+    required String userName,
+    int? startAtId,
+    int? loadCount,
+  }) async {
     try {
       CommentDetailMapper mapper = CommentDetailMapper();
       List<CommentDTO> commentDTO = await _commentRemoteDataSource

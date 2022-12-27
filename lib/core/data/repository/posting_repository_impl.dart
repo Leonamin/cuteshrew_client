@@ -90,10 +90,11 @@ class PostingRepositoryImpl extends PostingRepository {
   }
 
   @override
-  Future<Either<Failure, List<PostingPreviewEntity>>> getPostingsByUser(
-      {required String userName,
-      required int startAtId,
-      required int loadCount}) async {
+  Future<Either<Failure, List<PostingPreviewEntity>>> getPostingsByUser({
+    required String userName,
+    int? startAtId,
+    int? loadCount,
+  }) async {
     try {
       List<PostingDTO> postingDTOList = await _postingRemoteDataSource
           .searchPostings(userName, startAtId, loadCount);
