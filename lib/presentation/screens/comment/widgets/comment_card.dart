@@ -17,6 +17,9 @@ class CommentCard extends StatelessWidget {
     required this.createdAt,
     required this.commentId,
     required this.comment,
+    this.deleteFunction,
+    this.modifyFunction,
+    this.voteFunction,
   });
 
   final String communityName;
@@ -25,6 +28,9 @@ class CommentCard extends StatelessWidget {
   final int createdAt;
   final int commentId;
   final String comment;
+  final Function()? deleteFunction;
+  final Function()? modifyFunction;
+  final Function()? voteFunction;
 
   final int voteCount = 0;
 
