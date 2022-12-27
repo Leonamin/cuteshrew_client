@@ -39,7 +39,7 @@ class CommentDTO {
       writerInfo:
           (json['creator'] != null) ? UserDTO.fromJson(json['creator']) : null,
       posting: (json['posting'] != null)
-          ? PostingDTO.fromJson(json['positng'])
+          ? PostingDTO.fromJson(json['posting'])
           : null,
     );
   }
