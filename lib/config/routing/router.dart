@@ -11,6 +11,7 @@
 import 'package:cuteshrew/config/routing/routes.dart';
 import 'package:cuteshrew/presentation/screens/home/page/home_page.dart';
 import 'package:cuteshrew/presentation/screens/notfound/error_page.dart';
+import 'package:cuteshrew/presentation/screens/user/user_page.dart';
 import 'package:flutter/material.dart';
 
 //FIXME 무의미하게 communityInfo를 받는 것을 communityName으로 바꿔야함
@@ -53,34 +54,23 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     }
   }
 
-  // if (uri.pathSegments.length == 2) {
-  //   if (uri.pathSegments.first == Routes.CommunityPageName) {
-  //     String communityName = uri.pathSegments[1];
-  //     return MaterialPageRoute(
-  //       builder: (context) =>
-  //           CommunityPage(communityName: communityName, currentPageNum: 0),
-  //     );
-  //   }
-  //   if (uri.pathSegments.first == Routes.UserPageName) {
-  //     String userInfo = uri.pathSegments[1];
-
-  //     // 생각해보니 숫자 이름도 있을거같다.
-  //     // if (isNumeric(userInfo)) {
-  //     if (false) {
-  //       return MaterialPageRoute(
-  //         builder: (context) => UserPage(
-  //           userId: int.parse(userInfo),
-  //         ),
-  //       );
-  //     } else {
-  //       return MaterialPageRoute(
-  //         builder: (context) => UserPage(
-  //           userName: userInfo,
-  //         ),
-  //       );
-  //     }
-  //   }
-  // }
+  if (uri.pathSegments.length == 2) {
+    // if (uri.pathSegments.first == Routes.CommunityPageName) {
+    //   String communityName = uri.pathSegments[1];
+    //   return MaterialPageRoute(
+    //     builder: (context) =>
+    //         CommunityPage(communityName: communityName, currentPageNum: 0),
+    //   );
+    // }
+    if (uri.pathSegments.first == Routes.UserPageName) {
+      String userName = uri.pathSegments[1];
+      return MaterialPageRoute(
+        builder: (context) => UserPage(
+          userName: userName,
+        ),
+      );
+    }
+  }
 
   // if (uri.pathSegments.length == 3) {
   //   if (uri.pathSegments.first == Routes.CommunityPageName) {
