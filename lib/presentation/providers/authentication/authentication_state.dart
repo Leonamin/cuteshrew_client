@@ -42,6 +42,9 @@ class AuthorizedState extends AuthenticationState {
   final UserEntity userInfo;
   final LoginTokenEntity loginToken;
 
+  String get userName => userInfo.name;
+  String get userEmail => userInfo.email;
+
   @override
   List<Object?> get props => [
         userInfo,
