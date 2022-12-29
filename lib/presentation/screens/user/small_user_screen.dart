@@ -333,10 +333,9 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
               onTap: () => Navigator.pushNamed(
                   context,
                   Routes.PostingPageRoute(
-                      // TODO 변경해야함
-                      // comment.parentPost.ownCommunity.communityName,
-                      "",
-                      comment.postId)),
+                    comment.parentPosting.ownCommunity?.communityName,
+                    comment.postId,
+                  )),
               child: Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Column(
