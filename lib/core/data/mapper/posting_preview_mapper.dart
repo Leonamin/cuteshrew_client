@@ -25,8 +25,8 @@ class PostingPreviewMapper extends Mapper<PostingDTO, PostingPreviewEntity> {
       postId: object.postId,
       title: object.title ?? "",
       isLocked: object.isLocked ?? false,
-      publishedAt: 0,
-      updatedAt: 0,
+      publishedAt: object.publishedAt ?? 0,
+      updatedAt: object.updatedAt ?? 0,
       writer: userMapper.map(object.writerInfo ??
           const UserDTO(nickname: "nickname", email: "email")),
       ownCommunity: communityMapper.map(
