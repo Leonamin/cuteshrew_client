@@ -1,13 +1,13 @@
 import 'package:cuteshrew/presentation/data/posting_detail_data.dart';
-import 'package:cuteshrew/presentation/screens/comment_editor/post_editor_screen.dart';
+import 'package:cuteshrew/presentation/screens/posting_editor/posting_editor_screen.dart';
 import 'package:flutter/material.dart';
 
-class SmallPostEditorLayout extends StatelessWidget {
+class SmallPostingEditorLayout extends StatelessWidget {
   final String communityName;
   final PostingDetailData? originPost;
   final bool isModify;
 
-  const SmallPostEditorLayout(
+  const SmallPostingEditorLayout(
       {Key? key,
       required this.communityName,
       this.originPost,
@@ -18,7 +18,7 @@ class SmallPostEditorLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: PostEditorScreen(
+        child: PostingEditorScreen(
           communityName: communityName,
           originPost: originPost,
           isModify: isModify,

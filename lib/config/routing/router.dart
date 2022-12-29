@@ -10,7 +10,7 @@
 
 import 'package:cuteshrew/config/routing/routes.dart';
 import 'package:cuteshrew/presentation/screens/auth/auth_page.dart';
-import 'package:cuteshrew/presentation/screens/comment_editor/post_editor_page.dart';
+import 'package:cuteshrew/presentation/screens/posting_editor/posting_editor_page.dart';
 import 'package:cuteshrew/presentation/screens/community/community_page.dart';
 import 'package:cuteshrew/presentation/screens/home/page/home_page.dart';
 import 'package:cuteshrew/presentation/screens/notfound/error_page.dart';
@@ -45,7 +45,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           args = PostEditorPageArguments(null, false);
         }
         return MaterialPageRoute(
-          builder: (context) => PostEditorPage(
+          builder: (context) => PostingEditorPage(
               communityName: "",
               originPost: args.originPost,
               isModify: args.isModify),
@@ -84,7 +84,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           args = PostEditorPageArguments(null, false);
         }
         return MaterialPageRoute(
-          builder: (context) => PostEditorPage(
+          builder: (context) => PostingEditorPage(
               communityName: communityName,
               originPost: args.originPost,
               isModify: args.isModify),

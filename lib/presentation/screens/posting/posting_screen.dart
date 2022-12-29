@@ -6,7 +6,7 @@ import 'package:cuteshrew/core/data/repository/comment_repository_impl.dart';
 import 'package:cuteshrew/core/data/repository/posting_repository_impl.dart';
 import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
 import 'package:cuteshrew/core/domain/usecase/show_posting_page_usecase.dart';
-import 'package:cuteshrew/presentation/screens/comment_editor/post_editor_page.dart';
+import 'package:cuteshrew/presentation/screens/posting_editor/posting_editor_page.dart';
 import 'package:cuteshrew/presentation/screens/posting/posting_screen/password_certification_posting_page_screen.dart';
 import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_provider.dart';
 import 'package:cuteshrew/presentation/screens/comment/comment_screen.dart';

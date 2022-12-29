@@ -1,14 +1,14 @@
 import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/presentation/data/posting_detail_data.dart';
-import 'package:cuteshrew/presentation/screens/comment_editor/post_editor_screen.dart';
+import 'package:cuteshrew/presentation/screens/posting_editor/posting_editor_screen.dart';
 import 'package:flutter/material.dart';
 
-class LargePostEditorLayout extends StatelessWidget {
+class LargePostingEditorLayout extends StatelessWidget {
   final String communityName;
   final PostingDetailData? originPost;
   final bool isModify;
 
-  const LargePostEditorLayout({
+  const LargePostingEditorLayout({
     Key? key,
     required this.communityName,
     this.originPost,
@@ -29,7 +29,7 @@ class LargePostEditorLayout extends StatelessWidget {
             flex: 4,
             child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: PostEditorScreen(
+                child: PostingEditorScreen(
                   communityName: communityName,
                   originPost: originPost,
                   isModify: isModify,

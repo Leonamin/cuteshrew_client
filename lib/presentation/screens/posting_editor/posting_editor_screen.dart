@@ -22,13 +22,13 @@ import 'package:collection/collection.dart';
 // communityInfo: Community 포스팅 업로드시 커뮤니티 구분에 사용
 // originPost: PostDetail[Optional] 포스팅 수정시 내용 가져오기
 // isModify: bool[Optional] 포스팅 새로작성, 수정인지 구분
-class PostEditorScreen extends StatefulWidget {
+class PostingEditorScreen extends StatefulWidget {
   static const pageName = '/write';
-  String communityName;
-  PostingDetailData? originPost;
-  bool isModify;
+  final String communityName;
+  final PostingDetailData? originPost;
+  final bool isModify;
 
-  PostEditorScreen({
+  const PostingEditorScreen({
     Key? key,
     required this.communityName,
     this.originPost,
@@ -36,10 +36,10 @@ class PostEditorScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<PostEditorScreen> createState() => _PostEditorScreenState();
+  State<PostingEditorScreen> createState() => _PostingEditorScreenState();
 }
 
-class _PostEditorScreenState extends State<PostEditorScreen> {
+class _PostingEditorScreenState extends State<PostingEditorScreen> {
   final int _titleLengthLimit = 255;
 
   final OutlineInputBorder _border = OutlineInputBorder(
@@ -121,6 +121,7 @@ class _PostEditorScreenState extends State<PostEditorScreen> {
                                         isLocked:
                                             _passwordController.text.isNotEmpty,
                                         password: _passwordController.text);
+                                debugPrint(newPosting.body);
                                 widget.isModify
                                     ? context
                                         .read<PostingEditorProvider>()
