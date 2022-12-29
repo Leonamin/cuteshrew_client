@@ -1,17 +1,74 @@
-# cuteshrew
-My 'Cute Shrew Community' client
+# 소개
+귀여운땃쥐 커뮤니티 웹앱&AOS/IOS앱 프로젝트
 
-## How to build(Web)
-becuase of enhanced_html_editor, you should run 'flutter build web --web-renderer html'
+## 빌드
+### AOS
+### IOS
+### WEB
+`enhanced_html_editor` 패키지 떄문에 `flutter build web --web-renderer html`로 빌드해야한다.
 
-## 네이밍 규칙
-1. UI
-- 대표 페이지
-    - xxxPage
-    - HomePage
-- 페이지 사이즈 레이아웃 
-    - xxxLarge/Small/Desktop/Tablet/PhoneLayout
-    - HomeLargeLaout
-- 페이지 세부 상태별 화면
-    - xxxScreen
-    - AuthScreen
+## 구조
+├─config
+│  ├─routing
+│  └─url
+├─constants
+├─core
+│  ├─data
+│  │  ├─datasource
+│  │  │  ├─local
+│  │  │  └─remote
+│  │  ├─dto
+│  │  ├─mapper
+│  │  └─repository
+│  ├─domain
+│  │  ├─entity
+│  │  ├─repository
+│  │  └─usecase
+│  └─resources
+├─di
+└─presentation
+    ├─data
+    ├─helpers
+    ├─mappers
+    ├─providers
+    │  └─authentication
+    ├─screens
+    │  ├─auth
+    │  ├─comment
+    │  │  ├─providers
+    │  │  └─widgets
+    │  ├─comment_editor
+    │  │  └─provider
+    │  ├─community
+    │  │  └─providers
+    │  ├─home
+    │  │  ├─page
+    │  │  ├─provider
+    │  │  └─widgets
+    │  ├─notfound
+    │  ├─posting
+    │  │  ├─posting_screen
+    │  │  ├─providers
+    │  │  └─widgets
+    │  ├─posting_editor
+    │  │  └─providers
+    │  ├─register
+    │  │  └─providers
+    │  └─user
+    │      ├─provders
+    │      └─widget
+    ├─strings
+    ├─utils
+    └─widgets
+        ├─common_widgets
+        └─main_app_bar
+### config
+플러터에서 도메인, 데이터, 프레젠테이션으로 나누기 어려운 기본 설정들
+### core(domain)
+앱의 실제 데이터(entity), 업무 규칙(usecase), 리포지토리 추상화(repository)
+### core(data)
+로컬/리모트 데이터 입출력(datasource), 데이터 저장소 데이터 구조(dto), 저장소 데이터와 실제 데이터 변환(mapper), 리포지토리 구체(repository)
+### presentation
+프레젠테이션에서 사용할 데이터 구조(data), 프레젠테이션 데이터와 실제 데이터 변환(mapper), 전역 프로바이더(providers), 전역 메소드 (utils), 공통 위젯(widgets)
+#### screens
+각 화면당 해당 화면에 사용할 프로바이더(provider), 해당 화면에 사용할 위젯(widget)
