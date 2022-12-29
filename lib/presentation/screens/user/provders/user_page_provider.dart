@@ -38,8 +38,11 @@ class UserPageProvider extends ChangeNotifier {
       _userComments.map((e) => _commentMapper.map(e)));
 
   // TODO 유저의 전체 게시물을 가져오는 것 구현해야한다.
-  int get postingCounts => _userPostings.length;
-  int get commentCounts => _userComments.length;
+  // 유저 정보 가져올 때 가져오는게 좋을것 같다.
+  // int get getEntirePostingCount => _userInfo.entirePostingCount;
+  // int get getEntireCommentCount => _userInfo.entireCommentCount;
+  int get getEntirePostingCount => _userPostings.length;
+  int get getEntireCommentCount => _userComments.length;
 
   bool isLoadingPosting = false;
   bool isLoadingComment = false;

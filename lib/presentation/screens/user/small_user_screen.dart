@@ -359,10 +359,12 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
+                    // TODO 게시글 시간은 어떻게 표현하면 좋을까
+                    // 댓글 시간
                     Text(
                       DateFormat('yy.MM.dd').format(
                           DateTime.fromMillisecondsSinceEpoch(
-                              comment.parentPosting.publishedAt * 1000)),
+                              comment.createdAt * 1000)),
                       style: TextStyle(
                           color: Colors.black.withOpacity(0.8), fontSize: 12),
                       maxLines: 1,
@@ -425,7 +427,8 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   sliver: SliverList(
                       delegate: SliverChildBuilderDelegate((context, index) {
-                    return Text("${provider.postingCounts} 개의 게시물이 있습니다");
+                    return Text(
+                        "${provider.getEntirePostingCount} 개의 게시물이 있습니다");
                   }, childCount: 1)),
                 ),
 
@@ -521,7 +524,8 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   sliver: SliverList(
                       delegate: SliverChildBuilderDelegate((context, index) {
-                    return Text("${provider.commentCounts} 개의 댓글이 있습니다");
+                    return Text(
+                        "${provider.getEntireCommentCount} 개의 댓글이 있습니다");
                   }, childCount: 1)),
                 ),
 
