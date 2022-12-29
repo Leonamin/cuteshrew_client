@@ -2,7 +2,6 @@ import 'package:cuteshrew/core/data/datasource/remote/comment_remote_datasource.
 import 'package:cuteshrew/core/data/dto/comment_dto.dart';
 import 'package:cuteshrew/core/data/mapper/comment_create_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/comment_detail_mapper.dart';
-import 'package:cuteshrew/core/data/mapper/comment_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/login_token_mapper.dart';
 import 'package:cuteshrew/core/domain/entity/comment_detail_entity.dart';
 import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
@@ -34,7 +33,7 @@ class CommentRepositoryImpl extends CommentRepository {
       LoginTokenMapper tokenMapper = LoginTokenMapper();
 
       return Right(_commentRemoteDataSource.uploadComment(
-        "",
+        " ",
         postId,
         tokenMapper.toDTO(loginToken),
         commentMapper.map(newComment),
@@ -66,7 +65,7 @@ class CommentRepositoryImpl extends CommentRepository {
       LoginTokenMapper tokenMapper = LoginTokenMapper();
 
       return Right(_commentRemoteDataSource.deleteComment(
-        "",
+        " ",
         postId,
         commentId,
         tokenMapper.toDTO(loginToken),
@@ -93,9 +92,14 @@ class CommentRepositoryImpl extends CommentRepository {
       required int commentCount,
       String? password}) async {
     try {
-      CommentMapper commentMapper = CommentMapper();
-      List<CommentDTO> commentDTO = await _commentRemoteDataSource
-          .getCommentPage("", postId, pageNum, commentCount);
+      CommentDetailMapper commentMapper = CommentDetailMapper();
+      List<CommentDTO> commentDTO =
+          await _commentRemoteDataSource.getCommentPage(
+        " ",
+        postId,
+        pageNum,
+        commentCount,
+      );
       List<CommentEntity> result = [
         for (final e in commentDTO) commentMapper.map(e)
       ];
@@ -136,7 +140,7 @@ class CommentRepositoryImpl extends CommentRepository {
       LoginTokenMapper tokenMapper = LoginTokenMapper();
 
       return Right(_commentRemoteDataSource.updateComment(
-        "",
+        " ",
         postId,
         commentId,
         tokenMapper.toDTO(loginToken),
