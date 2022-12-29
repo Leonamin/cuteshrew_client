@@ -1,6 +1,6 @@
 import 'package:cuteshrew/core/domain/entity/comment_create_entity.dart';
+import 'package:cuteshrew/core/domain/entity/comment_detail_entity.dart';
 import 'package:cuteshrew/core/domain/entity/comment_entity.dart';
-import 'package:cuteshrew/core/domain/entity/comment_preview_entity.dart';
 import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
 import 'package:cuteshrew/core/resources/failure.dart';
 import 'package:dartz/dartz.dart';
@@ -22,10 +22,13 @@ abstract class CommentRepository {
   });
 
   // 유저 이름으로 댓글 가져오기
-  Future<Either<Failure, List<CommentPreviewEntity>>> getCommentsByUser({
+  // userName은 필수
+  // startAtId는 순서에 따라 (지금은 순서를 정하는게 없으니 최신순) 지정 아이디부터 혹은 순서 처음부터(지금은 가장 최신부터)
+  // loadCount는 한번에 가져올 때 얼마나 가져올지 정하기
+  Future<Either<Failure, List<CommentDetailEntity>>> getCommentsByUser({
     required String userName,
-    required int startAtId,
-    required int loadCount,
+    int? startAtId,
+    int? loadCount,
   });
 
   // 댓글 생성 분기

@@ -62,7 +62,7 @@ class PostingRepositoryImpl extends PostingRepository {
     try {
       PostingDTO postingDTO = await _postingRemoteDataSource.getPosting(
           communityPath, postId, password);
-      PostingMapper mapper = PostingMapper();
+      PostingDetailMapper mapper = PostingDetailMapper();
       PostingEntity result = mapper.map(postingDTO);
       return Right(result);
     } on Exception catch (e) {
@@ -90,10 +90,11 @@ class PostingRepositoryImpl extends PostingRepository {
   }
 
   @override
-  Future<Either<Failure, List<PostingPreviewEntity>>> getPostingsByUser(
-      {required String userName,
-      required int startAtId,
-      required int loadCount}) async {
+  Future<Either<Failure, List<PostingPreviewEntity>>> getPostingsByUser({
+    required String userName,
+    int? startAtId,
+    int? loadCount,
+  }) async {
     try {
       List<PostingDTO> postingDTOList = await _postingRemoteDataSource
           .searchPostings(userName, startAtId, loadCount);

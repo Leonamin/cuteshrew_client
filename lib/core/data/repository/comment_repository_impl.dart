@@ -1,11 +1,10 @@
 import 'package:cuteshrew/core/data/datasource/remote/comment_remote_datasource.dart';
 import 'package:cuteshrew/core/data/dto/comment_dto.dart';
 import 'package:cuteshrew/core/data/mapper/comment_create_mapper.dart';
-import 'package:cuteshrew/core/data/mapper/comment_mapper.dart';
-import 'package:cuteshrew/core/data/mapper/comment_preview_mapper.dart';
+import 'package:cuteshrew/core/data/mapper/comment_detail_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/login_token_mapper.dart';
+import 'package:cuteshrew/core/domain/entity/comment_detail_entity.dart';
 import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
-import 'package:cuteshrew/core/domain/entity/comment_preview_entity.dart';
 import 'package:cuteshrew/core/domain/entity/comment_entity.dart';
 import 'package:cuteshrew/core/domain/entity/comment_create_entity.dart';
 import 'package:cuteshrew/core/domain/repository/comment_repository.dart';
@@ -34,7 +33,7 @@ class CommentRepositoryImpl extends CommentRepository {
       LoginTokenMapper tokenMapper = LoginTokenMapper();
 
       return Right(_commentRemoteDataSource.uploadComment(
-        "",
+        " ",
         postId,
         tokenMapper.toDTO(loginToken),
         commentMapper.map(newComment),
@@ -66,7 +65,7 @@ class CommentRepositoryImpl extends CommentRepository {
       LoginTokenMapper tokenMapper = LoginTokenMapper();
 
       return Right(_commentRemoteDataSource.deleteComment(
-        "",
+        " ",
         postId,
         commentId,
         tokenMapper.toDTO(loginToken),
@@ -93,9 +92,14 @@ class CommentRepositoryImpl extends CommentRepository {
       required int commentCount,
       String? password}) async {
     try {
-      CommentMapper commentMapper = CommentMapper();
-      List<CommentDTO> commentDTO = await _commentRemoteDataSource
-          .getCommentPage("", postId, pageNum, commentCount);
+      CommentDetailMapper commentMapper = CommentDetailMapper();
+      List<CommentDTO> commentDTO =
+          await _commentRemoteDataSource.getCommentPage(
+        " ",
+        postId,
+        pageNum,
+        commentCount,
+      );
       List<CommentEntity> result = [
         for (final e in commentDTO) commentMapper.map(e)
       ];
@@ -106,15 +110,16 @@ class CommentRepositoryImpl extends CommentRepository {
   }
 
   @override
-  Future<Either<Failure, List<CommentPreviewEntity>>> getCommentsByUser(
-      {required String userName,
-      required int startAtId,
-      required int loadCount}) async {
+  Future<Either<Failure, List<CommentDetailEntity>>> getCommentsByUser({
+    required String userName,
+    int? startAtId,
+    int? loadCount,
+  }) async {
     try {
-      CommentPreviewMapper mapper = CommentPreviewMapper();
+      CommentDetailMapper mapper = CommentDetailMapper();
       List<CommentDTO> commentDTO = await _commentRemoteDataSource
           .searchComments(userName, startAtId, loadCount);
-      List<CommentPreviewEntity> result = [
+      List<CommentDetailEntity> result = [
         for (final e in commentDTO) mapper.map(e)
       ];
       return Right(result);
@@ -135,7 +140,7 @@ class CommentRepositoryImpl extends CommentRepository {
       LoginTokenMapper tokenMapper = LoginTokenMapper();
 
       return Right(_commentRemoteDataSource.updateComment(
-        "",
+        " ",
         postId,
         commentId,
         tokenMapper.toDTO(loginToken),

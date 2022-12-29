@@ -30,7 +30,7 @@ class PostingRemoteDataSource extends CuteShrewRemoteDataSource {
   ) async {
     try {
       final response = await get(
-          HttpConstants.getPostings(communityName, pageNum, postingCount));
+          HttpConstants.getCommunityPage(communityName, pageNum, postingCount));
       // FIXME 서버 바꿀 때 까지 임시로
       final decodedData = json.decode(utf8.decode(response.bodyBytes));
       if (decodedData['postings'] == null) {
@@ -70,7 +70,7 @@ class PostingRemoteDataSource extends CuteShrewRemoteDataSource {
     PostingCreateDTO posting,
   ) async {
     try {
-      await post(HttpConstants.updatePosting(communityName, postId),
+      await put(HttpConstants.updatePosting(communityName, postId),
           headers: {
             "Content-Type": "application/json",
             "Authorization": "${token.tokenType} ${token.accessToken}"

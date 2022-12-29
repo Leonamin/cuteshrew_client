@@ -32,8 +32,15 @@ class PostingDTO {
       isLocked: json['is_locked'],
       publishedAt: json['published_at'],
       updatedAt: json['updated_at'],
-      writerInfo: UserDTO.fromJson(json['creator']),
-      ownCommunity: CommunityDTO.fromJson(json['own_community']),
+      // 2022-12-25
+      // 그냥 넣으면 Map<String, dynamic>이 안왔다고 널 예외 발생한다.
+      // writerInfo: UserDTO.fromJson(json['creator']),
+      // ownCommunity: CommunityDTO.fromJson(json['own_community']),
+      writerInfo:
+          (json['creator'] != null) ? UserDTO.fromJson(json['creator']) : null,
+      ownCommunity: (json['own_community'] != null)
+          ? CommunityDTO.fromJson(json['own_community'])
+          : null,
       commnetCount: json['comment_count'],
     );
   }
@@ -45,8 +52,8 @@ class PostingDTO {
         'is_locked': isLocked,
         'published_at': publishedAt,
         'updated_at': updatedAt,
-        'creator': writerInfo,
-        'own_community': ownCommunity,
+        'creator': writerInfo?.toJson(),
+        'own_community': ownCommunity?.toJson(),
         'comment_count': commnetCount,
       };
 }

@@ -4,9 +4,10 @@ import 'package:cuteshrew/core/data/dto/user_dto.dart';
 import 'package:cuteshrew/core/data/mapper/community_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/mapper.dart';
 import 'package:cuteshrew/core/data/mapper/user_mapper.dart';
+import 'package:cuteshrew/core/domain/entity/posting_detail_entity.dart';
 import 'package:cuteshrew/core/domain/entity/posting_entity.dart';
 
-class PostingMapper extends Mapper<PostingDTO, PostingEntity> {
+class PostingDetailMapper extends Mapper<PostingDTO, PostingEntity> {
   @override
   PostingEntity map(PostingDTO object) {
     CommunityMapper communityMapper = CommunityMapper();
@@ -22,7 +23,7 @@ class PostingMapper extends Mapper<PostingDTO, PostingEntity> {
      * ownCommunity: 커뮤니티 없음 처리
      * commentCount: 기본 개수 0개로 처리
      */
-    return PostingEntity(
+    return PostingDetailEntity(
       postId: object.postId,
       title: object.title ?? "",
       body: object.body ?? "",

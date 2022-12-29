@@ -21,10 +21,13 @@ abstract class PostingRepository {
   });
 
   // 유저 이름으로 게시글 가져오기
+  // userName은 필수
+  // startAtId는 순서에 따라 (지금은 순서를 정하는게 없으니 최신순) 지정 아이디부터 혹은 순서 처음부터(지금은 가장 최신부터)
+  // loadCount는 한번에 가져올 때 얼마나 가져올지 정하기
   Future<Either<Failure, List<PostingPreviewEntity>>> getPostingsByUser({
     required String userName,
-    required int startAtId,
-    required int loadCount,
+    int? startAtId,
+    int? loadCount,
   });
 
   // 게시글 생성하기

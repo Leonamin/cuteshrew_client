@@ -14,11 +14,7 @@ class CreatePostingUseCase {
       {required this.communityRepository, required this.postingRepository});
 
   // 모든 커뮤니티 정보를 가져온다.
-  Future<Either<Failure, List<CommunityEntity>>> call(
-    String communityName,
-    PostingCreateEntity newPosting,
-    LoginTokenEntity loginToken,
-  ) {
+  Future<Either<Failure, List<CommunityEntity>>> call() {
     return communityRepository.getCommunityList(loadCount: 0);
   }
 

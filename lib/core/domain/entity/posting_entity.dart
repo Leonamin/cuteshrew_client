@@ -1,28 +1,22 @@
-import 'package:cuteshrew/core/domain/entity/community_entity.dart';
-import 'package:cuteshrew/core/domain/entity/user_entity.dart';
 import 'package:equatable/equatable.dart';
 
-// 게시글 전문이 들어가 있는 엔티티
-class PostingEntity extends Equatable {
+// 게시글의 최소 정보만 정의한다.
+// 2022-12-25
+// 다른 엔티티를 참조하지 않도록 Community, User와 독립되게 만들었다.
+abstract class PostingEntity extends Equatable {
   final int postId;
   final String title;
-  final String body;
   final bool isLocked;
   final int publishedAt;
   final int updatedAt;
-  final UserEntity writer;
-  final CommunityEntity ownCommunity;
   final int commentCount;
 
   const PostingEntity({
     required this.postId,
     required this.title,
-    required this.body,
     required this.isLocked,
     required this.publishedAt,
     required this.updatedAt,
-    required this.writer,
-    required this.ownCommunity,
     required this.commentCount,
   });
 
@@ -30,12 +24,9 @@ class PostingEntity extends Equatable {
   List<Object?> get props => [
         postId,
         title,
-        body,
         isLocked,
         publishedAt,
         updatedAt,
-        writer,
-        ownCommunity,
         commentCount,
       ];
 }
