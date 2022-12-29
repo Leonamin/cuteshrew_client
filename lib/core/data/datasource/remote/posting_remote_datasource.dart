@@ -70,7 +70,7 @@ class PostingRemoteDataSource extends CuteShrewRemoteDataSource {
     PostingCreateDTO posting,
   ) async {
     try {
-      await post(HttpConstants.updatePosting(communityName, postId),
+      await put(HttpConstants.updatePosting(communityName, postId),
           headers: {
             "Content-Type": "application/json",
             "Authorization": "${token.tokenType} ${token.accessToken}"
