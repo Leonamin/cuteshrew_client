@@ -1,10 +1,16 @@
 import 'package:cuteshrew/core/domain/entity/community_preview_entity.dart';
 import 'package:cuteshrew/core/domain/usecase/show_community_page_usecase.dart';
 import 'package:cuteshrew/core/resources/failure.dart';
+import 'package:cuteshrew/di/navigation_service.dart';
+import 'package:cuteshrew/di/service_locator.dart';
+import 'package:cuteshrew/presentation/config/route/routes.dart';
+import 'package:cuteshrew/presentation/config/route/url_query_parameters.dart';
 import 'package:cuteshrew/presentation/screens/community/providers/community_page_state.dart';
 import 'package:flutter/widgets.dart';
 
 class CommunityPageProvider extends ValueNotifier<CommunityPageState> {
+  final NavigationService _navigationService = locator<NavigationService>();
+
   CommunityPageProvider({
     required ShowCommunityPageUseCase communityPageUseCase,
     required String communityName,
@@ -54,5 +60,16 @@ class CommunityPageProvider extends ValueNotifier<CommunityPageState> {
         });
       });
     }
+  }
+
+  void navigateToPosting(String communityName, int postId) {
+    _navigationService.navigateTo(
+      Routes.PostingPageRoute(communityName, postId),
+    );
+  }
+
+  void navigateToPostingEditor(String communityName) {
+    _navigationService.navigateTo(Routes.PostEditorPageRoute,
+        queryParams: {UrlQueryParameters.communityName: communityName});
   }
 }

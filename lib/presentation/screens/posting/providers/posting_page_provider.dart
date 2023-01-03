@@ -2,10 +2,17 @@ import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
 import 'package:cuteshrew/core/domain/entity/posting_entity.dart';
 import 'package:cuteshrew/core/domain/usecase/show_posting_page_usecase.dart';
 import 'package:cuteshrew/core/resources/failure.dart';
+import 'package:cuteshrew/di/navigation_service.dart';
+import 'package:cuteshrew/di/service_locator.dart';
+import 'package:cuteshrew/presentation/config/route/routes.dart';
+import 'package:cuteshrew/presentation/config/route/url_query_parameters.dart';
 import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_state.dart';
+import 'package:cuteshrew/presentation/screens/posting_editor/posting_editor_page.dart';
 import 'package:flutter/widgets.dart';
 
 class PostingPageProvider extends ValueNotifier<PostingPageState> {
+  final NavigationService _navigationService = locator<NavigationService>();
+
   late ShowPostingPageUseCase _postingPageUseCase;
 
   PostingPageProvider({
@@ -82,5 +89,25 @@ class PostingPageProvider extends ValueNotifier<PostingPageState> {
         );
       });
     }
+  }
+
+  void navigateToHome() {
+    _navigationService.navigateTo(Routes.HomePageRoute);
+  }
+
+  void navigateToCommunity(String communityName) {
+    _navigationService.navigateTo(Routes.CommuintyNamePageRoute(communityName));
+  }
+
+  void navigateToUser(String userName) {
+    _navigationService.navigateTo(Routes.UserPageRoute,
+        queryParams: {UrlQueryParameters.userName: userName});
+  }
+
+  void navigateToPostingEditor(
+      String communityName, PostEditorPageArguments arguments) {
+    _navigationService.navigateTo(Routes.PostEditorPageRoute,
+        queryParams: {UrlQueryParameters.communityName: communityName},
+        arguments: arguments);
   }
 }

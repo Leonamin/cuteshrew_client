@@ -1,6 +1,3 @@
-import 'package:cuteshrew/di/navigation_service.dart';
-import 'package:cuteshrew/di/service_locator.dart';
-import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/core/data/datasource/remote/comment_remote_datasource.dart';
 import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.dart';
 import 'package:cuteshrew/core/data/datasource/remote/user_remote_datasource.dart';
@@ -49,9 +46,8 @@ class NotFoundSmallUserScreen extends StatelessWidget {
             height: 8,
           ),
           TextButton(
-              onPressed: () {
-                locator<NavigationService>().navigateTo(Routes.HomePageRoute);
-              },
+              onPressed: () =>
+                  context.read<UserPageProvider>().navigateToHome(),
               child: const Text("홈으로")),
         ],
       ),
@@ -279,9 +275,8 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
           children: [
             Expanded(
                 child: InkWell(
-              onTap: () => locator<NavigationService>().navigateTo(
-                  Routes.PostingPageRoute(
-                      posting.ownCommunity?.communityName, posting.postId)),
+              onTap: () => context.read<UserPageProvider>().navigateToPosting(
+                  posting.ownCommunity?.communityName ?? "", posting.postId),
               child: Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Column(
@@ -331,11 +326,9 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
           children: [
             Expanded(
                 child: InkWell(
-              onTap: () => locator<NavigationService>()
-                  .navigateTo(Routes.PostingPageRoute(
-                comment.parentPosting.ownCommunity?.communityName,
-                comment.postId,
-              )),
+              onTap: () => context.read<UserPageProvider>().navigateToPosting(
+                  comment.parentPosting.ownCommunity?.communityName ?? "",
+                  comment.postId),
               child: Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Column(

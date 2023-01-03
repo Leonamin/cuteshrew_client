@@ -1,6 +1,3 @@
-import 'package:cuteshrew/di/navigation_service.dart';
-import 'package:cuteshrew/di/service_locator.dart';
-import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/core/data/datasource/remote/user_remote_datasource.dart';
 import 'package:cuteshrew/core/data/repository/user_repository_impl.dart';
 import 'package:cuteshrew/core/domain/usecase/signin_usecase.dart';
@@ -33,7 +30,7 @@ class AuthScreen extends StatelessWidget {
           // FIXME 이거 없이 하면 setState() or markNeedsBuild() called during build.가 발생한다.
           // state 변경되면 화면 전환되게 하는거 없나
           WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            locator<NavigationService>().navigateTo(Routes.HomePageRoute);
+            context.read<AuthenticationProvider>().navigateAfterSiginIn();
           });
         }
         //TODO
