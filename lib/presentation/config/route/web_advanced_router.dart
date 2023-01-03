@@ -1,13 +1,3 @@
-/*
-  URL 리스트
-  /home: 일단은 /community로 대체
-  /community: 모든 커뮤니티 메뉴
-  /community/{name}: name 이름의 커뮤니티 페이지
-  /community/{name}/{postId}: name 이름 커뮤니티 아래의 postId번호를 가진 게시글 페이지
-  /community/{name}/write: 게시글 작성 페이지
-  /login: 로그인 페이지
-*/
-
 import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/presentation/screens/auth/auth_page.dart';
 import 'package:cuteshrew/presentation/screens/posting_editor/posting_editor_page.dart';
@@ -17,26 +7,21 @@ import 'package:cuteshrew/presentation/screens/notfound/error_page.dart';
 import 'package:cuteshrew/presentation/screens/posting/posting_page.dart';
 import 'package:cuteshrew/presentation/screens/user/user_page.dart';
 import 'package:flutter/material.dart';
-
-//FIXME 무의미하게 communityInfo를 받는 것을 communityName으로 바꿔야함
+import 'package:cuteshrew/extension/string_extenstion.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
-  var uri = Uri.parse(settings.name ?? "");
+  final routingData = settings.name!.getRoutingData;
+  final uri = Uri.parse(routingData.route);
 
   if (uri.pathSegments.length == 1) {
     switch (uri.pathSegments.first) {
       case Routes.HomePageName:
-        return MaterialPageRoute(
-          builder: (context) => const HomePage(),
-        );
+      // 나중에 기능이 여러개 생기면 HomePage와 CommunityPage가 분기될 것이다.
       case Routes.CommunityPageName:
-        return MaterialPageRoute(
-          builder: (context) => const HomePage(),
-        );
+        return _getPageRoute(const HomePage(), settings);
       case Routes.LoginPageName:
-        return MaterialPageRoute(
-          builder: (context) => const AuthPage(),
-        );
+        return _getPageRoute(const AuthPage(), settings);
+
       case Routes.PostEditorPageName:
         var args;
         if (settings.arguments != null) {
@@ -45,6 +30,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           args = PostEditorPageArguments(null, false);
         }
         return MaterialPageRoute(
+          settings: settings,
           builder: (context) => PostingEditorPage(
               communityName: "",
               originPost: args.originPost,
@@ -56,7 +42,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
   if (uri.pathSegments.length == 2) {
     if (uri.pathSegments.first == Routes.CommunityPageName) {
-      String communityName = uri.pathSegments[1];
+      final String communityName = routingData['communityName'];
+      print(communityName);
+      // String communityName = uri.pathSegments[1];
+      return _getPageRoute(
+          CommunityPage(communityName: communityName), settings);
       return MaterialPageRoute(
         builder: (context) =>
             CommunityPage(communityName: communityName, currentPageNum: 0),
@@ -115,4 +105,33 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   return MaterialPageRoute(
     builder: (context) => const PageNotFound(),
   );
+}
+
+PageRoute _getPageRoute(Widget child, RouteSettings settings) {
+  return _FadeRoute(child: child, routeName: settings.name ?? "");
+}
+
+class _FadeRoute extends PageRouteBuilder {
+  final Widget child;
+  final String routeName;
+  _FadeRoute({required this.child, required this.routeName})
+      : super(
+          settings: RouteSettings(name: routeName),
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              child,
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        );
 }

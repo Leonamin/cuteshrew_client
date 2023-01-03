@@ -1,4 +1,4 @@
-import 'package:cuteshrew/config/routing/routes.dart';
+import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/constants/values.dart';
 import 'package:cuteshrew/core/data/datasource/remote/community_remote_datasource.dart';
 import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.dart';

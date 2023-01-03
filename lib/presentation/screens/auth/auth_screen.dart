@@ -1,4 +1,4 @@
-import 'package:cuteshrew/config/routing/routes.dart';
+import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/core/data/datasource/remote/user_remote_datasource.dart';
 import 'package:cuteshrew/core/data/repository/user_repository_impl.dart';
 import 'package:cuteshrew/core/domain/usecase/signin_usecase.dart';

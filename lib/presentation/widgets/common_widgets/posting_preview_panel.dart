@@ -1,4 +1,4 @@
-import 'package:cuteshrew/config/routing/routes.dart';
+import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/presentation/data/posting_data.dart';
 import 'package:cuteshrew/presentation/widgets/common_widgets/posting_item.dart';
 import 'package:flutter/material.dart';

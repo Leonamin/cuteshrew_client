@@ -1,4 +1,4 @@
-import 'package:cuteshrew/config/routing/routes.dart';
+import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_provider.dart';
 import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_state.dart';

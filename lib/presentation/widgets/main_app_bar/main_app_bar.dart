@@ -1,4 +1,4 @@
-import 'package:cuteshrew/config/routing/routes.dart';
+import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_provider.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
