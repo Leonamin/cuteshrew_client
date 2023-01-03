@@ -9,6 +9,9 @@ class UserMapper extends Mapper<UserDTO, UserEntity> {
     return UserDetailEntity(
       email: object.email,
       name: object.nickname,
+      postingCount: object.postingCount ?? -1,
+      commentCount: object.commentCount ?? -1,
+      introduction: "introduction",
     );
   }
 }
