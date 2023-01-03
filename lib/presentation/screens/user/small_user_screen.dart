@@ -131,7 +131,7 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
   }
 
   // 앱바가 펴진 상태에서 보여줄 위젯
-  _userInfoWidget(UserPreviewData user) {
+  _userInfoWidget(UserPageProvider provider) {
     return SafeArea(
         child: Column(
       children: [
@@ -155,7 +155,7 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
           height: 16,
         ),
         Text(
-          user.name,
+          provider.userName,
           style: const TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.bold,
@@ -164,20 +164,19 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
         const SizedBox(
           height: 8,
         ),
-        Text(user.email),
+        Text(provider.userEmail),
         const SizedBox(
           height: 8,
         ),
         Text(
-          //user.profile.introduce
-          "Introduce",
+          provider.userIntroduction,
         ),
       ],
     ));
   }
 
   // 앱바가 줄여진 상태에서 보여줄 위젯
-  _shrinkUserInfoWidget(UserPreviewData user) {
+  _shrinkUserInfoWidget(UserPageProvider provider) {
     return [
       Padding(
         padding: const EdgeInsets.only(left: 8, right: 12),
@@ -189,14 +188,14 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    user.name,
+                    provider.userName,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    user.email,
+                    provider.userEmail,
                     style: const TextStyle(
                       fontSize: 12,
                     ),
@@ -219,7 +218,7 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
     ];
   }
 
-  _appBar(UserPreviewData user) {
+  _appBar(UserPageProvider provider) {
     return SliverAppBar(
       elevation: 0,
       // backgroundColor: Colors.grey.shade300,
@@ -229,9 +228,9 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
       flexibleSpace: FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         title: _isShrink ? Text("Profile") : null,
-        background: _userInfoWidget(user),
+        background: _userInfoWidget(provider),
       ),
-      actions: _isShrink ? _shrinkUserInfoWidget(user) : null,
+      actions: _isShrink ? _shrinkUserInfoWidget(provider) : null,
     );
   }
 
@@ -580,6 +579,7 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
                 commentRemoteDatasource: CommentRemoteDataSource(),
               )),
         );
+        provider(userName: widget.userName);
         provider.fetchPostings(userName: widget.userName);
         provider.fetchComments(userName: widget.userName);
         return provider;
@@ -597,8 +597,7 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
                     controller: _mainScrollController,
                     headerSliverBuilder: (context, innerBoxIsScrolled) {
                       return [
-                        _appBar(UserPreviewData(
-                            name: widget.userName, email: widget.userName)),
+                        _appBar(provider),
                         SliverOverlapAbsorber(
                           handle:
                               NestedScrollView.sliverOverlapAbsorberHandleFor(

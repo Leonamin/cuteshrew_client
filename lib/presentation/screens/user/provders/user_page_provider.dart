@@ -1,5 +1,6 @@
 import 'package:cuteshrew/core/domain/entity/comment_entity.dart';
 import 'package:cuteshrew/core/domain/entity/posting_entity.dart';
+import 'package:cuteshrew/core/domain/entity/user_detail_entity.dart';
 import 'package:cuteshrew/core/domain/usecase/show_user_page_usecase.dart';
 import 'package:cuteshrew/core/resources/failure.dart';
 import 'package:cuteshrew/di/navigation_service.dart';
@@ -32,6 +33,7 @@ class UserPageProvider extends ChangeNotifier {
   final PostingPreviewDataMapper _postingMapper = PostingPreviewDataMapper();
   final CommentDetailDataMapper _commentMapper = CommentDetailDataMapper();
 
+  UserDetailEntity? _userInfo;
   final List<PostingEntity> _userPostings = [];
   final List<CommentEntity> _userComments = [];
 
@@ -42,12 +44,12 @@ class UserPageProvider extends ChangeNotifier {
   List<CommentDetailData> get userComments => List<CommentDetailData>.from(
       _userComments.map((e) => _commentMapper.map(e)));
 
-  // TODO 유저의 전체 게시물을 가져오는 것 구현해야한다.
   // 유저 정보 가져올 때 가져오는게 좋을것 같다.
-  // int get getEntirePostingCount => _userInfo.entirePostingCount;
-  // int get getEntireCommentCount => _userInfo.entireCommentCount;
-  int get getEntirePostingCount => _userPostings.length;
-  int get getEntireCommentCount => _userComments.length;
+  int get getEntirePostingCount => _userInfo?.postingCount ?? 0;
+  int get getEntireCommentCount => _userInfo?.commentCount ?? 0;
+  String get userName => _userInfo?.name ?? "";
+  String get userEmail => _userInfo?.email ?? "";
+  String get userIntroduction => _userInfo?.introduction ?? "";
 
   bool isLoadingPosting = false;
   bool isLoadingComment = false;
@@ -60,10 +62,28 @@ class UserPageProvider extends ChangeNotifier {
   int lastRequestTimePosting = 0;
   int lastRequestTimeComment = 0;
 
-// TODO 이거 posting, comment 분리 해야함
   final requestTerm = const Duration(minutes: 5);
 
   final defaultLoadCount = 10;
+
+  Future<void> call({required String userName}) async {
+// 가져오기
+    final result = await _userPageUsecase(userName);
+
+    // 검사
+    result.fold((Failure failure) {
+      print("not found");
+      _state = UserPageState.USER_NOT_FOUND;
+    }, (data) {
+      print("found");
+
+      _userInfo = data;
+      print(_userInfo?.postingCount);
+    });
+
+    //마지막
+    notifyListeners();
+  }
 
   Future<void> refreshPostings({
     required String userName,
