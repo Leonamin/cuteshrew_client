@@ -3,6 +3,8 @@ import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.
 import 'package:cuteshrew/core/data/repository/community_repository_impl.dart';
 import 'package:cuteshrew/core/data/repository/posting_repository_impl.dart';
 import 'package:cuteshrew/core/domain/usecase/create_posting_usecase.dart';
+import 'package:cuteshrew/di/navigation_service.dart';
+import 'package:cuteshrew/di/service_locator.dart';
 import 'package:cuteshrew/presentation/data/posting_create_data.dart';
 import 'package:cuteshrew/presentation/data/posting_detail_data.dart';
 import 'package:cuteshrew/presentation/screens/posting_editor/providers/posting_editor_provider.dart';
@@ -63,7 +65,7 @@ class _PostingEditorScreenState extends State<PostingEditorScreen> {
 
   void _check(PostingEdiorState state) {
     if (state == PostingEdiorState.COMPLETED) {
-      Navigator.pop(context);
+      locator<NavigationService>().goBack();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(_makeSnackBar("포스팅 업로드 실패"));
     }

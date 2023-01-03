@@ -1,3 +1,5 @@
+import 'package:cuteshrew/di/navigation_service.dart';
+import 'package:cuteshrew/di/service_locator.dart';
 import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/presentation/data/posting_data.dart';
 import 'package:cuteshrew/presentation/widgets/common_widgets/posting_item.dart';
@@ -23,8 +25,7 @@ class PostingPreviewPanel extends StatelessWidget {
                 title: posts[index].title,
                 commentCount: posts[index].commentCount,
                 onClick: () {
-                  Navigator.pushNamed(
-                      context,
+                  locator<NavigationService>().navigateTo(
                       Routes.PostingPageRoute(
                           communityName, posts[index].postId));
                 },

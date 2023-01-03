@@ -1,3 +1,5 @@
+import 'package:cuteshrew/di/navigation_service.dart';
+import 'package:cuteshrew/di/service_locator.dart';
 import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/constants/values.dart';
 import 'package:cuteshrew/core/data/datasource/remote/community_remote_datasource.dart';
@@ -5,6 +7,7 @@ import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.
 import 'package:cuteshrew/core/data/repository/community_repository_impl.dart';
 import 'package:cuteshrew/core/data/repository/posting_repository_impl.dart';
 import 'package:cuteshrew/core/domain/usecase/show_community_page_usecase.dart';
+import 'package:cuteshrew/presentation/config/route/url_query_parameters.dart';
 import 'package:cuteshrew/presentation/data/posting_data.dart';
 import 'package:cuteshrew/presentation/screens/community/providers/community_page_provider.dart';
 import 'package:cuteshrew/presentation/screens/community/providers/community_page_state.dart';
@@ -175,8 +178,10 @@ class _LoadedDataCommunityScreenState extends State<LoadedDataCommunityScreen> {
         floatingActionButton: state is AuthorizedState
             ? FloatingActionButton(
                 onPressed: () {
-                  Navigator.pushNamed(context,
-                      Routes.PostEditorPageRoute(widget.communityName));
+                  locator<NavigationService>()
+                      .navigateTo(Routes.PostEditorPageRoute, queryParams: {
+                    UrlQueryParameters.communityName: widget.communityName
+                  });
                 },
                 child: const Icon(Icons.note_add),
               )

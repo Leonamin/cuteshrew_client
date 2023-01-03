@@ -1,4 +1,5 @@
 import 'package:cuteshrew/presentation/config/route/routes.dart';
+import 'package:cuteshrew/presentation/config/route/url_query_parameters.dart';
 import 'package:cuteshrew/presentation/screens/auth/auth_page.dart';
 import 'package:cuteshrew/presentation/screens/posting_editor/posting_editor_page.dart';
 import 'package:cuteshrew/presentation/screens/community/community_page.dart';
@@ -21,44 +22,35 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         return _getPageRoute(const HomePage(), settings);
       case Routes.LoginPageName:
         return _getPageRoute(const AuthPage(), settings);
+      case Routes.UserPageName:
+        final String userName = routingData[UrlQueryParameters.userName];
 
+        return _getPageRoute(UserPage(userName: userName), settings);
       case Routes.PostEditorPageName:
+        final String? communityName =
+            routingData[UrlQueryParameters.communityName];
         var args;
         if (settings.arguments != null) {
           args = settings.arguments;
         } else {
           args = PostEditorPageArguments(null, false);
         }
-        return MaterialPageRoute(
-          settings: settings,
-          builder: (context) => PostingEditorPage(
-              communityName: "",
-              originPost: args.originPost,
-              isModify: args.isModify),
-        );
+
+        return _getPageRoute(
+            PostingEditorPage(
+                communityName: communityName ?? "",
+                originPost: args.originPost,
+                isModify: args.isModify),
+            settings);
       default:
     }
   }
 
   if (uri.pathSegments.length == 2) {
     if (uri.pathSegments.first == Routes.CommunityPageName) {
-      final String communityName = routingData['communityName'];
-      print(communityName);
-      // String communityName = uri.pathSegments[1];
+      String communityName = uri.pathSegments[1];
       return _getPageRoute(
           CommunityPage(communityName: communityName), settings);
-      return MaterialPageRoute(
-        builder: (context) =>
-            CommunityPage(communityName: communityName, currentPageNum: 0),
-      );
-    }
-    if (uri.pathSegments.first == Routes.UserPageName) {
-      String userName = uri.pathSegments[1];
-      return MaterialPageRoute(
-        builder: (context) => UserPage(
-          userName: userName,
-        ),
-      );
     }
   }
 
@@ -73,19 +65,19 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         } else {
           args = PostEditorPageArguments(null, false);
         }
-        return MaterialPageRoute(
-          builder: (context) => PostingEditorPage(
-              communityName: communityName,
-              originPost: args.originPost,
-              isModify: args.isModify),
-        );
+        return _getPageRoute(
+            PostingEditorPage(
+                communityName: communityName,
+                originPost: args.originPost,
+                isModify: args.isModify),
+            settings);
       } else {
-        return MaterialPageRoute(
-          builder: (context) => PostingPage(
-            communityName: communityName,
-            postId: int.parse(uri.pathSegments[2]),
-          ),
-        );
+        return _getPageRoute(
+            PostingPage(
+              communityName: communityName,
+              postId: int.parse(uri.pathSegments[2]),
+            ),
+            settings);
       }
     }
   }
@@ -94,21 +86,40 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     if (uri.pathSegments.first == Routes.CommunityPageName &&
         uri.pathSegments[2] == 'page') {
       String communityName = uri.pathSegments[1];
-      return MaterialPageRoute(
-        builder: (context) => CommunityPage(
-            communityName: communityName,
-            currentPageNum: int.parse(uri.pathSegments[3])),
-      );
+      final int currentPageNum = routingData[UrlQueryParameters.page];
+      _getPageRoute(
+          CommunityPage(
+              communityName: communityName, currentPageNum: currentPageNum),
+          settings);
     }
   }
-
-  return MaterialPageRoute(
-    builder: (context) => const PageNotFound(),
-  );
+  return _getPageRoute(const PageNotFound(), settings);
 }
 
 PageRoute _getPageRoute(Widget child, RouteSettings settings) {
-  return _FadeRoute(child: child, routeName: settings.name ?? "");
+  return _NoTransitionRoute(child: child, routeName: settings.name ?? "");
+}
+
+class _NoTransitionRoute extends PageRouteBuilder {
+  final Widget child;
+  final String routeName;
+  _NoTransitionRoute({required this.child, required this.routeName})
+      : super(
+          settings: RouteSettings(name: routeName),
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              child,
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              child,
+        );
 }
 
 class _FadeRoute extends PageRouteBuilder {

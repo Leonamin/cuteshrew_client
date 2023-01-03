@@ -1,6 +1,8 @@
-import 'package:cuteshrew/config/routing/routes.dart';
+import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/core/domain/entity/community_entity.dart';
 import 'package:cuteshrew/core/domain/entity/posting_entity.dart';
+import 'package:cuteshrew/di/navigation_service.dart';
+import 'package:cuteshrew/di/service_locator.dart';
 import 'package:cuteshrew/presentation/widgets/common_widgets/clickable_text.dart';
 import 'package:cuteshrew/presentation/widgets/common_widgets/posting_item.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +32,9 @@ class CommunityPanel extends StatelessWidget {
           size: 30,
           weight: FontWeight.w800,
           onClick: () {
-            Navigator.pushNamed(context,
-                Routes.CommuintyNamePageRoute(communityInfo.communityName));
+            locator<NavigationService>().navigateTo(
+              Routes.CommuintyNamePageRoute(communityInfo.communityName),
+            );
           },
           // onClick: onPressed,
         ),
@@ -57,8 +60,7 @@ class CommunityPanel extends StatelessWidget {
                 title: item.title,
                 commentCount: item.commentCount,
                 onClick: () {
-                  Navigator.pushNamed(
-                      context,
+                  locator<NavigationService>().navigateTo(
                       Routes.PostingPageRoute(
                           communityInfo.communityName, item.postId));
                 },

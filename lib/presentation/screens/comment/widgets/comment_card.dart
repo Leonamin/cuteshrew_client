@@ -1,5 +1,8 @@
+import 'package:cuteshrew/di/navigation_service.dart';
+import 'package:cuteshrew/di/service_locator.dart';
 import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/constants/style.dart';
+import 'package:cuteshrew/presentation/config/route/url_query_parameters.dart';
 import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_provider.dart';
 import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_state.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
@@ -69,8 +72,9 @@ class CommentCard extends StatelessWidget {
                 width: 4,
               ),
               InkWell(
-                onTap: () => Navigator.pushNamed(
-                    context, Routes.UserPageRoute(userName)),
+                onTap: () => locator<NavigationService>().navigateTo(
+                    Routes.UserPageRoute,
+                    queryParams: {UrlQueryParameters.userName: userName}),
                 child: Text(
                   userName,
                   style: const TextStyle(

@@ -1,3 +1,5 @@
+import 'package:cuteshrew/di/navigation_service.dart';
+import 'package:cuteshrew/di/service_locator.dart';
 import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/core/data/datasource/remote/comment_remote_datasource.dart';
@@ -6,6 +8,7 @@ import 'package:cuteshrew/core/data/repository/comment_repository_impl.dart';
 import 'package:cuteshrew/core/data/repository/posting_repository_impl.dart';
 import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
 import 'package:cuteshrew/core/domain/usecase/show_posting_page_usecase.dart';
+import 'package:cuteshrew/presentation/config/route/url_query_parameters.dart';
 import 'package:cuteshrew/presentation/screens/posting_editor/posting_editor_page.dart';
 import 'package:cuteshrew/presentation/screens/posting/posting_screen/password_certification_posting_page_screen.dart';
 import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_provider.dart';
@@ -87,7 +90,7 @@ class PostingPageScreen extends StatelessWidget {
           }
           if (state is DeletedDataPostingPageState) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushNamed(context, Routes.HomePageRoute);
+              locator<NavigationService>().navigateTo(Routes.HomePageRoute);
             });
           }
           if (state is UnknownErrorPostingPageState) {}
@@ -111,7 +114,7 @@ class NoDataPostingPageScreen extends StatelessWidget {
           ClickableText(
             text: "홈으로 돌아가기",
             onClick: () {
-              Navigator.pushNamed(context, Routes.HomePageRoute);
+              locator<NavigationService>().navigateTo(Routes.HomePageRoute);
             },
           )
         ],
@@ -162,11 +165,8 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
           ],
         ),
         onTap: () {
-          Navigator.pushNamed(
-              context,
-              Routes.CommuintyNamePageRoute(
-                postingPageState.communityName,
-              ));
+          locator<NavigationService>().navigateTo(
+              Routes.CommuintyNamePageRoute(postingPageState.communityName));
         },
       ),
       const SizedBox(
@@ -203,11 +203,10 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () => Navigator.pushNamed(
-                    context,
-                    Routes.UserPageRoute(
-                      postingPageState.writerName,
-                    )),
+                onTap: () => locator<NavigationService>()
+                    .navigateTo(Routes.UserPageRoute, queryParams: {
+                  UrlQueryParameters.userName: postingPageState.writerName
+                }),
                 child: Text(
                   postingPageState.writerName,
                   style: const TextStyle(
@@ -249,10 +248,12 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
                           backgroundColor: Colors.grey,
                           textStyle: const TextStyle(color: Colors.black)),
                       onPressed: () {
-                        Navigator.pushNamed(
-                            context,
-                            Routes.PostEditorPageRoute(
-                                postingPageState.communityName),
+                        locator<NavigationService>().navigateTo(
+                            Routes.PostEditorPageRoute,
+                            queryParams: {
+                              UrlQueryParameters.communityName:
+                                  postingPageState.communityName
+                            },
                             arguments: PostEditorPageArguments(
                                 postingPageState.postingDetailData, true));
                       },

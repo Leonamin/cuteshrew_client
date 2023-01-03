@@ -1,3 +1,5 @@
+import 'package:cuteshrew/di/navigation_service.dart';
+import 'package:cuteshrew/di/service_locator.dart';
 import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/core/data/datasource/remote/comment_remote_datasource.dart';
 import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.dart';
@@ -48,7 +50,7 @@ class NotFoundSmallUserScreen extends StatelessWidget {
           ),
           TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, Routes.HomePageRoute);
+                locator<NavigationService>().navigateTo(Routes.HomePageRoute);
               },
               child: const Text("홈으로")),
         ],
@@ -277,8 +279,7 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
           children: [
             Expanded(
                 child: InkWell(
-              onTap: () => Navigator.pushNamed(
-                  context,
+              onTap: () => locator<NavigationService>().navigateTo(
                   Routes.PostingPageRoute(
                       posting.ownCommunity?.communityName, posting.postId)),
               child: Padding(
@@ -330,12 +331,11 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
           children: [
             Expanded(
                 child: InkWell(
-              onTap: () => Navigator.pushNamed(
-                  context,
-                  Routes.PostingPageRoute(
-                    comment.parentPosting.ownCommunity?.communityName,
-                    comment.postId,
-                  )),
+              onTap: () => locator<NavigationService>()
+                  .navigateTo(Routes.PostingPageRoute(
+                comment.parentPosting.ownCommunity?.communityName,
+                comment.postId,
+              )),
               child: Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Column(
