@@ -1,4 +1,4 @@
-import 'package:cuteshrew/core/domain/entity/user_detail_entity.dart';
+import 'package:cuteshrew/core/domain/entity/user_preview_entity.dart';
 import 'package:cuteshrew/core/domain/usecase/login_usecase.dart';
 import 'package:cuteshrew/core/resources/failure.dart';
 import 'package:cuteshrew/di/navigation_service.dart';
@@ -31,7 +31,7 @@ class AuthenticationProvider extends ValueNotifier<AuthenticationState> {
         value = const AuthenticationState.unauthorized();
       }, (data) {
         value = AuthenticationState.authorized(
-          userInfo: UserDetailEntity(
+          userInfo: UserPreviewEntity(
             email: id,
             name: id,
           ),
