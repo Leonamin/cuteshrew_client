@@ -6,7 +6,7 @@ import 'package:cuteshrew/core/data/mapper/user_mapper.dart';
 import 'package:cuteshrew/core/domain/entity/comment_detail_entity.dart';
 import 'package:cuteshrew/core/domain/entity/community_preview_entity.dart';
 import 'package:cuteshrew/core/domain/entity/posting_preview_entity.dart';
-import 'package:cuteshrew/core/domain/entity/user_detail_entity.dart';
+import 'package:cuteshrew/core/domain/entity/user_preview_entity.dart';
 
 class CommentDetailMapper extends Mapper<CommentDTO, CommentDetailEntity> {
   @override
@@ -42,7 +42,7 @@ class CommentDetailMapper extends Mapper<CommentDTO, CommentDetailEntity> {
               isLocked: false,
               publishedAt: 0,
               updatedAt: 0,
-              writer: UserDetailEntity(
+              writer: UserPreviewEntity(
                 name: "unknown",
                 email: "",
               ),
