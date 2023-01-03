@@ -4,7 +4,7 @@ class HttpConstants {
   static const String endpointApi = "/api";
   static const String endpointCommunity = "/community";
   static const String endpointLogin = "/login";
-  static const String endpointUser = "/user/general";
+  static const String endpointUser = "/user";
   static const String endpointPosting = "/posting";
   static const String endpointComment = '/comment';
   static const String endpointSearch = '/search';
@@ -121,6 +121,15 @@ class HttpConstants {
             "$endpointApi$endpointCommunity/$communityName/$postId$endpointComment/$commentId",
       );
 
+  static getUserDetail(String userName) => Uri(
+          host: cuteshrewBaseUrl,
+          scheme: cuteshrewScheme,
+          path: "$endpointApi$endpointUser$endpointSearch",
+          queryParameters: {
+            queryUserName: userName,
+          });
+
+  // Search
   // String으로 와야함 안그럼 버그난다
   static searchPostings(
       [int? userId, String? userName, int? startPostId, int? loadPageNum]) {
