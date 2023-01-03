@@ -3,9 +3,9 @@ import 'package:cuteshrew/core/data/mapper/mapper.dart';
 import 'package:cuteshrew/core/domain/entity/user_detail_entity.dart';
 import 'package:cuteshrew/core/domain/entity/user_entity.dart';
 
-class UserMapper extends Mapper<UserDTO, UserEntity> {
+class UserDetailMapper extends Mapper<UserDTO, UserEntity> {
   @override
-  UserEntity map(UserDTO object) {
+  UserDetailEntity map(UserDTO object) {
     return UserDetailEntity(
       email: object.email,
       name: object.nickname,

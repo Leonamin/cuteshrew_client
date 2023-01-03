@@ -1,5 +1,8 @@
 import 'package:cuteshrew/core/data/datasource/remote/user_remote_datasource.dart';
+import 'package:cuteshrew/core/data/dto/user_dto.dart';
 import 'package:cuteshrew/core/data/mapper/user_create_mapper.dart';
+import 'package:cuteshrew/core/data/mapper/user_mapper.dart';
+import 'package:cuteshrew/core/domain/entity/user_detail_entity.dart';
 import 'package:cuteshrew/core/domain/entity/user_entity.dart';
 import 'package:cuteshrew/core/domain/entity/user_create_entity.dart';
 import 'package:cuteshrew/core/domain/repository/user_repository.dart';
@@ -25,13 +28,14 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<Either<Failure, UserEntity>> getUser({required String userName}) {
-    throw UnimplementedError();
-    // try {
-    //   UserCreateMapper mapper = UserCreateMapper();
-    //   return Right(_userRemoteDataSource.getUserInfo(userName));
-    // } on Exception catch (e) {
-    //   return Left(Failure(e.toString()));
-    // }
+  Future<Either<Failure, UserDetailEntity>> getUser(
+      {required String userName}) async {
+    try {
+      UserDTO userDTO = await _userRemoteDataSource.getUserDetail(userName);
+      UserDetailMapper mapper = UserDetailMapper();
+      return Right(mapper.map(userDTO));
+    } on Exception catch (e) {
+      return Left(Failure(e.toString()));
+    }
   }
 }

@@ -12,7 +12,7 @@ class CommentDetailMapper extends Mapper<CommentDTO, CommentDetailEntity> {
   @override
   CommentDetailEntity map(CommentDTO object) {
     PostingPreviewMapper postingPreviewMapper = PostingPreviewMapper();
-    UserMapper userMapper = UserMapper();
+    UserDetailMapper userMapper = UserDetailMapper();
 
     /*
       기본 처리

@@ -11,7 +11,7 @@ class PostingDetailMapper extends Mapper<PostingDTO, PostingEntity> {
   @override
   PostingEntity map(PostingDTO object) {
     CommunityMapper communityMapper = CommunityMapper();
-    UserMapper userMapper = UserMapper();
+    UserDetailMapper userMapper = UserDetailMapper();
 
     /**
      * 기본 처리

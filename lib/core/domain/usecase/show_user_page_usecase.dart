@@ -1,6 +1,6 @@
 import 'package:cuteshrew/core/domain/entity/comment_detail_entity.dart';
 import 'package:cuteshrew/core/domain/entity/posting_preview_entity.dart';
-import 'package:cuteshrew/core/domain/entity/user_entity.dart';
+import 'package:cuteshrew/core/domain/entity/user_detail_entity.dart';
 import 'package:cuteshrew/core/domain/repository/comment_repository.dart';
 import 'package:cuteshrew/core/domain/repository/posting_repository.dart';
 import 'package:cuteshrew/core/domain/repository/user_repository.dart';
@@ -19,7 +19,7 @@ class ShowUserPageUsecase {
   });
 
   // 유저 기본 정보를 가져온다.
-  Future<Either<Failure, UserEntity>> call(String userName) {
+  Future<Either<Failure, UserDetailEntity>> call(String userName) {
     return userRepository.getUser(userName: userName);
   }
 
