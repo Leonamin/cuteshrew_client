@@ -1,4 +1,3 @@
-import 'package:cuteshrew/config/routing/routes.dart';
 import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_provider.dart';
 import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_state.dart';
@@ -69,8 +68,9 @@ class CommentCard extends StatelessWidget {
                 width: 4,
               ),
               InkWell(
-                onTap: () => Navigator.pushNamed(
-                    context, Routes.UserPageRoute(userName)),
+                onTap: () => context
+                    .read<CommentPageProvider>()
+                    .navigateToUser(userName),
                 child: Text(
                   userName,
                   style: const TextStyle(

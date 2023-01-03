@@ -1,4 +1,3 @@
-import 'package:cuteshrew/config/routing/routes.dart';
 import 'package:cuteshrew/core/data/datasource/remote/comment_remote_datasource.dart';
 import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.dart';
 import 'package:cuteshrew/core/data/datasource/remote/user_remote_datasource.dart';
@@ -47,9 +46,8 @@ class NotFoundSmallUserScreen extends StatelessWidget {
             height: 8,
           ),
           TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, Routes.HomePageRoute);
-              },
+              onPressed: () =>
+                  context.read<UserPageProvider>().navigateToHome(),
               child: const Text("홈으로")),
         ],
       ),
@@ -277,10 +275,8 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
           children: [
             Expanded(
                 child: InkWell(
-              onTap: () => Navigator.pushNamed(
-                  context,
-                  Routes.PostingPageRoute(
-                      posting.ownCommunity?.communityName, posting.postId)),
+              onTap: () => context.read<UserPageProvider>().navigateToPosting(
+                  posting.ownCommunity?.communityName ?? "", posting.postId),
               child: Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Column(
@@ -330,12 +326,9 @@ class _LoadedSmallUserScreenState extends State<LoadedSmallUserScreen>
           children: [
             Expanded(
                 child: InkWell(
-              onTap: () => Navigator.pushNamed(
-                  context,
-                  Routes.PostingPageRoute(
-                    comment.parentPosting.ownCommunity?.communityName,
-                    comment.postId,
-                  )),
+              onTap: () => context.read<UserPageProvider>().navigateToPosting(
+                  comment.parentPosting.ownCommunity?.communityName ?? "",
+                  comment.postId),
               child: Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Column(

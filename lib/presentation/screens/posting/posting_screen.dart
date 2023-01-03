@@ -1,4 +1,3 @@
-import 'package:cuteshrew/config/routing/routes.dart';
 import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/core/data/datasource/remote/comment_remote_datasource.dart';
 import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.dart';
@@ -87,7 +86,7 @@ class PostingPageScreen extends StatelessWidget {
           }
           if (state is DeletedDataPostingPageState) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushNamed(context, Routes.HomePageRoute);
+              context.read<PostingPageProvider>().navigateToHome();
             });
           }
           if (state is UnknownErrorPostingPageState) {}
@@ -111,7 +110,7 @@ class NoDataPostingPageScreen extends StatelessWidget {
           ClickableText(
             text: "홈으로 돌아가기",
             onClick: () {
-              Navigator.pushNamed(context, Routes.HomePageRoute);
+              context.read<PostingPageProvider>().navigateToHome();
             },
           )
         ],
@@ -141,7 +140,7 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
   final LoadedDataPostingPageState postingPageState;
   final AuthenticationState loginState;
 
-  Widget _makePostingHeader(context) {
+  Widget _makePostingHeader(PostingPageProvider provider) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       // 소속 게시판
       GestureDetector(
@@ -162,11 +161,7 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
           ],
         ),
         onTap: () {
-          Navigator.pushNamed(
-              context,
-              Routes.CommuintyNamePageRoute(
-                postingPageState.communityName,
-              ));
+          provider.navigateToHome();
         },
       ),
       const SizedBox(
@@ -203,11 +198,9 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () => Navigator.pushNamed(
-                    context,
-                    Routes.UserPageRoute(
-                      postingPageState.writerName,
-                    )),
+                onTap: () {
+                  provider.navigateToUser(postingPageState.writerName);
+                },
                 child: Text(
                   postingPageState.writerName,
                   style: const TextStyle(
@@ -233,77 +226,77 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
     final LoginTokenEntity? token = loginState is AuthorizedState
         ? (loginState as AuthorizedState).loginToken
         : null;
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-      children: [
-        _makePostingHeader(context),
-        const SizedBox(
-          height: 10,
-        ),
-        // 툴바
-        Container(
-          child: token != null
-              ? Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
+    return Consumer<PostingPageProvider>(
+      builder: (context, provider, child) => ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+        children: [
+          _makePostingHeader(provider),
+          const SizedBox(
+            height: 10,
+          ),
+          // 툴바
+          Container(
+            child: token != null
+                ? Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey,
+                            textStyle: const TextStyle(color: Colors.black)),
+                        onPressed: () {
+                          provider.navigateToPostingEditor(
+                              postingPageState.communityName,
+                              PostEditorPageArguments(
+                                  postingPageState.postingDetailData, true));
+                        },
+                        child: Row(
+                          children: const [
+                            Icon(Icons.edit),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text("수정")
+                          ],
+                        )),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.grey,
-                          textStyle: const TextStyle(color: Colors.black)),
-                      onPressed: () {
-                        Navigator.pushNamed(
-                            context,
-                            Routes.PostEditorPageRoute(
-                                postingPageState.communityName),
-                            arguments: PostEditorPageArguments(
-                                postingPageState.postingDetailData, true));
-                      },
-                      child: Row(
-                        children: const [
-                          Icon(Icons.edit),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text("수정")
-                        ],
-                      )),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.grey,
-                        textStyle: const TextStyle(color: Colors.black),
-                      ),
-                      onPressed: () {
-                        //TODO 임시로
-                        // _showDialog(context, loginState);
-                        context
-                            .read<PostingPageProvider>()
-                            .deletePosting(token);
-                      },
-                      child: Row(
-                        children: const [
-                          Icon(Icons.delete_forever),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text("삭제")
-                        ],
-                      ))
-                ])
-              : null,
-        ),
-        const Divider(
-          height: 5,
-        ),
-        Html(data: postingPageState.content),
-        const Divider(
-          height: 5,
-        ),
-        // Expanded 위젯은 Column, Row, Flex 내에서만 사용 가능하다.
-        CommentScreen(
-            communityName: postingPageState.communityName,
-            postId: postingPageState.postId),
-      ],
+                          textStyle: const TextStyle(color: Colors.black),
+                        ),
+                        onPressed: () {
+                          //TODO 임시로
+                          // _showDialog(context, loginState);
+                          context
+                              .read<PostingPageProvider>()
+                              .deletePosting(token);
+                        },
+                        child: Row(
+                          children: const [
+                            Icon(Icons.delete_forever),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text("삭제")
+                          ],
+                        ))
+                  ])
+                : null,
+          ),
+          const Divider(
+            height: 5,
+          ),
+          Html(data: postingPageState.content),
+          const Divider(
+            height: 5,
+          ),
+          // Expanded 위젯은 Column, Row, Flex 내에서만 사용 가능하다.
+          CommentScreen(
+              communityName: postingPageState.communityName,
+              postId: postingPageState.postId),
+        ],
+      ),
     );
   }
 

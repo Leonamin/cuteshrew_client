@@ -15,11 +15,11 @@ class Routes {
   static String get HomePageRoute => HomePagePath;
   static String get CommunityPageRoute => CommunityPagePath;
   static String get LoginPageRoute => LoginPagePath;
+  static String get UserPageRoute => UserPagePath;
+  static String get PostEditorPageRoute => PostEditorPagePath;
+
   static String CommuintyNamePageRoute(community) =>
       "$CommunityPagePath/$community";
   static String PostingPageRoute(community, id) =>
       "$CommunityPagePath/$community/$id";
-  static String PostEditorPageRoute(community) =>
-      "$CommunityPagePath/$community$PostEditorPagePath";
-  static String UserPageRoute(String userName) => "$UserPagePath/$userName";
 }

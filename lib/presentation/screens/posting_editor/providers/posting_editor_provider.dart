@@ -1,6 +1,8 @@
 import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
 import 'package:cuteshrew/core/domain/usecase/create_posting_usecase.dart';
 import 'package:cuteshrew/core/resources/failure.dart';
+import 'package:cuteshrew/di/navigation_service.dart';
+import 'package:cuteshrew/di/service_locator.dart';
 import 'package:cuteshrew/presentation/data/community_data.dart';
 import 'package:cuteshrew/presentation/data/posting_create_data.dart';
 import 'package:cuteshrew/presentation/mappers/community_preview_data_mapper.dart';
@@ -15,6 +17,8 @@ enum PostingEdiorState {
 }
 
 class PostingEditorProvider extends ChangeNotifier {
+  final NavigationService _navigationService = locator<NavigationService>();
+
   PostingEdiorState _state = PostingEdiorState.INIT;
   PostingEdiorState get state => _state;
   PostingEditorProvider({required CreatePostingUseCase useCase}) {
@@ -97,5 +101,9 @@ class PostingEditorProvider extends ChangeNotifier {
 
     notifyListeners();
     return state;
+  }
+
+  void goBack() {
+    _navigationService.goBack();
   }
 }

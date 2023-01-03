@@ -2,6 +2,9 @@ import 'package:cuteshrew/core/domain/entity/comment_entity.dart';
 import 'package:cuteshrew/core/domain/entity/posting_entity.dart';
 import 'package:cuteshrew/core/domain/usecase/show_user_page_usecase.dart';
 import 'package:cuteshrew/core/resources/failure.dart';
+import 'package:cuteshrew/di/navigation_service.dart';
+import 'package:cuteshrew/di/service_locator.dart';
+import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/presentation/data/comment_detail_data.dart';
 import 'package:cuteshrew/presentation/data/posting_preview_data.dart';
 import 'package:cuteshrew/presentation/mappers/comment_detail_data_mapper.dart';
@@ -15,6 +18,8 @@ enum UserPageState {
 }
 
 class UserPageProvider extends ChangeNotifier {
+  final NavigationService _navigationService = locator<NavigationService>();
+
   late ShowUserPageUsecase _userPageUsecase;
 
   UserPageProvider({required ShowUserPageUsecase userPageUsecase}) {
@@ -158,5 +163,14 @@ class UserPageProvider extends ChangeNotifier {
     // 마지막
     isLoadingComment = false;
     notifyListeners();
+  }
+
+  void navigateToHome() {
+    _navigationService.navigateTo(Routes.HomePageRoute);
+  }
+
+  void navigateToPosting(String communityName, int postId) {
+    _navigationService
+        .navigateTo(Routes.PostingPageRoute(communityName, postId));
   }
 }

@@ -2,10 +2,16 @@ import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
 import 'package:cuteshrew/core/domain/usecase/delete_comment_usecase.dart';
 import 'package:cuteshrew/core/domain/usecase/show_posting_page_usecase.dart';
 import 'package:cuteshrew/core/resources/failure.dart';
+import 'package:cuteshrew/di/navigation_service.dart';
+import 'package:cuteshrew/di/service_locator.dart';
+import 'package:cuteshrew/presentation/config/route/routes.dart';
+import 'package:cuteshrew/presentation/config/route/url_query_parameters.dart';
 import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_state.dart';
 import 'package:flutter/cupertino.dart';
 
 class CommentPageProvider extends ValueNotifier<CommentPageState> {
+  final NavigationService _navigationService = locator<NavigationService>();
+
   CommentPageProvider({
     required ShowPostingPageUseCase postingPageUseCase,
     required DeleteCommentUseCase deleteCommentUseCase,
@@ -80,5 +86,10 @@ class CommentPageProvider extends ValueNotifier<CommentPageState> {
     }, (data) {
       return true;
     });
+  }
+
+  void navigateToUser(String userName) {
+    _navigationService.navigateTo(Routes.UserPageRoute,
+        queryParams: {UrlQueryParameters.userName: userName});
   }
 }
