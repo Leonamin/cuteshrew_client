@@ -61,9 +61,9 @@ class _PostingEditorScreenState extends State<PostingEditorScreen> {
     );
   }
 
-  void _check(PostingEdiorState state) {
+  void _check(PostingEditorProvider provider, PostingEdiorState state) {
     if (state == PostingEdiorState.COMPLETED) {
-      context.read<PostingEditorProvider>().goBack();
+      provider.goBack();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(_makeSnackBar("포스팅 업로드 실패"));
     }
@@ -83,7 +83,7 @@ class _PostingEditorScreenState extends State<PostingEditorScreen> {
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
               Consumer<PostingEditorProvider>(
-                builder: (context, value, child) {
+                builder: (context, provider, child) {
                   return Row(
                     children: [
                       OutlinedButton(
@@ -130,7 +130,8 @@ class _PostingEditorScreenState extends State<PostingEditorScreen> {
                                             loginState.loginToken,
                                             newPosting,
                                             widget.originPost!.postId)
-                                        .then((state) => _check(state))
+                                        .then(
+                                            (state) => _check(provider, state))
                                     : context
                                         .read<PostingEditorProvider>()
                                         .uploadPosting(
@@ -138,7 +139,8 @@ class _PostingEditorScreenState extends State<PostingEditorScreen> {
                                           loginState.loginToken,
                                           newPosting,
                                         )
-                                        .then((state) => _check(state));
+                                        .then(
+                                            (state) => _check(provider, state));
                               });
                             } else {
                               ScaffoldMessenger.of(context)
@@ -207,21 +209,8 @@ class _PostingEditorScreenState extends State<PostingEditorScreen> {
   }
 
   Widget _makeBody() {
-    return Column(
+    return ListView(
       children: [
-        // Consumer<PostingEditorProvider>(
-        //   builder: (context, provider, child) {
-        //     _communitySeletController.text =
-        //         provider.selectedCommunity?.communityShowName ?? "";
-        //     return _buildTextFormField(
-        //       _communitySeletController,
-        //       "게시판",
-        //       "게시판",
-        //       false,
-        //     );
-        //   },
-        // ),
-
         // ChangeNotifierProvider 생성 시 fectchCommunities -> 이거 위젯 빌드 이때 provider.selectedCommunity null -> selectCommunity -> 위젯 다시 빌드
         //
         Consumer<PostingEditorProvider>(
