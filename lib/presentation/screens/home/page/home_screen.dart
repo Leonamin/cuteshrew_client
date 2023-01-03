@@ -74,6 +74,15 @@ class LoadedDataHomeScreen extends StatelessWidget {
                 latestPosts: (communities[index] is CommunityPreviewEntity)
                     ? (communities[index] as CommunityPreviewEntity).postings
                     : [],
+                onTitlePressed: () {
+                  context
+                      .read<HomePageProvider>()
+                      .navigateToCommunity(communities[index].communityName);
+                },
+                onItemPressed: (communityName, postId) {
+                  context.read<HomePageProvider>().navigateToPosting(
+                      communities[index].communityName, postId);
+                },
               );
             },
           )

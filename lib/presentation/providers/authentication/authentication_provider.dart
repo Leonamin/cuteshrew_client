@@ -1,12 +1,16 @@
-import 'package:cuteshrew/core/domain/entity/user_detail_entity.dart';
+import 'package:cuteshrew/core/domain/entity/user_preview_entity.dart';
 import 'package:cuteshrew/core/domain/usecase/login_usecase.dart';
 import 'package:cuteshrew/core/resources/failure.dart';
+import 'package:cuteshrew/di/navigation_service.dart';
+import 'package:cuteshrew/di/service_locator.dart';
+import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:flutter/widgets.dart';
 
 class AuthenticationProvider extends ValueNotifier<AuthenticationState> {
   // TODO 나중에 바꾸자
   late LoginUseCase _loginUseCase;
+  final NavigationService _navigationService = locator<NavigationService>();
 
   AuthenticationProvider({required LoginUseCase loginUseCase})
       : super(const AuthenticationState.unauthorized()) {
@@ -27,7 +31,7 @@ class AuthenticationProvider extends ValueNotifier<AuthenticationState> {
         value = const AuthenticationState.unauthorized();
       }, (data) {
         value = AuthenticationState.authorized(
-          userInfo: UserDetailEntity(
+          userInfo: UserPreviewEntity(
             email: id,
             name: id,
           ),
@@ -42,5 +46,9 @@ class AuthenticationProvider extends ValueNotifier<AuthenticationState> {
     if (value is AuthorizedState) {
       value = const AuthenticationState.unauthorized();
     }
+  }
+
+  void navigateAfterSiginIn() {
+    _navigationService.navigateTo(Routes.HomePageRoute);
   }
 }

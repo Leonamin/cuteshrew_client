@@ -1,4 +1,6 @@
-import 'package:cuteshrew/config/routing/routes.dart';
+import 'package:cuteshrew/di/navigation_service.dart';
+import 'package:cuteshrew/di/service_locator.dart';
+import 'package:cuteshrew/presentation/config/route/routes.dart';
 import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_provider.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
@@ -21,7 +23,8 @@ AppBar mainAppBar(BuildContext context, GlobalKey<ScaffoldState> key) => AppBar(
                         ),
                       ),
                       onTap: () {
-                        Navigator.pushNamed(context, Routes.HomePageRoute);
+                        locator<NavigationService>()
+                            .navigateTo(Routes.HomePageRoute);
                       },
                     ),
                   ],
@@ -92,7 +95,8 @@ class MainNavTitle extends StatelessWidget {
           InkWell(
             onTap: () {
               state is UnauthorizedState
-                  ? Navigator.pushNamed(context, Routes.LoginPageRoute)
+                  ? locator<NavigationService>()
+                      .navigateTo(Routes.LoginPageRoute)
                   : context.read<AuthenticationProvider>().logout();
             },
             child: CustomText(

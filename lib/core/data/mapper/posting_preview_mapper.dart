@@ -10,7 +10,7 @@ import 'mapper.dart';
 class PostingPreviewMapper extends Mapper<PostingDTO, PostingPreviewEntity> {
   @override
   PostingPreviewEntity map(PostingDTO object) {
-    UserMapper userMapper = UserMapper();
+    UserDetailMapper userMapper = UserDetailMapper();
     CommunityMapper communityMapper = CommunityMapper();
     /**
      * 기본 처리

@@ -63,7 +63,7 @@ class _PostingEditorScreenState extends State<PostingEditorScreen> {
 
   void _check(PostingEdiorState state) {
     if (state == PostingEdiorState.COMPLETED) {
-      Navigator.pop(context);
+      context.read<PostingEditorProvider>().goBack();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(_makeSnackBar("포스팅 업로드 실패"));
     }

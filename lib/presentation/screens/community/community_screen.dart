@@ -1,4 +1,3 @@
-import 'package:cuteshrew/config/routing/routes.dart';
 import 'package:cuteshrew/constants/values.dart';
 import 'package:cuteshrew/core/data/datasource/remote/community_remote_datasource.dart';
 import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.dart';
@@ -161,8 +160,14 @@ class _LoadedDataCommunityScreenState extends State<LoadedDataCommunityScreen> {
                       widget.communityShowName),
                 ),
                 PostingPreviewPanel(
-                    communityName: widget.communityName,
-                    posts: widget.postings),
+                  communityName: widget.communityName,
+                  posts: widget.postings,
+                  onItemPressed: (communityName, postId) {
+                    context
+                        .read<CommunityPageProvider>()
+                        .navigateToPosting(communityName, postId);
+                  },
+                ),
                 ListButton(
                   itemCount: _pageButtonProperties.length,
                   propertyList: _pageButtonProperties,
@@ -175,8 +180,9 @@ class _LoadedDataCommunityScreenState extends State<LoadedDataCommunityScreen> {
         floatingActionButton: state is AuthorizedState
             ? FloatingActionButton(
                 onPressed: () {
-                  Navigator.pushNamed(context,
-                      Routes.PostEditorPageRoute(widget.communityName));
+                  context
+                      .read<CommunityPageProvider>()
+                      .navigateToPostingEditor(widget.communityName);
                 },
                 child: const Icon(Icons.note_add),
               )

@@ -8,6 +8,7 @@
 `enhanced_html_editor` 패키지 떄문에 `flutter build web --web-renderer html`로 빌드해야한다.
 
 ## 구조
+```
 ├─config
 │  ├─routing
 │  └─url
@@ -62,6 +63,7 @@
     └─widgets
         ├─common_widgets
         └─main_app_bar
+```
 ### config
 플러터에서 도메인, 데이터, 프레젠테이션으로 나누기 어려운 기본 설정들
 ### core(domain)
@@ -72,3 +74,12 @@
 프레젠테이션에서 사용할 데이터 구조(data), 프레젠테이션 데이터와 실제 데이터 변환(mapper), 전역 프로바이더(providers), 전역 메소드 (utils), 공통 위젯(widgets)
 #### screens
 각 화면당 해당 화면에 사용할 프로바이더(provider), 해당 화면에 사용할 위젯(widget)
+
+## 업데이트 내역
+### 1.0.1
+추가 기능
+- 유저페이지에서 유저 정보 가져오기 기능 추가
+디버그
+- 커뮤니티에서 정보를 불러올 때 모든 게시글 개수를 가져오도록 수정
+
+## [회고](./log/README.md)

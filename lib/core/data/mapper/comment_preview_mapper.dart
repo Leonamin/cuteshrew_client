@@ -7,7 +7,7 @@ import 'package:cuteshrew/core/domain/entity/comment_preview_entity.dart';
 class CommentPreviewMapper extends Mapper<CommentDTO, CommentPreviewEntity> {
   @override
   CommentPreviewEntity map(CommentDTO object) {
-    UserMapper userMapper = UserMapper();
+    UserDetailMapper userMapper = UserDetailMapper();
 
     /*
       기본 처리

@@ -1,4 +1,3 @@
-import 'package:cuteshrew/config/routing/routes.dart';
 import 'package:cuteshrew/presentation/data/posting_data.dart';
 import 'package:cuteshrew/presentation/widgets/common_widgets/posting_item.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +5,13 @@ import 'package:flutter/material.dart';
 class PostingPreviewPanel extends StatelessWidget {
   final String communityName;
   final List<PostingData> posts;
-  const PostingPreviewPanel(
-      {Key? key, required this.communityName, required this.posts})
-      : super(key: key);
+  final Function(String communityName, int postId)? onItemPressed;
+  const PostingPreviewPanel({
+    Key? key,
+    required this.communityName,
+    required this.posts,
+    this.onItemPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +26,13 @@ class PostingPreviewPanel extends StatelessWidget {
                 title: posts[index].title,
                 commentCount: posts[index].commentCount,
                 onClick: () {
-                  Navigator.pushNamed(
-                      context,
-                      Routes.PostingPageRoute(
-                          communityName, posts[index].postId));
+                  if (onItemPressed != null) {
+                    onItemPressed!(communityName, posts[index].postId);
+                  }
+                  //
+                  // locator<NavigationService>().navigateTo(
+                  //     Routes.PostingPageRoute(
+                  //         communityName, posts[index].postId));
                 },
               ));
         },

@@ -1,6 +1,8 @@
 import 'package:cuteshrew/core/data/datasource/remote/authentication_remote_datasource.dart';
 import 'package:cuteshrew/core/data/repository/authentication_repository_impl.dart';
 import 'package:cuteshrew/core/domain/usecase/login_usecase.dart';
+import 'package:cuteshrew/di/navigation_service.dart';
+import 'package:cuteshrew/presentation/config/route/web_advanced_router.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_provider.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +13,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:cuteshrew/di/service_locator.dart';
 import 'package:cuteshrew/presentation/helpers/no_transition_builder.dart';
-import 'package:cuteshrew/config/routing/router.dart';
-import 'package:cuteshrew/config/routing/routes.dart';
+import 'package:cuteshrew/presentation/config/route/routes.dart';
 
 void main() {
   // usePathUrlStrategy();
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
                 },
         ),
       ),
+      navigatorKey: locator<NavigationService>().navigatorKey,
       onGenerateRoute: generateRoute,
       initialRoute: Routes.HomePageRoute,
     );
