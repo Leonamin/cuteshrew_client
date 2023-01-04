@@ -11,6 +11,7 @@ import 'package:cuteshrew/presentation/data/posting_preview_data.dart';
 import 'package:cuteshrew/presentation/mappers/comment_detail_data_mapper.dart';
 import 'package:cuteshrew/presentation/mappers/posting_preview_data_mapper.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 enum UserPageState {
   INIT,
@@ -44,12 +45,40 @@ class UserPageProvider extends ChangeNotifier {
   List<CommentDetailData> get userComments => List<CommentDetailData>.from(
       _userComments.map((e) => _commentMapper.map(e)));
 
-  // 유저 정보 가져올 때 가져오는게 좋을것 같다.
+  // 유저 정보
   int get getEntirePostingCount => _userInfo?.postingCount ?? 0;
   int get getEntireCommentCount => _userInfo?.commentCount ?? 0;
   String get userName => _userInfo?.name ?? "";
   String get userEmail => _userInfo?.email ?? "";
   String get userIntroduction => _userInfo?.introduction ?? "";
+
+  // 게시글 정보
+  String postingTitle(int index) => userPostings[index].title;
+  int postingCommentCount(int index) => userPostings[index].commentCount;
+  String postingCommunityName(int index) =>
+      userPostings[index].ownCommunity?.communityName ?? "";
+  int postingId(int index) => userPostings[index].postId;
+  String postingDateTime(int index) =>
+      DateFormat('yy.MM.dd').format(DateTime.fromMillisecondsSinceEpoch(
+          userPostings[index].publishedAt * 1000));
+  int get lastPostingId => userPostings.last.postId;
+
+  // 댓글 정보
+  // 이름 안헷갈리게 AtIndex 붙임
+  String commentAtIndex(int index) => userComments[index].comment;
+  String commentPostingTitle(int index) =>
+      userComments[index].parentPosting.title;
+  String commentPostingCommunityName(int index) =>
+      userComments[index].parentPosting.ownCommunity?.communityName ?? "";
+  int commentPostingId(int index) => userComments[index].postId;
+  String commentPostingDateTime(int index) =>
+      DateFormat('yy.MM.dd').format(DateTime.fromMillisecondsSinceEpoch(
+          userComments[index].parentPosting.publishedAt * 1000));
+  String commentDateTime(int index) =>
+      DateFormat('yy.MM.dd').format(DateTime.fromMillisecondsSinceEpoch(
+          userComments[index].createdAt * 1000));
+  int get lastCommentId => userComments.last.commentId;
+  int get lastCommentPostingId => userComments.last.postId;
 
   bool isLoadingPosting = false;
   bool isLoadingComment = false;
