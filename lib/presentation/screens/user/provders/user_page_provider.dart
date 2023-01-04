@@ -72,13 +72,10 @@ class UserPageProvider extends ChangeNotifier {
 
     // 검사
     result.fold((Failure failure) {
-      print("not found");
       _state = UserPageState.USER_NOT_FOUND;
     }, (data) {
-      print("found");
-
+      _state = UserPageState.USER_FOUND;
       _userInfo = data;
-      print(_userInfo?.postingCount);
     });
 
     //마지막
@@ -128,7 +125,7 @@ class UserPageProvider extends ChangeNotifier {
 
     // 검사
     result.fold((Failure failure) {
-      _state = UserPageState.USER_NOT_FOUND;
+      // _state = UserPageState.USER_NOT_FOUND;
     }, (data) {
       if (_state == UserPageState.INIT) _state = UserPageState.USER_FOUND;
 
@@ -168,7 +165,7 @@ class UserPageProvider extends ChangeNotifier {
 
     // 검사
     result.fold((Failure failure) {
-      _state = UserPageState.USER_NOT_FOUND;
+      // _state = UserPageState.USER_NOT_FOUND;
     }, (data) {
       if (_state == UserPageState.INIT) _state = UserPageState.USER_FOUND;
 
