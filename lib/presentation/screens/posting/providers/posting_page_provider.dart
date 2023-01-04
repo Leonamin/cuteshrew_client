@@ -106,8 +106,10 @@ class PostingPageProvider extends ValueNotifier<PostingPageState> {
 
   void navigateToPostingEditor(
       String communityName, PostEditorPageArguments arguments) {
-    _navigationService.navigateTo(Routes.PostEditorPageRoute,
-        queryParams: {UrlQueryParameters.communityName: communityName},
-        arguments: arguments);
+    _navigationService
+        .navigateTo(Routes.PostEditorPageRoute,
+            queryParams: {UrlQueryParameters.communityName: communityName},
+            arguments: arguments)
+        .then((value) => getPosting());
   }
 }

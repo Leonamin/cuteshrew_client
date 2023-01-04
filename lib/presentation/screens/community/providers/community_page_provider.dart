@@ -69,7 +69,8 @@ class CommunityPageProvider extends ValueNotifier<CommunityPageState> {
   }
 
   void navigateToPostingEditor(String communityName) {
-    _navigationService.navigateTo(Routes.PostEditorPageRoute,
-        queryParams: {UrlQueryParameters.communityName: communityName});
+    _navigationService.navigateTo(Routes.PostEditorPageRoute, queryParams: {
+      UrlQueryParameters.communityName: communityName
+    }).then((value) => getCommunityInfo(currentPageNum));
   }
 }
