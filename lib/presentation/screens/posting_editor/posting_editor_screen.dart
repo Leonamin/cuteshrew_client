@@ -19,7 +19,7 @@ import 'package:collection/collection.dart';
 // 포커스 문제 HTML 에디터 포커스가 활성화 된 상태에서 다른 텍스트폼 포커스가 씹힘
 
 // arguments
-// communityInfo: Community 포스팅 업로드시 커뮤니티 구분에 사용
+// communityName: 커뮤니티 선택에 사용
 // originPost: PostDetail[Optional] 포스팅 수정시 내용 가져오기
 // isModify: bool[Optional] 포스팅 새로작성, 수정인지 구분
 class PostingEditorScreen extends StatefulWidget {
@@ -213,44 +213,59 @@ class _PostingEditorScreenState extends State<PostingEditorScreen> {
       children: [
         // ChangeNotifierProvider 생성 시 fectchCommunities -> 이거 위젯 빌드 이때 provider.selectedCommunity null -> selectCommunity -> 위젯 다시 빌드
         //
-        Consumer<PostingEditorProvider>(
-          builder: (context, provider, child) {
-            _communitySeletController.text =
-                provider.selectedCommunity?.communityShowName ?? "";
-            return Form(
-              key: _formKey,
-              child: SearchField(
-                controller: _communitySeletController,
-                suggestions: provider.communities
-                    .map((community) => SearchFieldListItem(
-                          community.communityShowName,
-                        ))
-                    .toList(),
-                autoCorrect: true,
-                validator: (x) {
-                  if ((provider.communities.firstWhereOrNull(
-                          (it) => it.communityShowName == x)) ==
-                      null) {
-                    return "커뮤니티를 선택하세요";
-                  }
-                  provider.selectCommuinty(x!);
-                  return null;
+        Row(
+          children: [
+            Flexible(
+              child: Consumer<PostingEditorProvider>(
+                builder: (context, provider, child) {
+                  _communitySeletController.text =
+                      provider.selectedCommunity?.communityShowName ?? "";
+                  // Form을 넣은 이유
+                  // 게시글 업로드 직전 검사에서 _formKey를 사용해서 지우면 안되는 거였다.
+                  return Form(
+                    key: _formKey,
+                    child: SearchField(
+                      controller: _communitySeletController,
+                      suggestions: provider.communities
+                          .map((community) => SearchFieldListItem(
+                                community.communityShowName,
+                              ))
+                          .toList(),
+                      autoCorrect: true,
+                      validator: (x) {
+                        if ((provider.communities.firstWhereOrNull(
+                                (it) => it.communityShowName == x)) ==
+                            null) {
+                          return "커뮤니티를 선택하세요";
+                        }
+                        provider.selectCommuinty(x!);
+                        return null;
+                      },
+                      searchInputDecoration: InputDecoration(
+                          hintStyle: const TextStyle(color: Colors.black),
+                          labelStyle: const TextStyle(color: Colors.black),
+                          border: _border,
+                          errorBorder: _border,
+                          enabledBorder: _border,
+                          focusedBorder: _border,
+                          filled: true,
+                          fillColor: Colors.transparent,
+                          errorStyle: const TextStyle(
+                              color: Colors.redAccent,
+                              fontWeight: FontWeight.bold),
+                          floatingLabelBehavior: FloatingLabelBehavior.never),
+                    ),
+                  );
                 },
-                searchInputDecoration: InputDecoration(
-                    hintStyle: const TextStyle(color: Colors.black),
-                    labelStyle: const TextStyle(color: Colors.black),
-                    border: _border,
-                    errorBorder: _border,
-                    enabledBorder: _border,
-                    focusedBorder: _border,
-                    filled: true,
-                    fillColor: Colors.transparent,
-                    errorStyle: const TextStyle(
-                        color: Colors.redAccent, fontWeight: FontWeight.bold),
-                    floatingLabelBehavior: FloatingLabelBehavior.never),
               ),
-            );
-          },
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Flexible(
+                child:
+                    _buildTextFormField(_passwordController, "비밀번호", "비밀번호")),
+          ],
         ),
         const SizedBox(
           height: 8,
@@ -259,16 +274,11 @@ class _PostingEditorScreenState extends State<PostingEditorScreen> {
         const SizedBox(
           height: 8,
         ),
-        Expanded(
-            child: HtmlEditor(
+        HtmlEditor(
           controller: _editorController,
           htmlEditorOptions:
               HtmlEditorOptions(initialText: widget.originPost?.body),
-        )),
-        const SizedBox(
-          height: 8,
         ),
-        _buildTextFormField(_passwordController, "비밀번호", "비밀번호"),
       ],
     );
   }
@@ -280,29 +290,33 @@ class _PostingEditorScreenState extends State<PostingEditorScreen> {
     return Consumer<AuthenticationState>(
       builder: (context, loginState, child) {
         return ChangeNotifierProvider(
-            create: (context) {
-              final provider = PostingEditorProvider(
-                  useCase: CreatePostingUseCase(
-                      communityRepository: CommunityRepositoryImpl(
-                          communityRemoteDataSource:
-                              CommunityRemoteDataSource()),
-                      postingRepository: PostingRepositoryImpl(
-                          postingRemoteDataSource: PostingRemoteDataSource())));
-              provider.fetchCommunities().then((value) {
-                provider.selectCommuinty(widget.communityName);
-              });
-              return provider;
-            },
-            child: Scaffold(
-                body: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 8.0),
-                    child: Column(
-                      children: [
-                        _makeHeader(loginState),
-                        Expanded(child: _makeBody())
-                      ],
-                    ))));
+          create: (context) {
+            final provider = PostingEditorProvider(
+                useCase: CreatePostingUseCase(
+                    communityRepository: CommunityRepositoryImpl(
+                        communityRemoteDataSource: CommunityRemoteDataSource()),
+                    postingRepository: PostingRepositoryImpl(
+                        postingRemoteDataSource: PostingRemoteDataSource())));
+            provider.fetchCommunities().then((value) {
+              provider.selectCommuinty(widget.communityName);
+            });
+            return provider;
+          },
+          child: Scaffold(
+            body: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+              child: Column(
+                children: [
+                  _makeHeader(loginState),
+                  // 매번 까먹지만 Expanded는 Row, Column, Flex에서만 사용가능하다.
+                  // ListView에서는 사용 불가다
+                  Expanded(child: _makeBody()),
+                ],
+              ),
+            ),
+          ),
+        );
       },
     );
   }
