@@ -38,7 +38,7 @@ class CommentRepositoryImpl extends CommentRepository {
         tokenMapper.toDTO(loginToken),
         commentMapper.map(newComment),
       ));
-    } on Exception catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -70,7 +70,7 @@ class CommentRepositoryImpl extends CommentRepository {
         commentId,
         tokenMapper.toDTO(loginToken),
       ));
-    } on Exception catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -104,7 +104,7 @@ class CommentRepositoryImpl extends CommentRepository {
         for (final e in commentDTO) commentMapper.map(e)
       ];
       return Right(result);
-    } on Exception catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -123,7 +123,7 @@ class CommentRepositoryImpl extends CommentRepository {
         for (final e in commentDTO) mapper.map(e)
       ];
       return Right(result);
-    } on Exception catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -146,7 +146,7 @@ class CommentRepositoryImpl extends CommentRepository {
         tokenMapper.toDTO(loginToken),
         commentMapper.map(newComment),
       ));
-    } on Exception catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }

@@ -22,7 +22,7 @@ class UserRepositoryImpl extends UserRepository {
     try {
       UserCreateMapper mapper = UserCreateMapper();
       return Right(_userRemoteDataSource.postSignin(mapper.map(newUser)));
-    } on Exception catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -34,7 +34,7 @@ class UserRepositoryImpl extends UserRepository {
       UserDTO userDTO = await _userRemoteDataSource.getUserDetail(userName);
       UserDetailMapper mapper = UserDetailMapper();
       return Right(mapper.map(userDTO));
-    } on Exception catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }

@@ -24,7 +24,7 @@ class CommunityRepositoryImpl extends CommunityRepository {
       CommunityEntity result = mapper.map(communityDTO);
 
       return Right(result);
-    } on Exception catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -40,7 +40,7 @@ class CommunityRepositoryImpl extends CommunityRepository {
           communityDTO.map((e) => mapper.map(e)).toList();
 
       return Right(result);
-    } on Exception catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }

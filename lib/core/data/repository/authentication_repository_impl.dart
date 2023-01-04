@@ -49,7 +49,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
           await _authenticationRemoteDataSource.postLogin(nickname, password);
       LoginTokenEntity result = mapper.map(loginTokenDTO);
       return Right(result);
-    } on Exception catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }

@@ -32,7 +32,7 @@ class PostingRepositoryImpl extends PostingRepository {
 
       return Right(_postingRemoteDataSource.uploadPosting(communityPath,
           tokenMapper.toDTO(loginToken), postingMapper.map(newPosting)));
-    } on Exception catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -48,7 +48,7 @@ class PostingRepositoryImpl extends PostingRepository {
 
       return Right(_postingRemoteDataSource.deletePosting(
           communityPath, postId, tokenMapper.toDTO(loginToken)));
-    } on Exception catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -65,7 +65,9 @@ class PostingRepositoryImpl extends PostingRepository {
       PostingDetailMapper mapper = PostingDetailMapper();
       PostingEntity result = mapper.map(postingDTO);
       return Right(result);
-    } on Exception catch (e) {
+      // Expected a value of type 'int', but got one of type 'Null' exception type 에 대한 에러 타입
+      // } on TypeError catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -84,7 +86,7 @@ class PostingRepositoryImpl extends PostingRepository {
         for (final e in postingDTOList) mapper.map(e)
       ];
       return Right(result);
-    } on Exception catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -103,7 +105,7 @@ class PostingRepositoryImpl extends PostingRepository {
         for (final e in postingDTOList) mapper.map(e)
       ];
       return Right(result);
-    } on Exception catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
@@ -120,7 +122,7 @@ class PostingRepositoryImpl extends PostingRepository {
 
       return Right(_postingRemoteDataSource.updatePosting(communityPath, postId,
           tokenMapper.toDTO(loginToken), postingMapper.map(newPosting)));
-    } on Exception catch (e) {
+    } catch (e) {
       return Left(Failure(e.toString()));
     }
   }
