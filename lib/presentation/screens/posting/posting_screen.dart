@@ -1,3 +1,5 @@
+import 'package:cuteshrew/presentation/screens/posting/widgets/custom_html_widget.dart';
+
 import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/core/data/datasource/remote/comment_remote_datasource.dart';
 import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.dart';
@@ -5,6 +7,7 @@ import 'package:cuteshrew/core/data/repository/comment_repository_impl.dart';
 import 'package:cuteshrew/core/data/repository/posting_repository_impl.dart';
 import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
 import 'package:cuteshrew/core/domain/usecase/show_posting_page_usecase.dart';
+import 'package:cuteshrew/presentation/screens/posting/widgets/custom_widget_factory.dart';
 import 'package:cuteshrew/presentation/screens/posting_editor/posting_editor_page.dart';
 import 'package:cuteshrew/presentation/screens/posting/posting_screen/password_certification_posting_page_screen.dart';
 import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_provider.dart';
@@ -14,7 +17,6 @@ import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_st
 import 'package:cuteshrew/presentation/strings/strings.dart';
 import 'package:cuteshrew/presentation/widgets/common_widgets/clickable_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -293,18 +295,15 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
             height: 8,
           ),
           // SelectableHtml 쓰면 이미지가 출력이 안된다.
-          HtmlWidget(
+
+          CustomHtmlWidget(
             postingPageState.content,
             onTapUrl: (url) {
               launchUrl(Uri.parse(url));
               return true;
             },
-            // TODO Selectable한 텍스트를 만들고 싶으면 속성별로 나누는 빌더를 만들어야할 것 같다.
-            // return void; customWidget이 아닌 원래 내보내는 위젯을 반환하고 return FooWidget()을 하면 딱 FooWidget()이 나온다.
-            customWidgetBuilder: (element) {
-              return;
-            },
           ),
+
           // Html(data: postingPageState.content),
           const Divider(
             height: 8,
@@ -343,4 +342,21 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
       },
     );
   }
+
+  // Widget? _htmlCustomBuilder(DomHtml.Element element) {
+  //   print(element);
+  //   if (element.attributes['src'] != null) {
+  //     final src = element.attributes['src'] ?? "";
+  //     print(src);
+  //     final srcList = src.split(',');
+  //     final type = srcList.first;
+  //     final data = srcList.last;
+  //     if (type.contains('data:image')) {
+  //       if (type.contains('base64')) {
+  //         return Image.memory(base64Decode(data));
+  //       }
+  //     }
+  //   }
+  //   return SelectableText(element.text);
+  // }
 }
