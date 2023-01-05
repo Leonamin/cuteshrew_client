@@ -11,16 +11,18 @@ import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_pr
 import 'package:cuteshrew/presentation/screens/comment/comment_screen.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_state.dart';
+import 'package:cuteshrew/presentation/strings/strings.dart';
 import 'package:cuteshrew/presentation/widgets/common_widgets/clickable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 
 class PostingScreen extends StatefulWidget {
-  String communityName;
-  int postId;
+  final String communityName;
+  final int postId;
 
-  PostingScreen({Key? key, required this.communityName, required this.postId})
+  const PostingScreen(
+      {Key? key, required this.communityName, required this.postId})
       : super(key: key);
 
   @override
@@ -161,11 +163,11 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
           ],
         ),
         onTap: () {
-          provider.navigateToHome();
+          provider.navigateToCommunity(postingPageState.communityName);
         },
       ),
       const SizedBox(
-        height: 5,
+        height: 8,
       ),
       // 제목
       Text(
@@ -174,7 +176,7 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
             color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),
       ),
       const SizedBox(
-        height: 5,
+        height: 8,
       ),
       Row(
         children: [
@@ -192,7 +194,7 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
                     ))),
           ),
           const SizedBox(
-            width: 5,
+            width: 8,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -232,7 +234,7 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
         children: [
           _makePostingHeader(provider),
           const SizedBox(
-            height: 10,
+            height: 12,
           ),
           // 툴바
           Container(
@@ -258,38 +260,43 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
                           ],
                         )),
                     const SizedBox(
-                      width: 10,
+                      width: 12,
                     ),
                     ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey,
-                          textStyle: const TextStyle(color: Colors.black),
-                        ),
-                        onPressed: () {
-                          //TODO 임시로
-                          // _showDialog(context, loginState);
-                          context
-                              .read<PostingPageProvider>()
-                              .deletePosting(token);
-                        },
-                        child: Row(
-                          children: const [
-                            Icon(Icons.delete_forever),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text("삭제")
-                          ],
-                        ))
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.grey,
+                        textStyle: const TextStyle(color: Colors.black),
+                      ),
+                      onPressed: () {
+                        _showDialog(
+                          context,
+                          () => provider.deletePosting(token),
+                          () => provider.goBack(),
+                        );
+                      },
+                      child: Row(
+                        children: const [
+                          Icon(Icons.delete_forever),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Text("삭제")
+                        ],
+                      ),
+                    )
                   ])
                 : null,
           ),
           const Divider(
-            height: 5,
+            height: 8,
           ),
-          Html(data: postingPageState.content),
+          // SelectableHtml 쓰면 이미지가 출력이 안된다.
+          Html(
+            data: postingPageState.content,
+            onLinkTap: (url, context, attributes, element) {},
+          ),
           const Divider(
-            height: 5,
+            height: 8,
           ),
           // Expanded 위젯은 Column, Row, Flex 내에서만 사용 가능하다.
           CommentScreen(
@@ -300,35 +307,29 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
     );
   }
 
-  //FIXME provider 못찾는 문제
-
-  // void _showDialog(BuildContext context, LoginState loginState) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: const Text(Strings.alretDeletePostingTitle),
-  //         content: const Text(Strings.alretDeletePostingBody),
-  //         actions: <Widget>[
-  //           TextButton(
-  //             child: const Text(Strings.alretAccept),
-  //             onPressed: () {
-  //               if (loginState is AuthorizedState) {
-  //                 context
-  //                     .read<PostingNotifier>()
-  //                     .deletePosting(loginState.loginToken);
-  //               }
-  //             },
-  //           ),
-  //           TextButton(
-  //             child: const Text(Strings.alretBack),
-  //             onPressed: () {
-  //               Navigator.pop(context);
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
+  void _showDialog(
+    BuildContext context,
+    Function()? onDeletePressed,
+    Function()? onBackPressed,
+  ) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(Strings.alretDeletePostingTitle),
+          content: const Text(Strings.alretDeletePostingBody),
+          actions: [
+            TextButton(
+              onPressed: onDeletePressed,
+              child: const Text(Strings.alretAccept),
+            ),
+            TextButton(
+              onPressed: onBackPressed,
+              child: const Text(Strings.alretBack),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
