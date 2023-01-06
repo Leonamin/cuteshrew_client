@@ -112,4 +112,8 @@ class PostingPageProvider extends ValueNotifier<PostingPageState> {
             arguments: arguments)
         .then((value) => getPosting());
   }
+
+  void goBack() {
+    _navigationService.goBack();
+  }
 }
