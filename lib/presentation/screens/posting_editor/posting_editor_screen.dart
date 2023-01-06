@@ -122,6 +122,8 @@ class _PostingEditorScreenState extends State<PostingEditorScreen> {
                                             _passwordController.text.isNotEmpty,
                                         password: _passwordController.text);
                                 debugPrint(newPosting.body);
+
+                                // 포스팅 업로드 하는 부분
                                 widget.isModify
                                     ? context
                                         .read<PostingEditorProvider>()
@@ -232,13 +234,13 @@ class _PostingEditorScreenState extends State<PostingEditorScreen> {
                               ))
                           .toList(),
                       autoCorrect: true,
-                      validator: (x) {
-                        if ((provider.communities.firstWhereOrNull(
-                                (it) => it.communityShowName == x)) ==
+                      validator: (communityShowName) {
+                        if ((provider.communities.firstWhereOrNull((it) =>
+                                it.communityShowName == communityShowName)) ==
                             null) {
                           return "커뮤니티를 선택하세요";
                         }
-                        provider.selectCommuinty(x!);
+                        provider.selectCommuintyByShowName(communityShowName!);
                         return null;
                       },
                       searchInputDecoration: InputDecoration(
@@ -298,7 +300,7 @@ class _PostingEditorScreenState extends State<PostingEditorScreen> {
                     postingRepository: PostingRepositoryImpl(
                         postingRemoteDataSource: PostingRemoteDataSource())));
             provider.fetchCommunities().then((value) {
-              provider.selectCommuinty(widget.communityName);
+              provider.selectCommuintyByName(widget.communityName);
             });
             return provider;
           },
