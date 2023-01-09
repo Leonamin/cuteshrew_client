@@ -33,7 +33,7 @@ class PostingRemoteDataSource extends CuteShrewRemoteDataSource {
           HttpConstants.getCommunityPage(communityName, pageNum, postingCount));
       // FIXME 서버 바꿀 때 까지 임시로
       final decodedData = json.decode(utf8.decode(response.bodyBytes));
-      if (decodedData['postings'] == null) {
+      if (decodedData['posting_list'] == null) {
         return [for (final e in decodedData) PostingDTO.fromJson(e)];
       } else {
         return [

@@ -9,7 +9,7 @@ import 'package:http/http.dart';
 class UserRemoteDataSource extends CuteShrewRemoteDataSource {
   Future<void> postSignin(UserCreateDTO user) async {
     try {
-      await post(HttpConstants.requestSignin,
+      await post(HttpConstants.requestSignup,
           headers: {
             "Content-Type": "application/json",
           },
