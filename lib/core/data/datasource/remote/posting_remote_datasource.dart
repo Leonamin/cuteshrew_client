@@ -37,7 +37,7 @@ class PostingRemoteDataSource extends CuteShrewRemoteDataSource {
         return [for (final e in decodedData) PostingDTO.fromJson(e)];
       } else {
         return [
-          for (final e in decodedData['postings']) PostingDTO.fromJson(e)
+          for (final e in decodedData['posting_list']) PostingDTO.fromJson(e)
         ];
       }
     } catch (e) {
