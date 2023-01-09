@@ -25,9 +25,9 @@ class CommunityDTO {
       communityShowName: json['showname'],
       postingsCount: json['posting_count'],
       createdAt: json['created_at'],
-      postings: (json['postings'] != null)
+      postings: (json['posting_list'] != null)
           ? List.from(
-              (json['postings'] ?? []).map((e) => PostingDTO.fromJson(e)))
+              (json['posting_list'] ?? []).map((e) => PostingDTO.fromJson(e)))
           : null,
     );
   }
