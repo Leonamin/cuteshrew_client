@@ -113,13 +113,14 @@ class PostingRemoteDataSource extends CuteShrewRemoteDataSource {
 
       // FIXME 서버 바꿀 때 까지 임시로
       final decodedData = json.decode(utf8.decode(response.bodyBytes));
-      if (decodedData['postings'] == null) {
-        return [for (final e in decodedData) PostingDTO.fromJson(e)];
-      } else {
-        return [
-          for (final e in decodedData['postings']) PostingDTO.fromJson(e)
-        ];
-      }
+      return [for (final e in decodedData) PostingDTO.fromJson(e)];
+      // if (decodedData['postings'] == null) {
+      //   return [for (final e in decodedData) PostingDTO.fromJson(e)];
+      // } else {
+      //   return [
+      //     for (final e in decodedData['postings']) PostingDTO.fromJson(e)
+      //   ];
+      // }
     } catch (e) {
       rethrow;
     }
