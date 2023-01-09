@@ -150,7 +150,8 @@ class HttpConstants {
       Uri(
         host: cuteshrewBaseUrl,
         scheme: cuteshrewScheme,
-        path: "$endpointApi$endpointComment$pageUrl/$postId/$pageNum",
+        path:
+            "$endpointApi$endpointComment$pageUrl/$postId$endpointComment/$pageNum",
         queryParameters: {
           queryLoadCount: commentCount.toString(),
         },
