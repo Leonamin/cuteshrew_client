@@ -13,7 +13,7 @@ class HttpConstants {
   static const String endpointSearch = '/search';
 
   // Authentication Endpoint Function
-  static const String pathSiginin = "/siginin";
+  static const String pathSiginin = "/signin";
   static const String pathVerify = "/verify";
 
   // User Endpoint Path
