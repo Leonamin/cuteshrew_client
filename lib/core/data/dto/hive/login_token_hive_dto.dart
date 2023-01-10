@@ -1,19 +1,20 @@
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
+part 'login_token_hive_dto.g.dart';
 
 @HiveType(typeId: 0)
 class LoginTokenHiveDTO {
+  @HiveField(0)
+  String name;
   @HiveField(1)
-  final String name;
+  String email;
   @HiveField(2)
-  final String email;
+  String accessToken;
   @HiveField(3)
-  final String accessToken;
+  String tokenType;
   @HiveField(4)
-  final String tokenType;
-  @HiveField(5)
-  final int? expires;
+  int? expires;
 
-  const LoginTokenHiveDTO({
+  LoginTokenHiveDTO({
     required this.name,
     required this.email,
     required this.accessToken,
