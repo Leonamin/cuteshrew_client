@@ -101,7 +101,7 @@ class HttpConstants {
           scheme: cuteshrewScheme,
           path: "$endpointApi$endpointCommunity$pathAll",
           queryParameters: {
-            if (loadCount != null) queryCommunityCount: loadCount.toString(),
+            if (loadCount != null) queryLoadCount: loadCount.toString(),
           });
 
   // Posting URLs

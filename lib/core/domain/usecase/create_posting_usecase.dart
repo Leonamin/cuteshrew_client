@@ -15,7 +15,8 @@ class CreatePostingUseCase {
 
   // 모든 커뮤니티 정보를 가져온다.
   Future<Either<Failure, List<CommunityEntity>>> call() {
-    return communityRepository.getCommunityList(loadCount: 0);
+    // FIXME 명시적 한도를 지정했기 때문에 100개가 넘을 일은 거의 없겠지만 100개가 넘게되면 안되니 참고
+    return communityRepository.getCommunityList(loadCount: 100);
   }
 
   // 게시글 생성
