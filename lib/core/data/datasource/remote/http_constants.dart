@@ -101,7 +101,7 @@ class HttpConstants {
           scheme: cuteshrewScheme,
           path: "$endpointApi$endpointCommunity$pathAll",
           queryParameters: {
-            if (loadCount != null) queryCommunityCount: loadCount.toString(),
+            if (loadCount != null) queryLoadCount: loadCount.toString(),
           });
 
   // Posting URLs
@@ -119,7 +119,7 @@ class HttpConstants {
   static uploadPosting(String communityName) => Uri(
         host: cuteshrewBaseUrl,
         scheme: cuteshrewScheme,
-        path: "$endpointApi$endpointPosting/$communityName",
+        path: "$endpointApi$endpointPosting",
         queryParameters: {
           queryCommunityName: communityName,
         },

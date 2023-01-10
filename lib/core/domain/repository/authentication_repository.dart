@@ -1,4 +1,5 @@
 import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
+import 'package:cuteshrew/core/domain/entity/signed_user_entity.dart';
 import 'package:cuteshrew/core/resources/failure.dart';
 import 'package:dartz/dartz.dart';
 
@@ -30,4 +31,12 @@ abstract class AuthenticationRepository {
     required String nickname,
     required String password,
   });
+
+  // 로그인된 유저 정보 가져오기
+  Future<Either<Failure, SignedUserEntity>> getSignedUser();
+  // 로그인된 유저 정보 저장하기
+  Future<Either<Failure, SignedUserEntity>> setSignedUser(
+      {required SignedUserEntity signedUserEntity});
+  // 로그아웃된 유저 정보 지우기
+  Future<Either<Failure, void>> deleteSignedUser();
 }

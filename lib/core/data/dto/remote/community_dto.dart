@@ -1,4 +1,4 @@
-import 'package:cuteshrew/core/data/dto/posting_dto.dart';
+import 'package:cuteshrew/core/data/dto/remote/posting_dto.dart';
 
 class CommunityDTO {
   final int id;

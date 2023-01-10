@@ -1,4 +1,4 @@
-import 'package:cuteshrew/core/data/dto/posting_create_dto.dart';
+import 'package:cuteshrew/core/data/dto/remote/posting_create_dto.dart';
 import 'package:cuteshrew/core/data/mapper/mapper.dart';
 import 'package:cuteshrew/core/domain/entity/posting_create_entity.dart';
 

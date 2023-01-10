@@ -1,3 +1,4 @@
+import 'package:cuteshrew/core/domain/entity/signed_user_entity.dart';
 import 'package:cuteshrew/core/domain/entity/user_preview_entity.dart';
 import 'package:cuteshrew/core/domain/usecase/login_usecase.dart';
 import 'package:cuteshrew/core/resources/failure.dart';
@@ -17,6 +18,21 @@ class AuthenticationProvider extends ValueNotifier<AuthenticationState> {
     _loginUseCase = loginUseCase;
   }
 
+  Future<void> initializeToken() async {
+    final result = await _loginUseCase.getSignedUserFromLocal();
+    result.fold((Failure failure) {
+      value = AuthenticationState.unauthorized();
+    }, (data) {
+      if (data.loginTokenEntity.expires * 1000 >
+          DateTime.now().millisecondsSinceEpoch) {
+        value = AuthenticationState.authorized(
+          userInfo: data.userInfo,
+          loginToken: data.loginTokenEntity,
+        );
+      }
+    });
+  }
+
   Future<void> login(String id, String password) async {
     if (value is AuthorizedState) {
       await logout();
@@ -30,6 +46,11 @@ class AuthenticationProvider extends ValueNotifier<AuthenticationState> {
       result.fold((Failure failure) {
         value = const AuthenticationState.unauthorized();
       }, (data) {
+        final saveResult = _loginUseCase.saveSignedUserToLocal(
+            signedUserEntity: SignedUserEntity(
+                userInfo: UserPreviewEntity(name: id, email: id),
+                loginTokenEntity: data));
+        // saveResult.fold((Failure failure) {}, (data) {});
         value = AuthenticationState.authorized(
           userInfo: UserPreviewEntity(
             email: id,
@@ -44,6 +65,8 @@ class AuthenticationProvider extends ValueNotifier<AuthenticationState> {
   Future<void> logout() async {
     // TODO 나중에 여기서 로컬에 저장된 값을 지우지 않을까
     if (value is AuthorizedState) {
+      String id = (value as AuthorizedState).userName;
+      _loginUseCase.deleteSignedUserFromLocal();
       value = const AuthenticationState.unauthorized();
     }
   }

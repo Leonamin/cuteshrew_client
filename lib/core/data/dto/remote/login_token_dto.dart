@@ -13,7 +13,7 @@ class LoginTokenDTO {
     return LoginTokenDTO(
       accessToken: json['access_token'],
       tokenType: json['token_type'],
-      expires: json['expires'],
+      expires: json['expire_time'],
     );
   }
 

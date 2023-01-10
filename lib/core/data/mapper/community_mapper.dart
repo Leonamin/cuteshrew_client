@@ -1,4 +1,4 @@
-import 'package:cuteshrew/core/data/dto/community_dto.dart';
+import 'package:cuteshrew/core/data/dto/remote/community_dto.dart';
 import 'package:cuteshrew/core/data/mapper/mapper.dart';
 import 'package:cuteshrew/core/data/mapper/posting_preview_mapper.dart';
 import 'package:cuteshrew/core/domain/entity/community_entity.dart';
