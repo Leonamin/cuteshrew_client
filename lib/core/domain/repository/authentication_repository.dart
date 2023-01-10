@@ -35,7 +35,8 @@ abstract class AuthenticationRepository {
   // 로그인된 유저 정보 가져오기
   Future<Either<Failure, SignedUserEntity>> getSignedUser();
   // 로그인된 유저 정보 저장하기
-  Future<Either<Failure, SignedUserEntity>> setSignedUser();
+  Future<Either<Failure, SignedUserEntity>> setSignedUser(
+      {required SignedUserEntity signedUserEntity});
   // 로그아웃된 유저 정보 지우기
-  Future<Either<Failure, SignedUserEntity>> deleteSignedUser();
+  Future<Either<Failure, void>> deleteSignedUser();
 }
