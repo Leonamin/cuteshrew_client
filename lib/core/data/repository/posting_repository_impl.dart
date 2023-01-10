@@ -1,5 +1,5 @@
 import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.dart';
-import 'package:cuteshrew/core/data/dto/posting_dto.dart';
+import 'package:cuteshrew/core/data/dto/remote/posting_dto.dart';
 import 'package:cuteshrew/core/data/mapper/login_token_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/posting_create_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/posting_mapper.dart';

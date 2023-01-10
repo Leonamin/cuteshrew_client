@@ -119,7 +119,7 @@ class HttpConstants {
   static uploadPosting(String communityName) => Uri(
         host: cuteshrewBaseUrl,
         scheme: cuteshrewScheme,
-        path: "$endpointApi$endpointPosting/$communityName",
+        path: "$endpointApi$endpointPosting",
         queryParameters: {
           queryCommunityName: communityName,
         },

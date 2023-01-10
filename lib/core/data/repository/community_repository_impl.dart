@@ -1,5 +1,5 @@
 import 'package:cuteshrew/core/data/datasource/remote/community_remote_datasource.dart';
-import 'package:cuteshrew/core/data/dto/community_dto.dart';
+import 'package:cuteshrew/core/data/dto/remote/community_dto.dart';
 import 'package:cuteshrew/core/data/mapper/community_mapper.dart';
 import 'package:cuteshrew/core/domain/entity/community_entity.dart';
 import 'package:cuteshrew/core/domain/repository/community_repository.dart';
