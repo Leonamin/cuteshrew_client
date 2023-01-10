@@ -1,7 +1,6 @@
 class HttpConstants {
   static const String cuteshrewScheme = "http";
-  // static const String cuteshrewBaseUrl = "cuteshrew.xyz";
-  static const String cuteshrewBaseUrl = "127.0.0.1";
+  static const String cuteshrewBaseUrl = "cuteshrew.xyz";
   static const String endpointApi = "/apiv2";
 
   static const String endpointCommunity = "/community";
