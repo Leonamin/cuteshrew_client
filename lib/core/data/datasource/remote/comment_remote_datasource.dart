@@ -84,13 +84,15 @@ class CommentRemoteDataSource extends CuteShrewRemoteDataSource {
 
       // FIXME 서버 바꿀 때 까지 임시로
       final decodedData = json.decode(utf8.decode(response.bodyBytes));
-      if (decodedData['comments'] == null) {
-        return [for (final e in decodedData) CommentDTO.fromJson(e)];
-      } else {
-        return [
-          for (final e in decodedData['comments']) CommentDTO.fromJson(e)
-        ];
-      }
+      return [for (final e in decodedData) CommentDTO.fromJson(e)];
+      // 이거 null이면 expected int but string 뜸
+      // if (decodedData['comments'] == null) {
+      //   return [for (final e in decodedData) CommentDTO.fromJson(e)];
+      // } else {
+      //   return [
+      //     for (final e in decodedData['comments']) CommentDTO.fromJson(e)
+      //   ];
+      // }
     } catch (e) {
       rethrow;
     }

@@ -33,4 +33,16 @@ class CommunityRemoteDataSource extends CuteShrewRemoteDataSource {
       rethrow;
     }
   }
+
+  Future<List<CommunityDTO>> getMainCommunities() async {
+    try {
+      Response response = await get(HttpConstants.getMainPage);
+      return [
+        for (final e in json.decode(utf8.decode(response.bodyBytes)))
+          CommunityDTO.fromJson(e)
+      ];
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

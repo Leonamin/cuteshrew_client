@@ -10,4 +10,6 @@ abstract class CommunityRepository {
 
   Future<Either<Failure, List<CommunityEntity>>> getCommunityList(
       {required int loadCount});
+
+  Future<Either<Failure, List<CommunityEntity>>> getMainCommunityList();
 }

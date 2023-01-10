@@ -44,4 +44,19 @@ class CommunityRepositoryImpl extends CommunityRepository {
       return Left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<CommunityEntity>>> getMainCommunityList() async {
+    try {
+      List<CommunityDTO> communityDTO =
+          await _communityRemoteDataSource.getMainCommunities();
+      CommunityMapper mapper = CommunityMapper();
+      List<CommunityEntity> result =
+          communityDTO.map((e) => mapper.map(e)).toList();
+
+      return Right(result);
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
 }
