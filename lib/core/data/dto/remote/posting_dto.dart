@@ -1,5 +1,5 @@
-import 'package:cuteshrew/core/data/dto/community_dto.dart';
-import 'package:cuteshrew/core/data/dto/user_dto.dart';
+import 'package:cuteshrew/core/data/dto/remote/community_dto.dart';
+import 'package:cuteshrew/core/data/dto/remote/user_dto.dart';
 
 class PostingDTO {
   final int postId;

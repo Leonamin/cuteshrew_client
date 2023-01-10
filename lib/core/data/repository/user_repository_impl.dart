@@ -1,5 +1,5 @@
 import 'package:cuteshrew/core/data/datasource/remote/user_remote_datasource.dart';
-import 'package:cuteshrew/core/data/dto/user_dto.dart';
+import 'package:cuteshrew/core/data/dto/remote/user_dto.dart';
 import 'package:cuteshrew/core/data/mapper/user_create_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/user_mapper.dart';
 import 'package:cuteshrew/core/domain/entity/user_detail_entity.dart';

@@ -1,5 +1,5 @@
 import 'package:cuteshrew/core/data/datasource/remote/comment_remote_datasource.dart';
-import 'package:cuteshrew/core/data/dto/comment_dto.dart';
+import 'package:cuteshrew/core/data/dto/remote/comment_dto.dart';
 import 'package:cuteshrew/core/data/mapper/comment_create_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/comment_detail_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/login_token_mapper.dart';

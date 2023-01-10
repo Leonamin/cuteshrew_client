@@ -1,5 +1,5 @@
 import 'package:cuteshrew/core/data/datasource/remote/authentication_remote_datasource.dart';
-import 'package:cuteshrew/core/data/dto/login_token_dto.dart';
+import 'package:cuteshrew/core/data/dto/remote/login_token_dto.dart';
 import 'package:cuteshrew/core/data/mapper/login_token_mapper.dart';
 import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
 import 'package:cuteshrew/core/domain/repository/authentication_repository.dart';

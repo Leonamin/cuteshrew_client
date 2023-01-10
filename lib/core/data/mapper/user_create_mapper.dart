@@ -1,4 +1,4 @@
-import 'package:cuteshrew/core/data/dto/user_create_dto.dart';
+import 'package:cuteshrew/core/data/dto/remote/user_create_dto.dart';
 import 'package:cuteshrew/core/data/mapper/mapper.dart';
 import 'package:cuteshrew/core/domain/entity/user_create_entity.dart';
 
