@@ -3,7 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class LoginWidgetFormPanel extends StatefulWidget {
-  const LoginWidgetFormPanel({super.key});
+  final Function(String id, String password)? login;
+  const LoginWidgetFormPanel({super.key, this.login});
 
   @override
   State<LoginWidgetFormPanel> createState() => _LoginWidgetFormPanelState();
@@ -152,7 +153,10 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          _login(_idController.text, _passwordController.text);
+                          if (widget.login != null) {
+                            widget.login!(
+                                _idController.text, _passwordController.text);
+                          }
                         }
                       },
                       style: ButtonStyle(
