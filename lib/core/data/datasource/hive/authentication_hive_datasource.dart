@@ -9,7 +9,7 @@ class AuthenticationHiveDataSource {
 
   Future<LoginTokenHiveDTO> getToken({String? nameKey}) async {
     try {
-      final box = await Hive.box(hiveAuthBox);
+      final box = await Hive.openBox(hiveAuthBox);
       final LoginTokenHiveDTO result = await box.get(nameKey ?? _token);
       await box.close();
       return result;
@@ -22,7 +22,7 @@ class AuthenticationHiveDataSource {
     String? nameKey,
     required LoginTokenHiveDTO authTokenDTO,
   }) async {
-    final box = await Hive.box(hiveAuthBox);
+    final box = await Hive.openBox(hiveAuthBox);
 
     box.put(nameKey ?? _token, authTokenDTO);
     final LoginTokenHiveDTO result = await box.get(nameKey ?? _token);
@@ -30,7 +30,7 @@ class AuthenticationHiveDataSource {
   }
 
   Future<void> deleteToken({String? nameKey}) async {
-    final box = await Hive.box(hiveAuthBox);
+    final box = await Hive.openBox(hiveAuthBox);
     box.delete(nameKey ?? _token);
     await box.close();
   }
