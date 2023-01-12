@@ -12,8 +12,8 @@ class AuthPage extends StatelessWidget {
     final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
     return Scaffold(
         key: scaffoldKey,
+        backgroundColor: Color(0xFFECE7F4),
         // extendBodyBehindAppBar: true,
-        appBar: mainAppBar(context, scaffoldKey),
         drawer: const Drawer(),
         body: const ResponsiveWidget(
           largeScreen: LargeAuthLayout(),
