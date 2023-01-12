@@ -2,7 +2,7 @@ import 'package:cuteshrew/presentation/providers/authentication/authentication_p
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:cuteshrew/presentation/screens/auth/widgets/login_widget_form_panel.dart';
 import 'package:cuteshrew/presentation/screens/auth/widgets/login_widget_info_panel.dart';
-import 'package:cuteshrew/presentation/screens/register/widgets/register_form_panel.dart';
+import 'package:cuteshrew/presentation/screens/register/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -59,7 +59,7 @@ class _ExpandedLoginWidgetState extends State<ExpandedLoginWidget> {
                     ),
                     if (isResgister)
                       MaterialPage(
-                        child: RegisterFormPanel(
+                        child: RegisterScreen(
                           changeToLogin: changeLoginMode,
                         ),
                       ),
