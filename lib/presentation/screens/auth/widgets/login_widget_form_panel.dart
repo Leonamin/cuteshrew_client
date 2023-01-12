@@ -143,65 +143,71 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 18,
-                              height: 30,
-                              child: Checkbox(
-                                value: _keepLogin,
-                                // 이걸 해주면 체크박스 근처 호버링 범위 표시 효과가 없어진다.
-                                splashRadius: 0,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                  side: BorderSide(
-                                    color: authFormCreamWhiteColor,
-                                    width: 1,
-                                  ),
-                                ),
-                                checkColor: authFormCreamWhiteColor,
-                                activeColor: authFormLightBlueColor,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _keepLogin = !_keepLogin;
-                                  });
-                                },
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                text: "로그인 상태 유지",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelMedium!
-                                    .copyWith(
+                        Flexible(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                width: 18,
+                                height: 30,
+                                child: Checkbox(
+                                  value: _keepLogin,
+                                  // 이걸 해주면 체크박스 근처 호버링 범위 표시 효과가 없어진다.
+                                  splashRadius: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4),
+                                    side: BorderSide(
                                       color: authFormCreamWhiteColor,
+                                      width: 1,
                                     ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
+                                  ),
+                                  checkColor: authFormCreamWhiteColor,
+                                  activeColor: authFormLightBlueColor,
+                                  onChanged: (value) {
                                     setState(() {
                                       _keepLogin = !_keepLogin;
                                     });
                                   },
+                                ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Flexible(
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: "로그인 상태 유지",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium!
+                                        .copyWith(
+                                          color: authFormCreamWhiteColor,
+                                        ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        setState(() {
+                                          _keepLogin = !_keepLogin;
+                                        });
+                                      },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        RichText(
-                          text: TextSpan(
-                            text: "비밀번호를 잊었습니다.",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge!
-                                .copyWith(
-                                    color: authFormLightBlueColor,
-                                    fontWeight: FontWeight.w700),
-                            recognizer: TapGestureRecognizer()..onTap = () {},
+                        Flexible(
+                          child: RichText(
+                            text: TextSpan(
+                              text: "비밀번호를 잊었습니다.",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge!
+                                  .copyWith(
+                                      color: authFormLightBlueColor,
+                                      fontWeight: FontWeight.w700),
+                              recognizer: TapGestureRecognizer()..onTap = () {},
+                            ),
                           ),
                         ),
                       ],
