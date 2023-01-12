@@ -2,6 +2,7 @@ import 'package:cuteshrew/presentation/providers/authentication/authentication_p
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:cuteshrew/presentation/screens/auth/widgets/login_widget_form_panel.dart';
 import 'package:cuteshrew/presentation/screens/auth/widgets/login_widget_info_panel.dart';
+import 'package:cuteshrew/presentation/screens/register/widgets/register_form_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,14 @@ class ExpandedLoginWidget extends StatefulWidget {
 }
 
 class _ExpandedLoginWidgetState extends State<ExpandedLoginWidget> {
+  bool isResgister = false;
+
+  void changeLoginMode() {
+    setState(() {
+      isResgister = !isResgister;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthenticationState>(builder: (context, state, child) {
@@ -36,16 +45,34 @@ class _ExpandedLoginWidgetState extends State<ExpandedLoginWidget> {
             child: Row(
               children: [
                 Expanded(
-                  flex: 1,
-                  child: LoginWidgetFormPanel(
-                    login: (id, password, keepLogin) {
-                      context
-                          .read<AuthenticationProvider>()
-                          .login(id, password);
-                    },
-                  ),
-                ),
-                Expanded(
+                    child: Navigator(
+                  pages: [
+                    MaterialPage(
+                      child: LoginWidgetFormPanel(
+                        login: (id, password, keepLogin) {
+                          context
+                              .read<AuthenticationProvider>()
+                              .login(id, password);
+                        },
+                        changeToRegister: changeLoginMode,
+                      ),
+                    ),
+                    if (isResgister)
+                      MaterialPage(
+                        child: RegisterFormPanel(
+                          changeToLogin: changeLoginMode,
+                        ),
+                      ),
+                  ],
+                  onPopPage: (route, result) {
+                    if (!route.didPop(result)) {
+                      return false;
+                    }
+
+                    return true;
+                  },
+                )),
+                const Expanded(
                   flex: 1,
                   child: LoginWidgetInfoPanel(),
                 )

@@ -5,7 +5,12 @@ import 'package:flutter/material.dart';
 
 class LoginWidgetFormPanel extends StatefulWidget {
   final Function(String id, String password, bool keepLogin)? login;
-  const LoginWidgetFormPanel({super.key, this.login});
+  final Function()? changeToRegister;
+  const LoginWidgetFormPanel({
+    super.key,
+    this.login,
+    this.changeToRegister,
+  });
 
   @override
   State<LoginWidgetFormPanel> createState() => _LoginWidgetFormPanelState();
@@ -259,7 +264,8 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                           .textTheme
                           .labelLarge!
                           .copyWith(color: authFormLightBlueColor),
-                      recognizer: TapGestureRecognizer()..onTap = () {},
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = widget.changeToRegister,
                     ),
                   ],
                 ),
