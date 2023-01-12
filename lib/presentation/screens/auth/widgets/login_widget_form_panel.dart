@@ -1,4 +1,5 @@
 import 'package:cuteshrew/presentation/config/constants/color.dart';
+import 'package:cuteshrew/presentation/helpers/responsiveness.dart';
 import 'package:cuteshrew/presentation/strings/strings.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,11 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
 
   @override
   Widget build(BuildContext context) {
+    final horizontalPadding = ResponsiveWidget.isSmallScreen(context)
+        ? const EdgeInsets.symmetric(horizontal: 30)
+        : (ResponsiveWidget.isMediumScreen(context)
+            ? const EdgeInsets.symmetric(horizontal: 50)
+            : const EdgeInsets.symmetric(horizontal: 80));
     return Theme(
       data: ThemeData().copyWith(
         unselectedWidgetColor: authFormCreamWhiteColor,
@@ -43,7 +49,7 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
       ),
       child: Container(
         color: authFormWhiteColor,
-        padding: const EdgeInsets.symmetric(horizontal: 80),
+        padding: horizontalPadding,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
