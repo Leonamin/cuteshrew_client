@@ -1,3 +1,4 @@
+import 'package:cuteshrew/presentation/config/constants/color.dart';
 import 'package:cuteshrew/presentation/strings/strings.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,19 +12,13 @@ class LoginWidgetFormPanel extends StatefulWidget {
 }
 
 class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
-  static const Color backgroundColor = Color(0xFFFFFFFF);
-  static const Color highlightColor = Color(0xFF071a84);
-  static const Color formBackgroundColor = Color(0xFFBBC4D9);
-  static const Color formBorderColor = Color(0xFF3A54AA);
-  static const Color textColor = Color(0xFF514b4c);
-
   static const double _formWidth = double.infinity;
   static const double _formHeight = 60;
   static const double _borderRadius = 8.0;
 
   final OutlineInputBorder _border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(_borderRadius),
-      borderSide: const BorderSide(color: formBorderColor, width: 0));
+      borderSide: const BorderSide(color: authFormLightBlueColor, width: 0));
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _idController = TextEditingController();
@@ -36,13 +31,13 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
   Widget build(BuildContext context) {
     return Theme(
       data: ThemeData().copyWith(
-        unselectedWidgetColor: formBackgroundColor,
+        unselectedWidgetColor: authFormCreamWhiteColor,
         colorScheme: ThemeData().colorScheme.copyWith(
-              primary: formBorderColor,
+              primary: authFormLightBlueColor,
             ),
       ),
       child: Container(
-        color: backgroundColor,
+        color: authFormWhiteColor,
         padding: const EdgeInsets.symmetric(horizontal: 80),
         child: Center(
           child: Column(
@@ -61,7 +56,7 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                       style: Theme.of(context)
                           .textTheme
                           .headlineMedium!
-                          .copyWith(color: textColor),
+                          .copyWith(color: authFormTextColor),
                     ),
                     const SizedBox(
                       height: 12,
@@ -69,7 +64,7 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                     TextFormField(
                       controller: _idController,
                       maxLines: 1,
-                      cursorColor: formBorderColor,
+                      cursorColor: authFormLightBlueColor,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
                           return Strings.emptyTextForm;
@@ -86,9 +81,9 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                                 .textTheme
                                 .labelLarge!
                                 .copyWith(
-                                  color: formBorderColor,
+                                  color: authFormLightBlueColor,
                                 ),
-                            selectionColor: formBorderColor,
+                            selectionColor: authFormLightBlueColor,
                           ),
                           suffixIcon:
                               const Icon(Icons.person_outline_outlined)),
@@ -99,16 +94,16 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                     TextFormField(
                       controller: _passwordController,
                       maxLines: 1,
-                      cursorColor: formBorderColor,
+                      cursorColor: authFormLightBlueColor,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
                           return Strings.emptyTextForm;
                         }
                       },
                       decoration: InputDecoration(
-                        iconColor: formBorderColor,
-                        focusColor: formBorderColor,
-                        suffixIconColor: formBorderColor,
+                        iconColor: authFormLightBlueColor,
+                        focusColor: authFormLightBlueColor,
+                        suffixIconColor: authFormLightBlueColor,
                         border: _border,
                         enabledBorder: _border,
                         focusedBorder: _border,
@@ -117,9 +112,9 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                           "비밀번호",
                           style:
                               Theme.of(context).textTheme.labelLarge!.copyWith(
-                                    color: formBorderColor,
+                                    color: authFormLightBlueColor,
                                   ),
-                          selectionColor: formBorderColor,
+                          selectionColor: authFormLightBlueColor,
                         ),
                         suffixIcon: IconButton(
                           onPressed: () {
@@ -157,12 +152,12 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(4),
                                   side: BorderSide(
-                                    color: formBackgroundColor,
+                                    color: authFormCreamWhiteColor,
                                     width: 1,
                                   ),
                                 ),
-                                checkColor: formBackgroundColor,
-                                activeColor: formBorderColor,
+                                checkColor: authFormCreamWhiteColor,
+                                activeColor: authFormLightBlueColor,
                                 onChanged: (value) {
                                   setState(() {
                                     _keepLogin = !_keepLogin;
@@ -180,7 +175,7 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                                     .textTheme
                                     .labelMedium!
                                     .copyWith(
-                                      color: formBackgroundColor,
+                                      color: authFormCreamWhiteColor,
                                     ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
@@ -199,7 +194,7 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                                 .textTheme
                                 .labelLarge!
                                 .copyWith(
-                                    color: formBorderColor,
+                                    color: authFormLightBlueColor,
                                     fontWeight: FontWeight.w700),
                             recognizer: TapGestureRecognizer()..onTap = () {},
                           ),
@@ -222,14 +217,14 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                         minimumSize: MaterialStateProperty.all(
                             const Size(double.infinity, _formHeight)),
                         backgroundColor: MaterialStateProperty.all(
-                          highlightColor,
+                          authFormNavyBlueColor,
                         ),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(_borderRadius),
                             side: const BorderSide(
-                              color: formBorderColor,
+                              color: authFormLightBlueColor,
                             ),
                           ),
                         ),
@@ -239,7 +234,7 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                         style: Theme.of(context)
                             .textTheme
                             .labelLarge!
-                            .copyWith(color: formBackgroundColor),
+                            .copyWith(color: authFormCreamWhiteColor),
                       ),
                     ),
                   ],
@@ -256,14 +251,14 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                       style: Theme.of(context)
                           .textTheme
                           .labelSmall!
-                          .copyWith(color: formBackgroundColor),
+                          .copyWith(color: authFormCreamWhiteColor),
                     ),
                     TextSpan(
                       text: '계정 생성하기',
                       style: Theme.of(context)
                           .textTheme
                           .labelLarge!
-                          .copyWith(color: formBorderColor),
+                          .copyWith(color: authFormLightBlueColor),
                       recognizer: TapGestureRecognizer()..onTap = () {},
                     ),
                   ],
