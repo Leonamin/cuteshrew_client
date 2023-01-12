@@ -1,4 +1,4 @@
-import 'package:cuteshrew/presentation/screens/auth/auth_screen.dart';
+import 'package:cuteshrew/presentation/screens/auth/widgets/shrunk_login_widget.dart';
 import 'package:flutter/material.dart';
 
 class SmallAuthLayout extends StatelessWidget {
@@ -6,8 +6,6 @@ class SmallAuthLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: const AuthScreen());
+    return const ShrunkLoginWidget();
   }
 }
