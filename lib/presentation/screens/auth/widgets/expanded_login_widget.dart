@@ -38,7 +38,7 @@ class _ExpandedLoginWidgetState extends State<ExpandedLoginWidget> {
                 Expanded(
                   flex: 1,
                   child: LoginWidgetFormPanel(
-                    login: (id, password) {
+                    login: (id, password, keepLogin) {
                       context
                           .read<AuthenticationProvider>()
                           .login(id, password);

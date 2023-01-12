@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class LoginWidgetFormPanel extends StatefulWidget {
-  final Function(String id, String password)? login;
+  final Function(String id, String password, bool keepLogin)? login;
   const LoginWidgetFormPanel({super.key, this.login});
 
   @override
@@ -17,8 +17,12 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
   static const Color formBorderColor = Color(0xFF3A54AA);
   static const Color textColor = Color(0xFF514b4c);
 
+  static const double _formWidth = double.infinity;
+  static const double _formHeight = 60;
+  static const double _borderRadius = 8.0;
+
   final OutlineInputBorder _border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(_borderRadius),
       borderSide: const BorderSide(color: formBorderColor, width: 0));
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -26,13 +30,13 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
   final TextEditingController _passwordController = TextEditingController();
 
   bool _showPassword = false;
-
-  _login(String id, String password) {}
+  bool _keepLogin = false;
 
   @override
   Widget build(BuildContext context) {
     return Theme(
       data: ThemeData().copyWith(
+        unselectedWidgetColor: formBackgroundColor,
         colorScheme: ThemeData().colorScheme.copyWith(
               primary: formBorderColor,
             ),
@@ -72,19 +76,22 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                         }
                       },
                       decoration: InputDecoration(
-                        border: _border,
-                        enabledBorder: _border,
-                        focusedBorder: _border,
-                        errorBorder: _border,
-                        label: Text(
-                          "아이디",
-                          style:
-                              Theme.of(context).textTheme.labelLarge!.copyWith(
-                                    color: formBorderColor,
-                                  ),
-                          selectionColor: formBorderColor,
-                        ),
-                      ),
+                          border: _border,
+                          enabledBorder: _border,
+                          focusedBorder: _border,
+                          errorBorder: _border,
+                          label: Text(
+                            "아이디",
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .copyWith(
+                                  color: formBorderColor,
+                                ),
+                            selectionColor: formBorderColor,
+                          ),
+                          suffixIcon:
+                              const Icon(Icons.person_outline_outlined)),
                     ),
                     const SizedBox(
                       height: 20,
@@ -130,22 +137,74 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                       obscureText: !_showPassword,
                     ),
                     const SizedBox(
-                      height: 4,
+                      height: 12,
                     ),
-                    Align(
-                      alignment: Alignment.topRight,
-                      child: RichText(
-                        text: TextSpan(
-                          text: "비밀번호를 잊었습니다.",
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge!
-                              .copyWith(
-                                  color: formBorderColor,
-                                  fontWeight: FontWeight.w700),
-                          recognizer: TapGestureRecognizer()..onTap = () {},
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 18,
+                              height: 30,
+                              child: Checkbox(
+                                value: _keepLogin,
+                                // 이걸 해주면 체크박스 근처 호버링 범위 표시 효과가 없어진다.
+                                splashRadius: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                  side: BorderSide(
+                                    color: formBackgroundColor,
+                                    width: 1,
+                                  ),
+                                ),
+                                checkColor: formBackgroundColor,
+                                activeColor: formBorderColor,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _keepLogin = !_keepLogin;
+                                  });
+                                },
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                text: "로그인 상태 유지",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium!
+                                    .copyWith(
+                                      color: formBackgroundColor,
+                                    ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    setState(() {
+                                      _keepLogin = !_keepLogin;
+                                    });
+                                  },
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
+                        RichText(
+                          text: TextSpan(
+                            text: "비밀번호를 잊었습니다.",
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .copyWith(
+                                    color: formBorderColor,
+                                    fontWeight: FontWeight.w700),
+                            recognizer: TapGestureRecognizer()..onTap = () {},
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(
                       height: 32,
@@ -154,21 +213,21 @@ class _LoginWidgetFormPanelState extends State<LoginWidgetFormPanel> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           if (widget.login != null) {
-                            widget.login!(
-                                _idController.text, _passwordController.text);
+                            widget.login!(_idController.text,
+                                _passwordController.text, _keepLogin);
                           }
                         }
                       },
                       style: ButtonStyle(
                         minimumSize: MaterialStateProperty.all(
-                            const Size(double.infinity, 50)),
+                            const Size(double.infinity, _formHeight)),
                         backgroundColor: MaterialStateProperty.all(
                           highlightColor,
                         ),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
+                            borderRadius: BorderRadius.circular(_borderRadius),
                             side: const BorderSide(
                               color: formBorderColor,
                             ),
