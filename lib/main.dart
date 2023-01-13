@@ -67,17 +67,17 @@ class MyApp extends StatelessWidget {
         ),
         textTheme:
             GoogleFonts.notoSansNKoTextTheme(Theme.of(context).textTheme),
-        pageTransitionsTheme: PageTransitionsTheme(
-          builders: kIsWeb
-              ? {
-                  // No animations for every OS if the app running on the web
-                  for (final platform in TargetPlatform.values)
-                    platform: const NoTransitionsBuilder(),
-                }
-              : const {
-                  // handel other platforms you are targeting
-                },
-        ),
+        // pageTransitionsTheme: PageTransitionsTheme(
+        //   builders: kIsWeb
+        //       ? {
+        //           // No animations for every OS if the app running on the web
+        //           for (final platform in TargetPlatform.values)
+        //             platform: const NoTransitionsBuilder(),
+        //         }
+        //       : const {
+        //           // handel other platforms you are targeting
+        //         },
+        // ),
       ),
       navigatorKey: locator<NavigationService>().navigatorKey,
       onGenerateRoute: generateRoute,
