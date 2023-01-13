@@ -8,7 +8,7 @@ const Color authFormLightBlueColor = Color(0xFF3A54AA);
 const Color authFormTextColor = Color(0xFF514b4c);
 
 // Main Community Color Set
-const Color communityPrimaryColor = Color(0xFFFFFFFF);
+const Color communityPrimaryColor = Color(0xFFf5f2ef);
 const Color communityNavyBlueColor = Color(0xFF071a84);
 const Color communitySecondaryColor = Color(0xFFBBC4D9);
 const Color communityLightBlueColor = Color(0xFF3A54AA);

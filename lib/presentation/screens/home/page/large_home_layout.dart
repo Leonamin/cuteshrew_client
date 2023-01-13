@@ -1,4 +1,3 @@
-import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/presentation/screens/home/page/home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -12,19 +11,20 @@ class LargeHomeLayout extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Container(
-            color: lightGrey,
-          ),
+              // color: Colors.transparent,
+              ),
         ),
         Expanded(
             flex: 4,
             child: Container(
+                color: Colors.transparent,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: HomeScreen())),
         Expanded(
           flex: 1,
           child: Container(
-            color: lightGrey,
-          ),
+              // color: Colors.transparent,
+              ),
         ),
       ],
     );
