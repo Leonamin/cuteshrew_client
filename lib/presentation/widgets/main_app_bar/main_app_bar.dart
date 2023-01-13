@@ -26,12 +26,17 @@ class MainNavTitle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
-            child: Text(
-              "귀여운 땃쥐",
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+            child: GestureDetector(
+              onTap: () {
+                locator<NavigationService>().navigateTo(Routes.HomePageRoute);
+              },
+              child: Text(
+                "귀여운 땃쥐",
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+              ),
             ),
           ),
           Row(
