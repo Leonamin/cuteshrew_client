@@ -23,7 +23,7 @@ class CommunityDTO {
       id: json['id'],
       communityName: json['name'],
       communityShowName: json['showname'],
-      postingsCount: json['posting_count'],
+      postingsCount: json['postings_count'],
       createdAt: json['created_at'],
       postings: (json['posting_list'] != null)
           ? List.from(
