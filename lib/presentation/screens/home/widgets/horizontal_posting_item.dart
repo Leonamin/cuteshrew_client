@@ -1,4 +1,5 @@
 import 'package:cuteshrew/presentation/config/constants/color.dart';
+import 'package:cuteshrew/presentation/helpers/responsiveness.dart';
 import 'package:cuteshrew/presentation/utils/utils.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,8 @@ class HorizontalPostingItem extends StatelessWidget {
                         recognizer: TapGestureRecognizer()
                           ..onTap = onUserPressed,
                       ),
+                      if (!ResponsiveWidget.isLargeScreen(context))
+                        const TextSpan(text: "\n"),
                       TextSpan(
                         text: "${Utils.formatTimeStamp(publishedAt ?? 0)}    ",
                         style: Theme.of(context)
