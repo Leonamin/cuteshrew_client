@@ -29,8 +29,9 @@ class CommunityPageProvider extends ValueNotifier<CommunityPageState> {
   int get countPerPage => value.countPerPage;
 
   // UI -> n번 페이지 요청 -> n번 페이지로 변수 변경 및 요청
-  Future<void> getCommunityInfo(int currentPageNum,
-      [int countPerPage = 25]) async {
+  Future<void> getCommunityInfo(
+    int currentPageNum,
+  ) async {
     if (value is! LoadingCommunityPageState) {
       final result = await _communityPageUseCase(communityName);
 

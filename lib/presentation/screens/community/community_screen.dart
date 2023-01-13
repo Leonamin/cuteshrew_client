@@ -10,7 +10,7 @@ import 'package:cuteshrew/presentation/screens/community/providers/community_pag
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:cuteshrew/presentation/screens/home/widgets/community_card.dart';
 import 'package:cuteshrew/presentation/screens/home/widgets/horizontal_posting_item.dart';
-import 'package:cuteshrew/presentation/widgets/common_widgets/list_button.dart';
+import 'package:cuteshrew/presentation/widgets/common_widgets/new_list_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -104,7 +104,7 @@ class _LoadedDataCommunityScreenState extends State<LoadedDataCommunityScreen> {
   // 현재 페이지 번호로부터 전~후 최대 버튼 표시 범위 설정
   final int _pageRange = 4;
   // 페이지 번호 버튼 리스트
-  List<ListButtonProperties> _pageButtonProperties = [];
+  List<int> _pageList = [];
 
   @override
   void initState() {
@@ -126,69 +126,82 @@ class _LoadedDataCommunityScreenState extends State<LoadedDataCommunityScreen> {
       minSelectablePage = 1;
       maxSelectablePage = _maxPage;
     }
-    _pageButtonProperties = List<ListButtonProperties>.generate(
-      maxSelectablePage - minSelectablePage + 1,
-      (index) => ListButtonProperties(
-        id: minSelectablePage + index,
-        color: Colors.blue,
-        onPressed: () {
-          context
-              .read<CommunityPageProvider>()
-              .getCommunityInfo(_pageButtonProperties[index].id);
-        },
-      ),
-    );
+
+    _pageList =
+        List<int>.generate(_maxPage, (index) => minSelectablePage + index);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthenticationState>(builder: (context, state, child) {
-      return Scaffold(
-        backgroundColor: Colors.transparent,
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24),
-            child: CommunityCard(
-              communityShowName: widget.communityShowName,
-              postingPanel: widget.postings
-                  .map<Widget>(
-                (posting) => Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: HorizontalPostingItem(
-                    title: posting.title,
-                    writerName: "nickname",
-                    publishedAt: posting.publishedAt,
-                    commentCount: posting.commentCount.toString(),
-                    onPostingPressed: () {
-                      context.read<CommunityPageProvider>().navigateToPosting(
-                          widget.communityName, posting.postId);
-                    },
+    return Consumer<AuthenticationState>(
+      builder: (context, state, child) {
+        int selectedIndex =
+            _pageList.indexWhere((element) => element == widget.currentPageNum);
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: CommunityCard(
+                communityShowName: widget.communityShowName,
+                postingPanel: widget.postings
+                    .map<Widget>(
+                  (posting) => Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: HorizontalPostingItem(
+                      title: posting.title,
+                      writerName: "nickname",
+                      publishedAt: posting.publishedAt,
+                      commentCount: posting.commentCount.toString(),
+                      onPostingPressed: () {
+                        context.read<CommunityPageProvider>().navigateToPosting(
+                            widget.communityName, posting.postId);
+                      },
+                    ),
                   ),
-                ),
-              )
-                  .followedBy(
-                [
-                  ListButton(
-                    itemCount: _pageButtonProperties.length,
-                    propertyList: _pageButtonProperties,
-                    selectedIndex: _pageButtonProperties[0].id,
-                  ),
-                ],
-              ).toList(),
+                )
+                    .followedBy(
+                  [
+                    NewListButton(
+                      itemCount: _maxPage,
+                      onPressed: (index) {
+                        context
+                            .read<CommunityPageProvider>()
+                            .getCommunityInfo(_pageList[index]);
+                      },
+                      selectedIndex: selectedIndex,
+                      children: List<Widget>.generate(
+                        _maxPage,
+                        (index) => Text(
+                          _pageList[index].toString(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge!
+                              .copyWith(
+                                color: index == selectedIndex
+                                    ? Theme.of(context).colorScheme.onPrimary
+                                    : Theme.of(context).colorScheme.primary,
+                              ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ).toList(),
+              ),
             ),
           ),
-        ),
-        floatingActionButton: state is AuthorizedState
-            ? FloatingActionButton(
-                onPressed: () {
-                  context
-                      .read<CommunityPageProvider>()
-                      .navigateToPostingEditor(widget.communityName);
-                },
-                child: const Icon(Icons.note_add),
-              )
-            : null,
-      );
-    });
+          floatingActionButton: state is AuthorizedState
+              ? FloatingActionButton(
+                  onPressed: () {
+                    context
+                        .read<CommunityPageProvider>()
+                        .navigateToPostingEditor(widget.communityName);
+                  },
+                  child: const Icon(Icons.note_add),
+                )
+              : null,
+        );
+      },
+    );
   }
 }
