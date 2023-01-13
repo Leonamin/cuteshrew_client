@@ -15,7 +15,7 @@ class ExpandedLoginWidget extends StatefulWidget {
 
 class _ExpandedLoginWidgetState extends State<ExpandedLoginWidget> {
   bool isResgister = false;
-
+  AuthenticationState? previewState = null;
   void changeLoginMode() {
     setState(() {
       isResgister = !isResgister;
@@ -25,8 +25,26 @@ class _ExpandedLoginWidgetState extends State<ExpandedLoginWidget> {
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthenticationState>(builder: (context, state, child) {
+      if (state is UnauthorizedState) {
+        if (previewState == null) {
+          previewState = const UnauthorizedState();
+        } else {
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              // FIXME 하드코딩 문장
+              content: Text("로그인 실패"),
+              backgroundColor: Colors.red,
+            ));
+          });
+        }
+      }
       if (state is AuthorizedState) {
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            // FIXME 하드코딩 문장
+            content: Text("로그인 성공"),
+            backgroundColor: Colors.green,
+          ));
           context.read<AuthenticationProvider>().navigateAfterSiginIn();
         });
       }
