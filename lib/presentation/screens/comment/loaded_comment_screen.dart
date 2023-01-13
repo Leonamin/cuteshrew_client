@@ -32,7 +32,7 @@ class _LoadedCommentScreenState extends State<LoadedCommentScreen> {
   // 현재 페이지 번호로부터 전~후 최대 버튼 표시 범위 설정
   final int _pageRange = 4;
   // 페이지 번호 버튼 리스트
-  List<ListButtonProperties> _pageButtonProperties = [];
+  List<int> _pageList = [];
 
   @override
   void initState() {
@@ -61,24 +61,8 @@ class _LoadedCommentScreenState extends State<LoadedCommentScreen> {
       minSelectablePage = 1;
       maxSelectablePage = _maxPage;
     }
-    _pageButtonProperties = List<ListButtonProperties>.generate(
-      maxSelectablePage - minSelectablePage + 1,
-      (index) => ListButtonProperties(
-        id: minSelectablePage + index,
-        color: Colors.blue,
-        // onPressed: () {
-        // context
-        //     .read<CommentPageProvider>()
-        //     .getCommentPage(_pageButtonProperties[index].id);
-        // },
-        // TODO 리스트 버튼 사용법이 좀 너무 복잡한거 같은데 나중에 손봐야함
-        onPressed: () {
-          widget.onPageButtonPressed != null
-              ? widget.onPageButtonPressed!(_pageButtonProperties[index].id)
-              : null;
-        },
-      ),
-    );
+    _pageList =
+        List<int>.generate(_maxPage, (index) => minSelectablePage + index);
   }
 
   Widget _makeCommentPanel(List<CommentDetailData> comments) {
@@ -120,6 +104,8 @@ class _LoadedCommentScreenState extends State<LoadedCommentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int selectedIndex =
+        _pageList.indexWhere((element) => element == widget.currentPageNum);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -129,9 +115,22 @@ class _LoadedCommentScreenState extends State<LoadedCommentScreen> {
         ),
         _makeCommentPanel(widget.comments),
         ListButton(
-          itemCount: _pageButtonProperties.length,
-          propertyList: _pageButtonProperties,
-          selectedIndex: _pageButtonProperties[0].id,
+          itemCount: _maxPage,
+          onPressed: (index) {
+            widget.onPageButtonPressed!(_pageList[index]);
+          },
+          selectedIndex: selectedIndex,
+          children: List<Widget>.generate(
+            _maxPage,
+            (index) => Text(
+              _pageList[index].toString(),
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                    color: index == selectedIndex
+                        ? Theme.of(context).colorScheme.onPrimary
+                        : Theme.of(context).colorScheme.primary,
+                  ),
+            ),
+          ),
         ),
       ],
     );

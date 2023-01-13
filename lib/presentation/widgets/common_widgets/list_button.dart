@@ -1,42 +1,23 @@
 import 'package:cuteshrew/presentation/widgets/common_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
-class ButtonProperties {
-  int page;
-  Color color;
-
-  ButtonProperties({required this.page, this.color = Colors.black});
-}
-
-class ListButtonProperties {
-  int id;
-  Color color;
-  VoidCallback onPressed;
-
-  ListButtonProperties({
-    required this.id,
-    required this.color,
-    required this.onPressed,
-  });
-}
-
-// TODO immutable 관련해서 확인해야한다.
 class ListButton extends StatefulWidget {
-  ListButton({
+  const ListButton({
     super.key,
-    required this.itemCount,
-    this.backgroundColor,
-    this.selectedColor,
-    this.maxHeight,
-    required this.propertyList,
+    this.itemCount,
     this.selectedIndex,
+    this.selectedColor,
+    this.unselectedColor,
+    this.onPressed,
+    this.children,
   });
-  Color? backgroundColor;
-  Color? selectedColor;
-  double? maxHeight;
-  int itemCount;
-  List<ListButtonProperties> propertyList;
-  int? selectedIndex = 0;
+
+  final int? itemCount;
+  final int? selectedIndex;
+  final Color? selectedColor;
+  final Color? unselectedColor;
+  final Function(int index)? onPressed;
+  final List<Widget>? children;
 
   @override
   State<ListButton> createState() => _ListButtonState();
@@ -47,20 +28,21 @@ class _ListButtonState extends State<ListButton> {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: widget.propertyList
-          .map((item) => CircleElevatedButton(
-                color: item.id == widget.selectedIndex
-                    ? widget.selectedColor ?? Colors.blue
-                    : Colors.grey,
-                onPressed: () {
-                  setState(() {
-                    widget.selectedIndex = item.id;
-                  });
-                  item.onPressed();
-                },
-                child: Text(item.id.toString()),
-              ))
-          .toList(),
+      children: List.generate(
+        widget.itemCount ?? 0,
+        (index) => CircleElevatedButton(
+          color: index == widget.selectedIndex
+              ? widget.selectedColor ?? Theme.of(context).colorScheme.tertiary
+              : widget.unselectedColor ??
+                  Theme.of(context).colorScheme.onTertiary,
+          onPressed: () {
+            if (widget.onPressed != null) {
+              widget.onPressed!(index);
+            }
+          },
+          child: widget.children?[index],
+        ),
+      ),
     );
   }
 }

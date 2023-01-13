@@ -10,7 +10,7 @@ import 'package:cuteshrew/presentation/screens/community/providers/community_pag
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:cuteshrew/presentation/screens/home/widgets/community_card.dart';
 import 'package:cuteshrew/presentation/screens/home/widgets/horizontal_posting_item.dart';
-import 'package:cuteshrew/presentation/widgets/common_widgets/new_list_button.dart';
+import 'package:cuteshrew/presentation/widgets/common_widgets/list_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -162,7 +162,7 @@ class _LoadedDataCommunityScreenState extends State<LoadedDataCommunityScreen> {
                 )
                     .followedBy(
                   [
-                    NewListButton(
+                    ListButton(
                       itemCount: _maxPage,
                       onPressed: (index) {
                         context
