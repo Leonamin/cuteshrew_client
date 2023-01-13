@@ -14,6 +14,18 @@ class NavigationService {
     );
   }
 
+  Future<dynamic> navigateAndRemoveUntil(String routeName,
+      {Map<String, String>? queryParams, Object? arguments}) {
+    if (queryParams != null) {
+      routeName = Uri(path: routeName, queryParameters: queryParams).toString();
+    }
+    return navigatorKey.currentState!.pushNamedAndRemoveUntil(
+      routeName,
+      (route) => false,
+      arguments: arguments,
+    );
+  }
+
   void goBack() {
     return navigatorKey.currentState!.pop();
   }

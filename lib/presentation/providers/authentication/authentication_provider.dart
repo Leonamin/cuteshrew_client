@@ -71,7 +71,11 @@ class AuthenticationProvider extends ValueNotifier<AuthenticationState> {
     }
   }
 
+  // 이걸 한이유
+  // 잘못된 설계로 인해 로그인 페이지 스택이 쌓여서 2개 이상이 되면
+  // 알림이 스택에 쌓인 로그인 페이지만큼 발생한다.
+  // 그래서 그냥 싸그리 지우고 홈으로 이동시키는게 낫다고 판단된다.
   void navigateAfterSiginIn() {
-    _navigationService.navigateTo(Routes.HomePageRoute);
+    _navigationService.navigateAndRemoveUntil(Routes.HomePageRoute);
   }
 }
