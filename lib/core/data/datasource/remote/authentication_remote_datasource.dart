@@ -17,6 +17,9 @@ class AuthenticationRemoteDataSource extends CuteShrewRemoteDataSource {
           },
           encoding: Encoding.getByName('utf-8'),
           body: encodedBody);
+      if (response.statusCode != 200) {
+        throw Exception();
+      }
       return LoginTokenDTO.fromJson(
           json.decode(utf8.decode(response.bodyBytes)));
     } catch (e) {

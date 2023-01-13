@@ -13,6 +13,9 @@ class CommentRemoteDataSource extends CuteShrewRemoteDataSource {
     try {
       final response = await get(HttpConstants.getCommentList(
           communityName, postId, pageNum, commentCount));
+      if (response.statusCode != 200) {
+        throw Exception();
+      }
       return [
         for (final e in json.decode(utf8.decode(response.bodyBytes)))
           CommentDTO.fromJson(e),
@@ -26,13 +29,17 @@ class CommentRemoteDataSource extends CuteShrewRemoteDataSource {
   Future<void> uploadComment(String communityName, int postId,
       LoginTokenDTO token, CommentCreateDTO comment) async {
     try {
-      await post(HttpConstants.uploadComment(communityName, postId),
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "${token.tokenType} ${token.accessToken}",
-          },
-          encoding: Encoding.getByName('utf-8'),
-          body: jsonEncode(comment.toJson()));
+      final response =
+          await post(HttpConstants.uploadComment(communityName, postId),
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": "${token.tokenType} ${token.accessToken}",
+              },
+              encoding: Encoding.getByName('utf-8'),
+              body: jsonEncode(comment.toJson()));
+      if (response.statusCode != 201) {
+        throw Exception();
+      }
     } catch (e) {
       rethrow;
     }
@@ -42,7 +49,7 @@ class CommentRemoteDataSource extends CuteShrewRemoteDataSource {
   Future<void> updateComment(String communityName, int postId, int commentId,
       LoginTokenDTO token, CommentCreateDTO comment) async {
     try {
-      await post(
+      final response = await post(
           HttpConstants.basicCommentUrl(communityName, postId, commentId),
           headers: {
             "Content-Type": "application/json",
@@ -50,6 +57,9 @@ class CommentRemoteDataSource extends CuteShrewRemoteDataSource {
           },
           encoding: Encoding.getByName('utf-8'),
           body: jsonEncode(comment.toJson()));
+      if (response.statusCode != 201) {
+        throw Exception();
+      }
     } catch (e) {
       rethrow;
     }
@@ -59,20 +69,22 @@ class CommentRemoteDataSource extends CuteShrewRemoteDataSource {
   Future<void> deleteComment(String communityName, int postId, int commentId,
       LoginTokenDTO token) async {
     try {
-      await delete(
+      final response = await delete(
         HttpConstants.basicCommentUrl(communityName, postId, commentId),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "${token.tokenType} ${token.accessToken}",
         },
       );
+      if (response.statusCode != 204) {
+        throw Exception();
+      }
     } catch (e) {
       rethrow;
     }
   }
 
   // TODO 나중에 검색 쪽으로 분리 될 수 있다.
-  // FIXME 서버 바꿀 때 임시로
   Future<List<CommentDTO>> searchComments([
     String? userName,
     int? startId,
@@ -81,18 +93,11 @@ class CommentRemoteDataSource extends CuteShrewRemoteDataSource {
     try {
       final response = await get(
           HttpConstants.searchComments(null, userName, startId, loadPageNum));
-
-      // FIXME 서버 바꿀 때 까지 임시로
+      if (response.statusCode != 200) {
+        throw Exception();
+      }
       final decodedData = json.decode(utf8.decode(response.bodyBytes));
       return [for (final e in decodedData) CommentDTO.fromJson(e)];
-      // 이거 null이면 expected int but string 뜸
-      // if (decodedData['comments'] == null) {
-      //   return [for (final e in decodedData) CommentDTO.fromJson(e)];
-      // } else {
-      //   return [
-      //     for (final e in decodedData['comments']) CommentDTO.fromJson(e)
-      //   ];
-      // }
     } catch (e) {
       rethrow;
     }

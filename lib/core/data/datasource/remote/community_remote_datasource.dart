@@ -10,9 +10,11 @@ class CommunityRemoteDataSource extends CuteShrewRemoteDataSource {
       [int pageNum = 1, int? loadCount]) async {
     try {
       // Response response = await get(HttpConstants.getCommunity(communityName));
-      Response response = await get(
+      final Response response = await get(
           HttpConstants.getCommunityPage(communityName, pageNum, loadCount));
-
+      if (response.statusCode != 200) {
+        throw Exception();
+      }
       return CommunityDTO.fromJson(
           json.decode(utf8.decode(response.bodyBytes)));
     } catch (e) {
@@ -23,8 +25,11 @@ class CommunityRemoteDataSource extends CuteShrewRemoteDataSource {
   // 정확한 개수를 안보내면 모든 커뮤니티 가져온다.
   Future<List<CommunityDTO>> getCommunities([int? loadCommunityCount]) async {
     try {
-      Response response =
+      final Response response =
           await get(HttpConstants.getCommunities(loadCommunityCount));
+      if (response.statusCode != 200) {
+        throw Exception();
+      }
       return [
         for (final e in json.decode(utf8.decode(response.bodyBytes)))
           CommunityDTO.fromJson(e)
@@ -36,7 +41,10 @@ class CommunityRemoteDataSource extends CuteShrewRemoteDataSource {
 
   Future<List<CommunityDTO>> getMainCommunities() async {
     try {
-      Response response = await get(HttpConstants.getMainPage);
+      final Response response = await get(HttpConstants.getMainPage);
+      if (response.statusCode != 200) {
+        throw Exception();
+      }
       return [
         for (final e in json.decode(utf8.decode(response.bodyBytes)))
           CommunityDTO.fromJson(e)

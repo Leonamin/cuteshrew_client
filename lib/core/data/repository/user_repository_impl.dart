@@ -21,14 +21,8 @@ class UserRepositoryImpl extends UserRepository {
       {required UserCreateEntity newUser}) async {
     try {
       UserCreateMapper mapper = UserCreateMapper();
-      final int responseCode =
-          await _userRemoteDataSource.postSignin(mapper.map(newUser));
-      if (responseCode == 201) {
-        return const Right(null);
-      } else {
-        // TODO 회원가입 실패 로직 필요
-        return Left(Failure('failed'));
-      }
+
+      return Right(await _userRemoteDataSource.postSignin(mapper.map(newUser)));
     } catch (e) {
       return Left(Failure(e.toString()));
     }

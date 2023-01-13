@@ -16,6 +16,10 @@ class PostingRemoteDataSource extends CuteShrewRemoteDataSource {
     try {
       final response =
           await get(HttpConstants.getPosting(communityName, postId, password));
+      // TODO 응답 코드 예외 세분화 성공/비밀번호 필요/게시글 없음
+      if (response.statusCode != 200) {
+        throw Exception();
+      }
       return PostingDTO.fromJson(json.decode(utf8.decode(response.bodyBytes)));
     } catch (e) {
       rethrow;
@@ -31,6 +35,9 @@ class PostingRemoteDataSource extends CuteShrewRemoteDataSource {
     try {
       final response = await get(
           HttpConstants.getCommunityPage(communityName, pageNum, postingCount));
+      if (response.statusCode != 200) {
+        throw Exception();
+      }
       // FIXME 서버 바꿀 때 까지 임시로
       final decodedData = json.decode(utf8.decode(response.bodyBytes));
       if (decodedData['posting_list'] == null) {
@@ -51,13 +58,16 @@ class PostingRemoteDataSource extends CuteShrewRemoteDataSource {
     PostingCreateDTO posting,
   ) async {
     try {
-      await post(HttpConstants.uploadPosting(communityName),
+      final response = await post(HttpConstants.uploadPosting(communityName),
           headers: {
             "Content-Type": "application/json",
             "Authorization": "${token.tokenType} ${token.accessToken}"
           },
           encoding: Encoding.getByName('utf-8'),
           body: jsonEncode(posting.toJson()));
+      if (response.statusCode != 201) {
+        throw Exception();
+      }
     } catch (e) {
       rethrow;
     }
@@ -70,13 +80,17 @@ class PostingRemoteDataSource extends CuteShrewRemoteDataSource {
     PostingCreateDTO posting,
   ) async {
     try {
-      await put(HttpConstants.updatePosting(communityName, postId),
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "${token.tokenType} ${token.accessToken}"
-          },
-          encoding: Encoding.getByName('utf-8'),
-          body: jsonEncode(posting.toJson()));
+      final response =
+          await put(HttpConstants.updatePosting(communityName, postId),
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": "${token.tokenType} ${token.accessToken}"
+              },
+              encoding: Encoding.getByName('utf-8'),
+              body: jsonEncode(posting.toJson()));
+      if (response.statusCode != 202) {
+        throw Exception();
+      }
     } catch (e) {
       rethrow;
     }
@@ -88,13 +102,16 @@ class PostingRemoteDataSource extends CuteShrewRemoteDataSource {
     LoginTokenDTO token,
   ) async {
     try {
-      await delete(
+      final response = await delete(
         HttpConstants.deletePosting(communityName, postId),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "${token.tokenType} ${token.accessToken}"
         },
       );
+      if (response.statusCode != 204) {
+        throw Exception();
+      }
     } catch (e) {
       rethrow;
     }
@@ -110,7 +127,9 @@ class PostingRemoteDataSource extends CuteShrewRemoteDataSource {
     try {
       final response = await get(HttpConstants.searchPostings(
           null, userName, startPostId, loadPageNum));
-
+      if (response.statusCode != 200) {
+        throw Exception();
+      }
       // FIXME 서버 바꿀 때 까지 임시로
       final decodedData = json.decode(utf8.decode(response.bodyBytes));
       return [for (final e in decodedData) PostingDTO.fromJson(e)];
