@@ -8,8 +8,9 @@ import 'package:cuteshrew/presentation/data/posting_data.dart';
 import 'package:cuteshrew/presentation/screens/community/providers/community_page_provider.dart';
 import 'package:cuteshrew/presentation/screens/community/providers/community_page_state.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
+import 'package:cuteshrew/presentation/screens/home/widgets/community_card.dart';
+import 'package:cuteshrew/presentation/screens/home/widgets/horizontal_posting_item.dart';
 import 'package:cuteshrew/presentation/widgets/common_widgets/list_button.dart';
-import 'package:cuteshrew/presentation/widgets/common_widgets/posting_preview_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -49,6 +50,7 @@ class CommunityScreen extends StatelessWidget {
         update: (context, value, previous) => value.value,
         child: Consumer<CommunityPageState>(builder: (context, value, child) {
           return Scaffold(
+            backgroundColor: Colors.transparent,
             body: () {
               if (value is LoadedDataCommunityPageState) {
                 return LoadedDataCommunityScreen(
@@ -125,57 +127,56 @@ class _LoadedDataCommunityScreenState extends State<LoadedDataCommunityScreen> {
       maxSelectablePage = _maxPage;
     }
     _pageButtonProperties = List<ListButtonProperties>.generate(
-        maxSelectablePage - minSelectablePage + 1,
-        (index) => ListButtonProperties(
-            id: minSelectablePage + index,
-            color: Colors.blue,
-            onPressed: () {
-              context
-                  .read<CommunityPageProvider>()
-                  .getCommunityInfo(_pageButtonProperties[index].id);
-            }));
+      maxSelectablePage - minSelectablePage + 1,
+      (index) => ListButtonProperties(
+        id: minSelectablePage + index,
+        color: Colors.blue,
+        onPressed: () {
+          context
+              .read<CommunityPageProvider>()
+              .getCommunityInfo(_pageButtonProperties[index].id);
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthenticationState>(builder: (context, state, child) {
       return Scaffold(
-        backgroundColor: Colors.white,
-        body: ListView(
-          children: [
-            const SizedBox(
-              height: 30.0,
+        backgroundColor: Colors.transparent,
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24),
+            child: CommunityCard(
+              communityShowName: widget.communityShowName,
+              postingPanel: widget.postings
+                  .map<Widget>(
+                (posting) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: HorizontalPostingItem(
+                    title: posting.title,
+                    writerName: "nickname",
+                    publishedAt: posting.publishedAt,
+                    commentCount: posting.commentCount.toString(),
+                    onPostingPressed: () {
+                      context.read<CommunityPageProvider>().navigateToPosting(
+                          widget.communityName, posting.postId);
+                    },
+                  ),
+                ),
+              )
+                  .followedBy(
+                [
+                  ListButton(
+                    itemCount: _pageButtonProperties.length,
+                    propertyList: _pageButtonProperties,
+                    selectedIndex: _pageButtonProperties[0].id,
+                  ),
+                ],
+              ).toList(),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: Text(
-                      style: const TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontSize: 30,
-                          fontWeight: FontWeight.w800,
-                          height: 0.9),
-                      widget.communityShowName),
-                ),
-                PostingPreviewPanel(
-                  communityName: widget.communityName,
-                  posts: widget.postings,
-                  onItemPressed: (communityName, postId) {
-                    context
-                        .read<CommunityPageProvider>()
-                        .navigateToPosting(communityName, postId);
-                  },
-                ),
-                ListButton(
-                  itemCount: _pageButtonProperties.length,
-                  propertyList: _pageButtonProperties,
-                  selectedIndex: _pageButtonProperties[0].id,
-                ),
-              ],
-            )
-          ],
+          ),
         ),
         floatingActionButton: state is AuthorizedState
             ? FloatingActionButton(

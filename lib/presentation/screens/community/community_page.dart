@@ -20,6 +20,7 @@ class CommunityPage extends StatelessWidget {
     return Scaffold(
         key: scaffoldKey,
         // extendBodyBehindAppBar: true,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         appBar: mainAppBar(context, scaffoldKey),
         drawer: const Drawer(),
         body: ResponsiveWidget(

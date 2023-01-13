@@ -1,4 +1,3 @@
-import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/presentation/screens/community/community_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -17,21 +16,20 @@ class LargeCommunityLayout extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Container(
-            color: lightGrey,
+            color: Colors.transparent,
           ),
         ),
         Expanded(
-            flex: 4,
-            child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: CommunityScreen(
-                  communityName: communityName,
-                  currentPageNum: currentPageNum,
-                ))),
+          flex: 4,
+          child: CommunityScreen(
+            communityName: communityName,
+            currentPageNum: currentPageNum,
+          ),
+        ),
         Expanded(
           flex: 1,
           child: Container(
-            color: lightGrey,
+            color: Colors.transparent,
           ),
         ),
       ],
