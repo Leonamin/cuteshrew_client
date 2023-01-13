@@ -1,4 +1,3 @@
-import 'package:cuteshrew/presentation/config/constants/color.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +20,7 @@ class CommunityCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
       child: Container(
-        color: communityPrimaryColor,
+        color: Theme.of(context).colorScheme.onPrimary,
         padding: const EdgeInsets.all(defaultPadding),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -30,10 +29,10 @@ class CommunityCard extends StatelessWidget {
             RichText(
               text: TextSpan(
                 text: communityShowName ?? "",
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.w800),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.w800,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                 recognizer: TapGestureRecognizer()..onTap = onTitlePressed,
               ),
             ),
@@ -45,7 +44,7 @@ class CommunityCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(borderRadius),
               child: Container(
                 height: 40,
-                color: communitySecondaryColor,
+                color: Theme.of(context).colorScheme.primary,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -55,7 +54,12 @@ class CommunityCard extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
                           '제목',
-                          style: Theme.of(context).textTheme.labelLarge,
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
                         ),
                       ),
                     ),
@@ -66,11 +70,23 @@ class CommunityCard extends StatelessWidget {
                         children: [
                           Text(
                             '댓글',
-                            style: Theme.of(context).textTheme.labelLarge,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
                           ),
                           Text(
                             '조회수',
-                            style: Theme.of(context).textTheme.labelLarge,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge!
+                                .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                ),
                           ),
                         ],
                       ),

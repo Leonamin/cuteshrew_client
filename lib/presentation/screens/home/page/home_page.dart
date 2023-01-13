@@ -1,4 +1,3 @@
-import 'package:cuteshrew/presentation/config/constants/color.dart';
 import 'package:cuteshrew/presentation/helpers/responsiveness.dart';
 import 'package:cuteshrew/presentation/screens/home/page/large_home_layout.dart';
 import 'package:cuteshrew/presentation/screens/home/page/small_home_layout.dart';
@@ -14,7 +13,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
         key: scaffoldKey,
         appBar: mainAppBar(context, scaffoldKey),
-        backgroundColor: communitySecondaryColor,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         extendBodyBehindAppBar: true,
         drawer: const Drawer(),
         body: const ResponsiveWidget(

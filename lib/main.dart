@@ -47,6 +47,9 @@ void main() async {
   ));
 }
 
+// const seedColor = Color(0xFFFFFF00);
+const seedColor = Color(0xFFBCC0C0);
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -55,9 +58,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Cute Shrew',
       theme: ThemeData(
-        primarySwatch: Colors.green,
-        textTheme: GoogleFonts.mulishTextTheme(Theme.of(context).textTheme)
-            .apply(bodyColor: Colors.black),
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: seedColor,
+          brightness: Brightness.light,
+          // onPrimary: communityPrimaryColor,
+          // primary: communitySecondaryTextColor,
+        ),
+        textTheme:
+            GoogleFonts.notoSansNKoTextTheme(Theme.of(context).textTheme),
         pageTransitionsTheme: PageTransitionsTheme(
           builders: kIsWeb
               ? {

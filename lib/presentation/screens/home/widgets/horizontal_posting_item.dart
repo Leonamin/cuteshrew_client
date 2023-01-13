@@ -1,4 +1,3 @@
-import 'package:cuteshrew/presentation/config/constants/color.dart';
 import 'package:cuteshrew/presentation/helpers/responsiveness.dart';
 import 'package:cuteshrew/presentation/utils/utils.dart';
 import 'package:flutter/gestures.dart';
@@ -34,8 +33,8 @@ class HorizontalPostingItem extends StatelessWidget {
                 onTap: onUserPressed,
                 child: CircleAvatar(
                   child: Icon(Icons.person),
-                  backgroundColor: Colors.white,
-                  foregroundColor: communitySecondaryColor,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 ),
               ),
               const SizedBox(
@@ -49,17 +48,19 @@ class HorizontalPostingItem extends StatelessWidget {
                       TextSpan(
                         text: "${title ?? "제목 없음"}\n",
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            overflow: TextOverflow.ellipsis),
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.primary,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = onPostingPressed,
                       ),
                       TextSpan(
                         text: "${writerName ?? "Dantto"}    ",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall!
-                            .copyWith(fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = onUserPressed,
                       ),
@@ -67,10 +68,8 @@ class HorizontalPostingItem extends StatelessWidget {
                         const TextSpan(text: "\n"),
                       TextSpan(
                         text: "${Utils.formatTimeStamp(publishedAt ?? 0)}    ",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall!
-                            .copyWith(color: communitySecondaryTextColor),
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                            color: Theme.of(context).colorScheme.secondary),
                       ),
                     ],
                   ),
@@ -131,14 +130,13 @@ class HorizontalPostingItem extends StatelessWidget {
                     commentCount ?? "0",
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                   ),
                   Text(
                     "댓글",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall!
-                        .copyWith(color: communitySecondaryTextColor),
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        color: Theme.of(context).colorScheme.secondary),
                   ),
                 ],
               ),
@@ -151,14 +149,13 @@ class HorizontalPostingItem extends StatelessWidget {
                     "0",
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                   ),
                   Text(
                     "조회수",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall!
-                        .copyWith(color: communitySecondaryTextColor),
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        color: Theme.of(context).colorScheme.secondary),
                   ),
                 ],
               ),
