@@ -51,7 +51,7 @@ class HorizontalPostingItem extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             overflow: TextOverflow.ellipsis),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => onPostingPressed,
+                          ..onTap = onPostingPressed,
                       ),
                       TextSpan(
                         text: "${writerName ?? "Dantto"}    ",
@@ -60,7 +60,7 @@ class HorizontalPostingItem extends StatelessWidget {
                             .titleSmall!
                             .copyWith(fontWeight: FontWeight.bold),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => onUserPressed,
+                          ..onTap = onUserPressed,
                       ),
                       TextSpan(
                         text: "${Utils.formatTimeStamp(publishedAt ?? 0)}    ",

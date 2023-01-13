@@ -1,4 +1,5 @@
 import 'package:cuteshrew/presentation/config/constants/color.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class CommunityCard extends StatelessWidget {
@@ -26,12 +27,15 @@ class CommunityCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              communityShowName ?? "",
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge!
-                  .copyWith(fontWeight: FontWeight.w800),
+            RichText(
+              text: TextSpan(
+                text: communityShowName ?? "",
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(fontWeight: FontWeight.w800),
+                recognizer: TapGestureRecognizer()..onTap = onTitlePressed,
+              ),
             ),
             const SizedBox(
               height: defaultPadding,
