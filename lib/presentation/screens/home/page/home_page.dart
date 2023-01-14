@@ -14,7 +14,6 @@ class HomePage extends StatelessWidget {
         key: scaffoldKey,
         appBar: mainAppBar(context, scaffoldKey),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        extendBodyBehindAppBar: true,
         drawer: const Drawer(),
         body: const ResponsiveWidget(
           largeScreen: LargeHomeLayout(),
