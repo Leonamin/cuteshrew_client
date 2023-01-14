@@ -1,6 +1,6 @@
 import 'package:cuteshrew/core/domain/entity/community_entity.dart';
 import 'package:cuteshrew/core/domain/entity/posting_entity.dart';
-import 'package:cuteshrew/presentation/data/posting_data.dart';
+import 'package:cuteshrew/presentation/data/posting_preview_data.dart';
 import 'package:cuteshrew/presentation/mappers/posting_preview_data_mapper.dart';
 import 'package:cuteshrew/presentation/utils/utils.dart';
 import 'package:equatable/equatable.dart';
@@ -119,8 +119,9 @@ class LoadedDataCommunityPageState extends CommunityPageState {
   // 엔티티(도메인) -> 유즈케이스 -> 상태 관리 -> 위젯 모델 <- 위젯 이렇게 바꾸면 위젯은 충격이 덜하겠지
   // 그래서 PostingEntity를 주는게 아니라 PostingWidgetModel 등을 주고 여기서 바꾸는게 낫다.
   // DONE 그래서 Entity -> Data Model로 바꿧다..
-  List<PostingData> get currentPagePostings => List<PostingData>.from(
-      _postingEntityList.map((e) => _postingPreviewDataMapper.map(e)));
+  List<PostingPreviewData> get currentPagePostings =>
+      List<PostingPreviewData>.from(
+          _postingEntityList.map((e) => _postingPreviewDataMapper.map(e)));
 
   // 안쓸거 같은걸 만들지 말랬지만 만든다.
   // 위의 currentPagePostingCount랑 결합해서 사용하면 될듯

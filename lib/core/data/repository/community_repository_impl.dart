@@ -19,7 +19,7 @@ class CommunityRepositoryImpl extends CommunityRepository {
       {required String communityName}) async {
     try {
       CommunityDTO communityDTO =
-          await _communityRemoteDataSource.getCommunityPage(communityName);
+          await _communityRemoteDataSource.getCommunityInfo(communityName);
       CommunityMapper mapper = CommunityMapper();
       CommunityEntity result = mapper.map(communityDTO);
 

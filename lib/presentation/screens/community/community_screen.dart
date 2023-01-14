@@ -4,7 +4,7 @@ import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.
 import 'package:cuteshrew/core/data/repository/community_repository_impl.dart';
 import 'package:cuteshrew/core/data/repository/posting_repository_impl.dart';
 import 'package:cuteshrew/core/domain/usecase/show_community_page_usecase.dart';
-import 'package:cuteshrew/presentation/data/posting_data.dart';
+import 'package:cuteshrew/presentation/data/posting_preview_data.dart';
 import 'package:cuteshrew/presentation/screens/community/providers/community_page_provider.dart';
 import 'package:cuteshrew/presentation/screens/community/providers/community_page_state.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
@@ -78,7 +78,7 @@ class LoadedDataCommunityScreen extends StatefulWidget {
   final String communityName; // 현재 커뮤니티 정보
   final String communityShowName;
   final int postingCount;
-  final List<PostingData> postings;
+  final List<PostingPreviewData> postings;
 
   final int currentPageNum; // 현재 페이지 번호
   final int countPerPage; // 한 페이지에 표시할 게시물 수
@@ -150,7 +150,7 @@ class _LoadedDataCommunityScreenState extends State<LoadedDataCommunityScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: HorizontalPostingItem(
                       title: posting.title,
-                      writerName: "nickname",
+                      writerName: posting.writer?.name ?? "nickname",
                       publishedAt: posting.publishedAt,
                       commentCount: posting.commentCount.toString(),
                       onPostingPressed: () {

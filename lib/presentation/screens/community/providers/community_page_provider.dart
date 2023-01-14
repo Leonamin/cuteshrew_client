@@ -44,19 +44,18 @@ class CommunityPageProvider extends ValueNotifier<CommunityPageState> {
       }, (data) async {
         final postingResult = await _communityPageUseCase.loadPage(
             communityName, currentPageNum, countPerPage);
-
         postingResult.fold((Failure failure) {
           value = CommunityPageState.notLoaded(
               communityName: communityName,
               currentPageNum: currentPageNum,
               countPerPage: countPerPage);
-        }, (adata) {
+        }, (postingData) {
           value = CommunityPageState.loadedData(
             communityName: communityName,
             currentPageNum: currentPageNum,
             countPerPage: countPerPage,
             communityEntity: data,
-            postingEntityList: (data is CommunityPreviewEntity) ? adata : [],
+            postingEntityList: postingData,
           );
         });
       });
