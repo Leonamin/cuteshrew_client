@@ -20,7 +20,7 @@ class ShowMainPageUseCase {
 
   // 메인 페이지의 커뮤니티들을 가져온다
   Future<Either<Failure, List<CommunityEntity>>> call(int loadCount) {
-    return communityRepository.getMainCommunityList();
+    return communityRepository.getCommunityList(loadCount: loadCount);
   }
 
   // 커뮤니티의 미리보기 포스팅들을 가져온다.
