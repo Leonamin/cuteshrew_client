@@ -88,10 +88,10 @@ class HttpConstants {
           });
 
   // Community URLs
-  static getCommunity(String communityName) => Uri(
+  static getCommunityInfo(String communityName) => Uri(
           host: cuteshrewBaseUrl,
           scheme: cuteshrewScheme,
-          path: "$endpointApi$endpointCommunity",
+          path: "$endpointApi$endpointCommunity$pathInfo",
           queryParameters: {
             queryCommunityName: communityName,
           });
@@ -113,6 +113,19 @@ class HttpConstants {
         queryParameters: {
           queryCommunityName: communityName,
           if (password != null) queryNamePassword: password,
+        },
+      );
+
+  static getPostingPreviewPage(String communityName,
+          [int? pageNum, int? loadCount]) =>
+      Uri(
+        host: cuteshrewBaseUrl,
+        scheme: cuteshrewScheme,
+        path: "$endpointApi$endpointPosting$pathPreviews",
+        queryParameters: {
+          queryCommunityName: communityName,
+          if (pageNum != null) queryPageNum: pageNum.toString(),
+          if (loadCount != null) queryLoadCount: loadCount.toString(),
         },
       );
 
