@@ -26,7 +26,6 @@ class PostingRemoteDataSource extends CuteShrewRemoteDataSource {
     }
   }
 
-  // FIXME 서버 바꿀 떄 반드시 바꾸길 바란다.
   Future<List<PostingDTO>> getPostings(
     String communityName,
     int pageNum,
@@ -34,19 +33,14 @@ class PostingRemoteDataSource extends CuteShrewRemoteDataSource {
   ) async {
     try {
       final response = await get(
-          HttpConstants.getCommunityPage(communityName, pageNum, postingCount));
+        HttpConstants.getPostingPreviewPage(
+            communityName, pageNum, postingCount),
+      );
       if (response.statusCode != 200) {
         throw Exception();
       }
-      // FIXME 서버 바꿀 때 까지 임시로
       final decodedData = json.decode(utf8.decode(response.bodyBytes));
-      if (decodedData['posting_list'] == null) {
-        return [for (final e in decodedData) PostingDTO.fromJson(e)];
-      } else {
-        return [
-          for (final e in decodedData['posting_list']) PostingDTO.fromJson(e)
-        ];
-      }
+      return [for (final e in decodedData) PostingDTO.fromJson(e)];
     } catch (e) {
       rethrow;
     }
