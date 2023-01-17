@@ -21,64 +21,27 @@ class MainNavTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthenticationState>(builder: (context, state, child) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Flexible(
-            child: GestureDetector(
-              onTap: () {
-                locator<NavigationService>().navigateTo(Routes.HomePageRoute);
-              },
-              child: Text(
-                "귀여운 땃쥐",
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-              ),
-            ),
-          ),
-          Row(
-            children: [
-              /*
-              IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.shuffle_rounded,
-                    color: Theme.of(context).colorScheme.primary,
-                  )),
-              Stack(
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.notifications),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(
+          child: GestureDetector(
+            onTap: () {
+              locator<NavigationService>().navigateTo(Routes.HomePageRoute);
+            },
+            child: Text(
+              "귀여운 땃쥐",
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary,
                   ),
-                  Positioned(
-                      top: 7,
-                      right: 7,
-                      child: Container(
-                        width: 12,
-                        height: 12,
-                        padding: EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            color: active,
-                            borderRadius: BorderRadius.circular(30),
-                            border: Border.all(color: light, width: 2)),
-                      ))
-                ],
-              ),
-              Container(
-                width: 1,
-                height: 22,
-                color: lightGrey,
-              ),
-              const SizedBox(
-                width: 24,
-              ),
-              */
-              InkWell(
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            Consumer<AuthenticationState>(
+              builder: (context, state, child) => InkWell(
                 onTap: () {
                   state is UnauthorizedState
                       ? locator<NavigationService>()
@@ -92,33 +55,37 @@ class MainNavTitle extends StatelessWidget {
                   color: Theme.of(context).colorScheme.tertiary,
                 ),
               ),
-              const SizedBox(
-                width: 16,
+            ),
+            const SizedBox(
+              width: 16,
+            ),
+            // TODO 유저 정보를 받게되면 프로필 그때 바꾸자
+            // 로그인 토큰 -> 토큰 업데이트 -> 유저 미리보기 정보 가져오기
+            // 근데 이게 맞나>?
+            // Authorized에 UserPreview를 포함하거나
+            // UserPreview를 가지는 단독 프로바이더를 또 만들어야할텐데
+            // AuthorizedProvider에서 UserInfoProvider로 접근할 방법이 안떠오르고
+
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
               ),
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30)),
-                child: Container(
-                    padding: const EdgeInsets.all(2),
-                    margin: const EdgeInsets.all(2),
-                    child: CircleAvatar(
-                      backgroundColor: light,
-                      child: state is AuthorizedState
-                          ? const Icon(
-                              Icons.person_outline,
-                              color: dark,
-                            )
-                          : const Icon(
-                              Icons.person_outline,
-                              color: light,
-                            ),
-                    )),
-              )
-            ],
-          ),
-        ],
-      );
-    });
+              child: Container(
+                padding: const EdgeInsets.all(2),
+                margin: const EdgeInsets.all(2),
+                child: const CircleAvatar(
+                  backgroundColor: light,
+                  child: Icon(
+                    Icons.person_outline,
+                    color: light,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
