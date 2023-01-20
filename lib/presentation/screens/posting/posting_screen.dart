@@ -1,5 +1,3 @@
-import 'package:cuteshrew/presentation/screens/posting/widgets/custom_html_widget.dart';
-
 import 'package:cuteshrew/constants/style.dart';
 import 'package:cuteshrew/core/data/datasource/remote/comment_remote_datasource.dart';
 import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.dart';
@@ -7,7 +5,6 @@ import 'package:cuteshrew/core/data/repository/comment_repository_impl.dart';
 import 'package:cuteshrew/core/data/repository/posting_repository_impl.dart';
 import 'package:cuteshrew/core/domain/entity/login_token_entity.dart';
 import 'package:cuteshrew/core/domain/usecase/show_posting_page_usecase.dart';
-import 'package:cuteshrew/presentation/screens/posting/widgets/custom_widget_factory.dart';
 import 'package:cuteshrew/presentation/screens/posting_editor/posting_editor_page.dart';
 import 'package:cuteshrew/presentation/screens/posting/posting_screen/password_certification_posting_page_screen.dart';
 import 'package:cuteshrew/presentation/screens/posting/providers/posting_page_provider.dart';
@@ -294,14 +291,15 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
           const Divider(
             height: 8,
           ),
-          // SelectableHtml 쓰면 이미지가 출력이 안된다.
 
-          CustomHtmlWidget(
-            postingPageState.content,
-            onTapUrl: (url) {
-              launchUrl(Uri.parse(url));
-              return true;
-            },
+          SelectionArea(
+            child: HtmlWidget(
+              postingPageState.content,
+              onTapUrl: (url) {
+                launchUrl(Uri.parse(url));
+                return true;
+              },
+            ),
           ),
 
           // Html(data: postingPageState.content),
@@ -342,21 +340,4 @@ class LoadedDataPostingPageScreen extends StatelessWidget {
       },
     );
   }
-
-  // Widget? _htmlCustomBuilder(DomHtml.Element element) {
-  //   print(element);
-  //   if (element.attributes['src'] != null) {
-  //     final src = element.attributes['src'] ?? "";
-  //     print(src);
-  //     final srcList = src.split(',');
-  //     final type = srcList.first;
-  //     final data = srcList.last;
-  //     if (type.contains('data:image')) {
-  //       if (type.contains('base64')) {
-  //         return Image.memory(base64Decode(data));
-  //       }
-  //     }
-  //   }
-  //   return SelectableText(element.text);
-  // }
 }

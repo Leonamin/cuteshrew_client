@@ -221,9 +221,11 @@ class CommentCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(
-                comment,
-                style: const TextStyle(color: Colors.black),
+              child: SelectionArea(
+                child: Text(
+                  comment,
+                  style: const TextStyle(color: Colors.black),
+                ),
               ),
             ),
             const SizedBox(
