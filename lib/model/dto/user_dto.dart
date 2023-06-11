@@ -1,8 +1,8 @@
 import 'package:cuteshrew/model/dto/login_dto.dart';
 import 'package:equatable/equatable.dart';
 
-part 'user/user_summary.dart';
-part 'user/user_detail.dart';
+part 'user/user_summary_info.dart';
+part 'user/user_detail_info.dart';
 part 'user/user_create_form.dart';
 part 'user/signed_user_info.dart';
 
