@@ -1,14 +1,30 @@
 import 'dart:convert';
 
+import 'package:cuteshrew/data/remote/comment/comment_req.dart';
+import 'package:cuteshrew/data/remote/comment/comment_res.dart';
 import 'package:cuteshrew/data/remote/community/community_res.dart';
 import 'package:cuteshrew/data/remote/dio_factory.dart';
 import 'package:cuteshrew/data/remote/posting/posting_req.dart';
 import 'package:cuteshrew/data/remote/posting/posting_res.dart';
+import 'package:cuteshrew/data/remote/user/user_req.dart';
+import 'package:cuteshrew/data/remote/user/user_res.dart';
 import 'package:cuteshrew/model/dto/login_dto.dart';
 import 'package:dio/dio.dart';
 
 class ApiCuteShrew {
   final Dio _dio = DioFactory.getDioClientForCuteShrew();
+
+  // Auth
+  Future<void> requestLogin(String nickname, String password) async {
+    Map data = {'username': nickname, 'password': password};
+    String encodedBody = data.keys.map((key) => "$key=${data[key]}").join("&");
+
+    await _dio.post(
+      '/auth/signin',
+      options: Options(contentType: 'application/x-www-form-urlencoded'),
+      data: encodedBody,
+    );
+  }
 
   // Community
   Future<CommunityRes> getCommunityPage(String communityName,
@@ -115,6 +131,120 @@ class ApiCuteShrew {
         },
       ),
     );
+  }
+
+  Future<List<PostingRes>> searchPostings([
+    String? userName,
+    int? startPostId,
+    int? loadPageNum,
+  ]) async {
+    Map<String, dynamic> queryParameters = {};
+    _setQueryParam(queryParameters, 'user_name', userName);
+    _setQueryParam(queryParameters, 'skip_until_id', startPostId);
+    _setQueryParam(queryParameters, 'load_count', loadPageNum);
+
+    final response =
+        await _dio.get('/search/posting', queryParameters: queryParameters);
+    return [for (final e in jsonDecode(response.data)) PostingRes.fromJson(e)];
+  }
+
+  // Comment
+
+  Future<List<CommentRes>> getCommentList(
+    String communityName,
+    int postId,
+    int pageNum,
+    int commentCount,
+  ) async {
+    Map<String, dynamic> queryParameters = {};
+    _setQueryParam(queryParameters, 'load_count', commentCount);
+
+    final response = await _dio.get(
+      '/comment/page/$postId/comment/$pageNum',
+      queryParameters: queryParameters,
+    );
+    return [for (final e in jsonDecode(response.data)) CommentRes.fromJson(e)];
+  }
+
+  Future<void> uploadComment(
+    int postId,
+    LoginToken token,
+    CommentReq comment,
+  ) async {
+    await _dio.post(
+      '/comment/create/$postId',
+      options: Options(
+        contentType: 'application/json',
+        headers: {
+          'Authorization': '${token.tokenType} ${token.accessToken}',
+        },
+      ),
+      data: comment.toJson(),
+    );
+  }
+
+  Future<void> updateComment(
+    int commentId,
+    LoginToken token,
+    CommentReq comment,
+  ) async {
+    await _dio.post(
+      '/comment/$commentId',
+      options: Options(
+        contentType: 'application/json',
+        headers: {
+          'Authorization': '${token.tokenType} ${token.accessToken}',
+        },
+      ),
+      data: comment.toJson(),
+    );
+  }
+
+  Future<void> deleteComment(
+    int commentId,
+    LoginToken token,
+  ) async {
+    await _dio.delete(
+      '/comment/$commentId',
+      options: Options(
+        contentType: 'application/json',
+        headers: {
+          'Authorization': '${token.tokenType} ${token.accessToken}',
+        },
+      ),
+    );
+  }
+
+  Future<List<CommentRes>> searchComments([
+    String? userName,
+    int? startPostId,
+    int? loadPageNum,
+  ]) async {
+    Map<String, dynamic> queryParameters = {};
+    _setQueryParam(queryParameters, 'user_name', userName);
+    _setQueryParam(queryParameters, 'skip_until_id', startPostId);
+    _setQueryParam(queryParameters, 'load_count', loadPageNum);
+
+    final response =
+        await _dio.get('/search/comment', queryParameters: queryParameters);
+    return [for (final e in jsonDecode(response.data)) CommentRes.fromJson(e)];
+  }
+
+  // User
+  Future<void> requestSignUp(UserReq user) async {
+    await _dio.post(
+      '/user/general',
+      options: Options(contentType: 'application/json'),
+      data: user.toJson(),
+    );
+  }
+
+  Future<UserRes> getUserDetail(String userName) async {
+    Map<String, dynamic> queryParameters = {};
+    _setQueryParam(queryParameters, 'user_name', userName);
+    final response =
+        await _dio.get('/user/search', queryParameters: queryParameters);
+    return UserRes.fromJson(response.data);
   }
 
   // ETC
