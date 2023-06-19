@@ -1,4 +1,4 @@
-import 'package:cuteshrew/constants/style.dart';
+import 'package:cuteshrew/config/constants/style.dart';
 import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_provider.dart';
 import 'package:cuteshrew/presentation/screens/comment/providers/comment_page_state.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';

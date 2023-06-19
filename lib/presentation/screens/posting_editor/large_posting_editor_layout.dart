@@ -1,4 +1,4 @@
-import 'package:cuteshrew/constants/style.dart';
+import 'package:cuteshrew/config/constants/style.dart';
 import 'package:cuteshrew/presentation/data/posting_detail_data.dart';
 import 'package:cuteshrew/presentation/screens/posting_editor/posting_editor_screen.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-import 'package:cuteshrew/constants/style.dart';
+import 'package:cuteshrew/config/constants/style.dart';
 import 'package:flutter/material.dart';
 
 class LargeMainScreen extends StatelessWidget {

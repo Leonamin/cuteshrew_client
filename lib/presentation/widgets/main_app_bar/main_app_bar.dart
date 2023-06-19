@@ -1,7 +1,7 @@
 import 'package:cuteshrew/di/navigation_service.dart';
 import 'package:cuteshrew/di/service_locator.dart';
 import 'package:cuteshrew/presentation/config/route/routes.dart';
-import 'package:cuteshrew/constants/style.dart';
+import 'package:cuteshrew/config/constants/style.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_provider.dart';
 import 'package:cuteshrew/presentation/providers/authentication/authentication_state.dart';
 import 'package:cuteshrew/presentation/strings/strings.dart';

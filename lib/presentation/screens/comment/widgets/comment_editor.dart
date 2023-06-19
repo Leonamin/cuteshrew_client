@@ -1,5 +1,5 @@
-import 'package:cuteshrew/constants/style.dart';
-import 'package:cuteshrew/constants/values.dart';
+import 'package:cuteshrew/config/constants/style.dart';
+import 'package:cuteshrew/config/constants/values.dart';
 import 'package:cuteshrew/core/data/datasource/remote/comment_remote_datasource.dart';
 import 'package:cuteshrew/core/data/repository/comment_repository_impl.dart';
 import 'package:cuteshrew/core/domain/usecase/create_comment_usecase.dart';

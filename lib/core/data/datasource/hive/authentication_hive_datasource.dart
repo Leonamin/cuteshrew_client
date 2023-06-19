@@ -1,4 +1,4 @@
-import 'package:cuteshrew/constants/values.dart';
+import 'package:cuteshrew/config/constants/values.dart';
 import 'package:cuteshrew/core/data/dto/hive/login_token_hive_dto.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
