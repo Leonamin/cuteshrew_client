@@ -1,7 +1,6 @@
 import 'package:cuteshrew/common/build_config.dart';
 import 'package:cuteshrew/config/constants/values.dart';
 import 'package:cuteshrew/core/data/dto/hive/login_token_hive_dto.dart';
-import 'package:cuteshrew/data/remote/api_cuteshrew.dart';
 import 'package:cuteshrew/presentation/config/route/web_advanced_router.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,9 +15,7 @@ void main() async {
   Hive.registerAdapter<LoginTokenHiveDTO>(LoginTokenHiveDTOAdapter());
   await Hive.openBox(hiveAuthBox);
   runApp(MultiProvider(
-    providers: [
-      Provider(create: (context) => ApiCuteShrew(), lazy: false),
-    ],
+    providers: [],
     child: const MyApp(),
   ));
 }

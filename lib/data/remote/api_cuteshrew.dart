@@ -12,6 +12,13 @@ import 'package:cuteshrew/model/dto/login_dto.dart';
 import 'package:dio/dio.dart';
 
 class ApiCuteShrew {
+  ApiCuteShrew._();
+  static final ApiCuteShrew _instance = ApiCuteShrew._();
+
+  factory ApiCuteShrew() {
+    return _instance;
+  }
+
   final Dio _dio = DioFactory.getDioClientForCuteShrew();
 
   // Auth
