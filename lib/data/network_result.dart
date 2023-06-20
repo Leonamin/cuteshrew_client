@@ -1,3 +1,6 @@
+import 'package:cuteshrew/data/shrew_exception.dart';
+import 'package:dio/dio.dart';
+
 class NetworkResult<T> {
   NetworkResult._();
 
@@ -7,7 +10,7 @@ class NetworkResult<T> {
 
   Future<void> onAction({
     Function(T value)? onSuccess,
-    Function(Exception e)? onFailure,
+    Function(ShrewException e)? onFailure,
   }) async {
     if (isSuccess()) {
       await onSuccess?.call((this as Success).value);
@@ -21,7 +24,7 @@ class NetworkResult<T> {
     return this;
   }
 
-  NetworkResult<T> onFailure(Function(Exception e) action) {
+  NetworkResult<T> onFailure(Function(ShrewException e) action) {
     if (isFailure()) action((this as Failure).error);
     return this;
   }
@@ -49,7 +52,7 @@ class NetworkResult<T> {
 
   factory NetworkResult.success(T value) = Success;
 
-  factory NetworkResult.failure(Exception e) = Failure;
+  factory NetworkResult.failure(ShrewException e) = Failure;
 }
 
 class Success<T> extends NetworkResult<T> {
@@ -59,7 +62,35 @@ class Success<T> extends NetworkResult<T> {
 }
 
 class Failure<T> extends NetworkResult<T> {
-  final Exception error;
+  final ShrewException error;
 
   Failure(this.error) : super._();
+}
+
+Future<NetworkResult<T>> handleRequest<T>(
+    Future<T> Function() requestFunc) async {
+  try {
+    return NetworkResult.success(await requestFunc());
+  } catch (e, s) {
+    if (e is DioException) {
+      return NetworkResult.failure(
+        ShrewException(
+            type: ShrewExceptionType.api,
+            exception: CustomDioException(e: e),
+            stackTrace: e.stackTrace,
+            msg: 'API Error'),
+      );
+    } else if (e is ShrewException) {
+      return NetworkResult.failure(e);
+    } else {
+      return NetworkResult.failure(
+        ShrewException(
+          msg: 'Unknown Exception...',
+          type: ShrewExceptionType.unknown,
+          exception: e,
+          stackTrace: s,
+        ),
+      );
+    }
+  }
 }
