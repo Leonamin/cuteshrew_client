@@ -1,42 +1,48 @@
-import 'package:cuteshrew/core/domain/entity/signed_user_entity.dart';
+import 'package:cuteshrew/data/hive/auth/login_token_hive.dart';
+import 'package:cuteshrew/data/hive/hive_helper.dart';
 import 'package:cuteshrew/data/network_result.dart';
+import 'package:cuteshrew/data/remote/api_cuteshrew.dart';
+import 'package:cuteshrew/data/remote/auth/login_token_res.dart';
 import 'package:cuteshrew/model/dto/login_dto.dart';
+import 'package:cuteshrew/model/dto/user_dto.dart';
 
-abstract class AuthModel {
-  // 로그인 토큰 저장하기
-  Future<NetworkResult<LoginToken>> saveToken({
-    required int userId,
-    required LoginToken loginTokenEntity,
-  });
-
-  // 저장한 토큰 가져오기
-  Future<NetworkResult<LoginToken>> getToken({
-    required String nickname,
-  });
-
-  // 저장된 토큰들 가져오기
-  Future<NetworkResult<List<LoginToken>>> getTokenList();
-
-  // 저장된 토큰 지우기
-  Future<NetworkResult<void>> deleteToken({
-    required String nickname,
-  });
-
-  // 모든 토큰 지우기
-  Future<NetworkResult<void>> cleanTokens();
+class AuthModel {
+  final ApiCuteShrew _apiCuteShrew = ApiCuteShrew();
+  final HiveHelper _hiveHelper = HiveHelper();
 
   // 새로운 토큰 가져오기
   Future<NetworkResult<LoginToken>> requestLogin({
     required String nickname,
     required String password,
-  });
+  }) =>
+      handleRequest(() async {
+        final result = await _apiCuteShrew.requestLogin(nickname, password);
+        return result.toDto();
+      });
 
   // 로그인된 유저 정보 가져오기
-  Future<NetworkResult<SignedUserEntity>> getSignedUser();
+  Future<NetworkResult<SignedUserInfo>> getSignedUser() =>
+      handleRequest(() async {
+        LoginTokenHive result = await _hiveHelper.getToken();
+        return result.toSignedUser();
+      });
 
   // 로그인된 유저 정보 저장하기
-  Future<NetworkResult<SignedUserEntity>> setSignedUser(
-      {required SignedUserEntity signedUserEntity});
+  Future<NetworkResult<SignedUserInfo>> setSignedUser(
+          {required SignedUserInfo signedUserinfo}) =>
+      handleRequest(() async {
+        await _hiveHelper.setToken(
+          authTokenDTO: LoginTokenHive(
+              name: signedUserinfo.userInfo.name,
+              email: signedUserinfo.userInfo.email,
+              accessToken: signedUserinfo.loginToken.accessToken,
+              tokenType: signedUserinfo.loginToken.tokenType),
+        );
+        return signedUserinfo;
+      });
+
   // 로그아웃된 유저 정보 지우기
-  Future<NetworkResult<void>> deleteSignedUser();
+  Future<NetworkResult<void>> deleteSignedUser() => handleRequest(() {
+        return _hiveHelper.deleteToken();
+      });
 }
