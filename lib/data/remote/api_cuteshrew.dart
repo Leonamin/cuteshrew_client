@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cuteshrew/data/remote/auth/login_token_res.dart';
 import 'package:cuteshrew/data/remote/comment/comment_req.dart';
 import 'package:cuteshrew/data/remote/comment/comment_res.dart';
 import 'package:cuteshrew/data/remote/community/community_res.dart';
@@ -22,15 +23,17 @@ class ApiCuteShrew {
   final Dio _dio = DioFactory.getDioClientForCuteShrew();
 
   // Auth
-  Future<void> requestLogin(String nickname, String password) async {
+  Future<LoginTokenRes> requestLogin(String nickname, String password) async {
     Map data = {'username': nickname, 'password': password};
     String encodedBody = data.keys.map((key) => "$key=${data[key]}").join("&");
 
-    await _dio.post(
+    final result = await _dio.post(
       '/auth/signin',
       options: Options(contentType: 'application/x-www-form-urlencoded'),
       data: encodedBody,
     );
+
+    return LoginTokenRes.fromJson(result.data);
   }
 
   // Community
