@@ -2,16 +2,16 @@ part of '../user_dto.dart';
 
 class SignedUserInfo extends Equatable {
   final UserSummaryInfo userInfo;
-  final LoginToken loginTokenEntity;
+  final LoginToken loginToken;
 
   const SignedUserInfo({
     required this.userInfo,
-    required this.loginTokenEntity,
+    required this.loginToken,
   });
 
   @override
   List<Object?> get props => [
         userInfo,
-        loginTokenEntity,
+        loginToken,
       ];
 }

@@ -6,17 +6,17 @@ part of 'login_token_hive.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class LoginTokenHiveDTOAdapter extends TypeAdapter<LoginTokenHiveDTO> {
+class LoginTokenHiveDTOAdapter extends TypeAdapter<LoginTokenHive> {
   @override
   final int typeId = 0;
 
   @override
-  LoginTokenHiveDTO read(BinaryReader reader) {
+  LoginTokenHive read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return LoginTokenHiveDTO(
+    return LoginTokenHive(
       name: fields[0] as String,
       email: fields[1] as String,
       accessToken: fields[2] as String,
@@ -26,7 +26,7 @@ class LoginTokenHiveDTOAdapter extends TypeAdapter<LoginTokenHiveDTO> {
   }
 
   @override
-  void write(BinaryWriter writer, LoginTokenHiveDTO obj) {
+  void write(BinaryWriter writer, LoginTokenHive obj) {
     writer
       ..writeByte(5)
       ..writeByte(0)
