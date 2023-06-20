@@ -9,6 +9,7 @@ class PostingSummaryInfo extends _BasePosting {
     required int updatedAt,
     required int commentCount,
     required int hits,
+    required this.writer,
   }) : super(
           postId: postId,
           title: title,
@@ -18,4 +19,23 @@ class PostingSummaryInfo extends _BasePosting {
           commentCount: commentCount,
           hits: hits,
         );
+
+  final UserSummaryInfo writer;
+
+  factory PostingSummaryInfo.empty() => PostingSummaryInfo(
+        postId: -1,
+        title: '',
+        isLocked: false,
+        createdAt: -1,
+        updatedAt: -1,
+        commentCount: -1,
+        hits: -1,
+        writer: UserSummaryInfo.empty(),
+      );
+
+  @override
+  List<Object?> get props => [
+        ...super.props,
+        writer,
+      ];
 }

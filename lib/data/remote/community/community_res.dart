@@ -1,3 +1,4 @@
+import 'package:cuteshrew/model/dto/community_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'community_res.g.dart';
@@ -27,4 +28,12 @@ class CommunityRes {
       _$CommunityResFromJson(json);
 
   Map<String, dynamic> toJson() => _$CommunityResToJson(this);
+}
+
+extension CommunityResX on CommunityRes {
+  CommunityInfo toCommunityInfo() => CommunityInfo(
+        communityName: communityName ?? '',
+        communityShowName: communityShowName ?? '',
+        postingCount: postingsCount ?? 0,
+      );
 }

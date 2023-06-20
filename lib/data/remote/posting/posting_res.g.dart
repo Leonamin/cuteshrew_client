@@ -13,14 +13,13 @@ PostingRes _$PostingResFromJson(Map<String, dynamic> json) => PostingRes(
       isLocked: json['is_locked'] as bool?,
       publishedAt: json['published_at'] as int?,
       updatedAt: json['updated_at'] as int?,
-      writerInfo: json['creator'] == null
-          ? null
-          : UserRes.fromJson(json['creator'] as Map<String, dynamic>),
+      writerInfo: UserRes.fromJson(json['creator'] as Map<String, dynamic>),
       ownCommunity: json['own_community'] == null
           ? null
           : CommunityDTO.fromJson(
               json['own_community'] as Map<String, dynamic>),
       commnetCount: json['comment_count'] as int?,
+      hits: json['hits'] as int?,
     );
 
 Map<String, dynamic> _$PostingResToJson(PostingRes instance) =>
@@ -34,4 +33,5 @@ Map<String, dynamic> _$PostingResToJson(PostingRes instance) =>
       'creator': instance.writerInfo,
       'own_community': instance.ownCommunity,
       'comment_count': instance.commnetCount,
+      'hits': instance.hits,
     };

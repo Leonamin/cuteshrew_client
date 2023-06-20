@@ -15,9 +15,7 @@ CommentRes _$CommentResFromJson(Map<String, dynamic> json) => CommentRes(
       commentClass: json['comment_class'] as int?,
       order: json['order'] as int?,
       groupId: json['group_id'] as int?,
-      writerInfo: json['creator'] == null
-          ? null
-          : UserRes.fromJson(json['creator'] as Map<String, dynamic>),
+      writerInfo: UserRes.fromJson(json['creator'] as Map<String, dynamic>),
       posting: json['posting'] == null
           ? null
           : PostingRes.fromJson(json['posting'] as Map<String, dynamic>),

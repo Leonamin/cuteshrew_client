@@ -1,5 +1,7 @@
 import 'package:cuteshrew/data/remote/posting/posting_res.dart';
 import 'package:cuteshrew/data/remote/user/user_res.dart';
+import 'package:cuteshrew/model/dto/comment_dto.dart';
+import 'package:cuteshrew/model/dto/posting_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'comment_res.g.dart';
@@ -23,7 +25,7 @@ class CommentRes {
   @JsonKey(name: 'group_id')
   final int? groupId;
   @JsonKey(name: 'creator')
-  final UserRes? writerInfo;
+  final UserRes writerInfo;
   @JsonKey(name: 'posting')
   final PostingRes? posting;
 
@@ -36,7 +38,7 @@ class CommentRes {
     this.commentClass,
     this.order,
     this.groupId,
-    this.writerInfo,
+    required this.writerInfo,
     this.posting,
   });
 
@@ -44,4 +46,30 @@ class CommentRes {
       _$CommentResFromJson(json);
 
   Map<String, dynamic> toJson() => _$CommentResToJson(this);
+}
+
+extension CommentResX on CommentRes {
+  CommentSummaryInfo toSummaryInfo() => CommentSummaryInfo(
+        commentId: commentId,
+        writerId: writerId ?? -1,
+        commentClass: commentClass ?? -1,
+        createdAt: createdAt ?? -1,
+        groupId: groupId ?? -1,
+        order: order ?? -1,
+        postId: postId ?? -1,
+        writer: writerInfo.toSummaryInfo(),
+      );
+
+  CommentDetailInfo toDetailInfo() => CommentDetailInfo(
+        commentId: commentId,
+        comment: comment ?? '',
+        writerId: writerId ?? -1,
+        commentClass: commentClass ?? -1,
+        createdAt: createdAt ?? -1,
+        groupId: groupId ?? -1,
+        order: order ?? -1,
+        postId: postId ?? -1,
+        writer: writerInfo.toSummaryInfo(),
+        parentPosting: posting?.toSummaryInfo() ?? PostingSummaryInfo.empty(),
+      );
 }

@@ -1,8 +1,6 @@
 part of '../posting_dto.dart';
 
 class PostingDetailInfo extends _BasePosting {
-  final String body;
-
   const PostingDetailInfo({
     required int postId,
     required String title,
@@ -12,6 +10,7 @@ class PostingDetailInfo extends _BasePosting {
     required int commentCount,
     required int hits,
     required this.body,
+    required this.writer,
   }) : super(
           postId: postId,
           title: title,
@@ -22,9 +21,13 @@ class PostingDetailInfo extends _BasePosting {
           hits: hits,
         );
 
+  final String body;
+  final UserSummaryInfo writer;
+
   @override
   List<Object?> get props => [
         ...super.props,
         body,
+        writer,
       ];
 }

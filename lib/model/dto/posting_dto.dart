@@ -1,3 +1,4 @@
+import 'package:cuteshrew/model/dto/user_dto.dart';
 import 'package:equatable/equatable.dart';
 
 part 'posting/posting_detail_info.dart';

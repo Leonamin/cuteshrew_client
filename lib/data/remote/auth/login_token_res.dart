@@ -1,3 +1,4 @@
+import 'package:cuteshrew/model/dto/login_dto.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'login_token_res.g.dart';
@@ -21,4 +22,12 @@ class LoginTokenRes {
       _$LoginTokenResFromJson(json);
 
   Map<String, dynamic> toJson() => _$LoginTokenResToJson(this);
+}
+
+extension LoginTokenResX on LoginTokenRes {
+  LoginToken toDto() => LoginToken(
+        accessToken: accessToken,
+        tokenType: tokenType,
+        expires: expires ?? 0,
+      );
 }

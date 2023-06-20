@@ -13,6 +13,7 @@ UserRes _$UserResFromJson(Map<String, dynamic> json) => UserRes(
       introduction: json['introduction'] as String?,
       postingCount: json['posting_count'] as int?,
       commentCount: json['comment_count'] as int?,
+      profileImageUrl: json['profile_image_url'] as String?,
     );
 
 Map<String, dynamic> _$UserResToJson(UserRes instance) => <String, dynamic>{
@@ -22,4 +23,5 @@ Map<String, dynamic> _$UserResToJson(UserRes instance) => <String, dynamic>{
       'introduction': instance.introduction,
       'posting_count': instance.postingCount,
       'comment_count': instance.commentCount,
+      'profile_image_url': instance.profileImageUrl,
     };

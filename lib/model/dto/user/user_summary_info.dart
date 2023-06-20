@@ -10,4 +10,10 @@ class UserSummaryInfo extends _BaseUser {
           email: email,
           profileImageUrl: profileImageUrl,
         );
+
+  factory UserSummaryInfo.empty() => const UserSummaryInfo(
+        name: '',
+        email: '',
+        profileImageUrl: null,
+      );
 }
