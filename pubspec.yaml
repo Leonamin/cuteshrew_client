@@ -30,42 +30,56 @@ dependencies:
   flutter:
     sdk: flutter
 
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  # Legacy
   cupertino_icons: ^1.0.2
-
-  # html editor for Flutter
   html_editor_enhanced: ^2.5.0
-  # responsive ui
   responsive_framework: ^0.2.0
   flutter_html: ^2.2.1
   http: ^0.13.4
-  provider: ^6.0.3
   flutter_staggered_grid_view: ^0.6.1
-
   get_it: ^7.2.0
-
   google_fonts: ^3.0.1
   validators: ^3.0.0
-  intl: ^0.17.0
-
   searchfield: ^0.7.2
-
-  equatable: ^2.0.5
   dartz: ^0.10.1
   url_launcher: ^6.1.7
   flutter_widget_from_html: ^0.9.0+2
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
-  build_runner: ^2.3.3
-  hive_generator: ^2.0.0
+  
   flutter_web_plugins:
     sdk: flutter
-  json_serializable: ^6.7.0
-  dio: ^5.2.1+1
+  
+  # New
+  # Logging
   logger: ^1.4.0
+
+  # Routing
   go_router: ^8.0.5
+
+  # State Management
+  provider: ^6.0.3
+
+  # Type validation
+  equatable: ^2.0.5
+
+  # Internationalization, Localization
+  intl: ^0.17.0
+
+  # Network
+  dio: ^5.2.1+1
+
+  # Need to generate Json, Hive, etc
+  build_runner: ^2.3.3
+
+  # Save Local Database
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  hive_generator: ^2.0.0
+
+
+  # Json Parsing
+  json_serializable: ^6.7.0
+  json_annotation: ^4.8.1
+
 
 dev_dependencies:
   flutter_test:
