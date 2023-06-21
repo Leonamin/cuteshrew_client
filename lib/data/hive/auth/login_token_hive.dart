@@ -34,4 +34,9 @@ extension LoginTokenHiveX on LoginTokenHive {
           expires: expires ?? 0,
         ),
       );
+  LoginToken toTokenDto() => LoginToken(
+        accessToken: accessToken,
+        tokenType: tokenType,
+        expires: expires ?? 0,
+      );
 }
