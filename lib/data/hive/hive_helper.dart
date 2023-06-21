@@ -27,9 +27,9 @@ class HiveHelper {
     await Hive.openBox(hiveAuthBox);
   }
 
-  Future<LoginToken> get loginToken async => (await getToken()).toTokenDto();
+  LoginToken get loginToken => getToken().toTokenDto();
 
-  Future<LoginTokenHive> getToken({String? nameKey}) async {
+  LoginTokenHive getToken({String? nameKey}) {
     final result = _authBox.get(nameKey ?? _token);
     if (result == null) {
       throw Exception("Token is null");
