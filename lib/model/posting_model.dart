@@ -1,50 +1,102 @@
+import 'package:cuteshrew/data/hive/hive_helper.dart';
 import 'package:cuteshrew/data/network_result.dart';
+import 'package:cuteshrew/data/remote/api_cuteshrew.dart';
+import 'package:cuteshrew/data/remote/posting/posting_req.dart';
+import 'package:cuteshrew/data/remote/posting/posting_res.dart';
 import 'package:cuteshrew/model/dto/login_dto.dart';
 import 'package:cuteshrew/model/dto/posting_dto.dart';
 
-abstract class PostingModel {
-  Future<NetworkResult<PostingDetailInfo>> getPosting({
-    required int communityName,
-    required int postId,
+class PostingModel {
+  final ApiCuteShrew _apiCuteShrew = ApiCuteShrew();
+  final HiveHelper _hiveHelper = HiveHelper();
+
+  Future<NetworkResult<PostingDetailInfo>> getPosting(
+    String communityName,
+    int postId, [
     String? password,
-  });
+  ]) =>
+      handleRequest(() async {
+        final result = await _apiCuteShrew.getPosting(
+          communityName,
+          postId,
+          password,
+        );
+        return result.toDetailInfo();
+      });
 
-  // 페이지 단위로 게시글 가져오기
-  Future<NetworkResult<List<PostingSummaryInfo>>> getPostingPage({
-    required int communityId,
-    required int pageNum,
-    required int loadCount,
-  });
+  Future<NetworkResult<List<PostingSummaryInfo>>> getPostingPage(
+    String communityName,
+    int pageNum, [
+    int? loadCount,
+  ]) =>
+      handleRequest(() async {
+        final result = await _apiCuteShrew.getPostingSummaryList(
+          communityName,
+          pageNum,
+          loadCount ?? 10,
+        );
+        return result.map((e) => e.toSummaryInfo()).toList();
+      });
 
-  // 유저 이름으로 게시글 가져오기
-  // userName은 필수
-  // startAtId는 순서에 따라 (지금은 순서를 정하는게 없으니 최신순) 지정 아이디부터 혹은 순서 처음부터(지금은 가장 최신부터)
-  // loadCount는 한번에 가져올 때 얼마나 가져올지 정하기
-  Future<NetworkResult<List<PostingSummaryInfo>>> getPostingsByUser({
-    required int userId,
+  Future<NetworkResult<List<PostingSummaryInfo>>> getPostingsByUser(
+    String userName, [
     int? startOffset,
     int? loadCount,
-  });
+  ]) =>
+      handleRequest(() async {
+        final result = await _apiCuteShrew.searchPostings(
+          userName,
+          startOffset ?? 0,
+          loadCount ?? 10,
+        );
+        return result.map((e) => e.toSummaryInfo()).toList();
+      });
 
-  // 게시글 생성하기
-  Future<NetworkResult<void>> createPosting({
-    required int communityId,
-    required PostingCreateForm newPosting,
-    required LoginToken loginToken,
-  });
+  Future<NetworkResult<void>> createPosting(
+    String communityName,
+    PostingCreateForm newPosting,
+  ) =>
+      handleRequest(() async {
+        return await _apiCuteShrew.uploadPosting(
+          communityName,
+          _hiveHelper.loginToken,
+          PostingReq(
+            title: newPosting.title,
+            body: newPosting.body,
+            isLocked: newPosting.isLocked,
+            password: newPosting.password,
+          ),
+        );
+      });
 
-  // 게시글 업데이트
-  Future<NetworkResult<void>> updatePosting({
-    required int communityId,
-    required int postId,
-    required PostingCreateForm newPosting,
-    required LoginToken loginToken,
-  });
+  Future<NetworkResult<void>> updatePosting(
+    String communityName,
+    int postId,
+    PostingCreateForm newPosting,
+    LoginToken loginToken,
+  ) =>
+      handleRequest(() async {
+        return await _apiCuteShrew.updatePosting(
+          communityName,
+          postId,
+          _hiveHelper.loginToken,
+          PostingReq(
+            title: newPosting.title,
+            body: newPosting.body,
+            isLocked: newPosting.isLocked,
+            password: newPosting.password,
+          ),
+        );
+      });
 
-  // 게시글 삭제
-  Future<NetworkResult<void>> deletePosting({
-    required int communityName,
-    required int postId,
-    required LoginToken loginToken,
-  });
+  Future<NetworkResult<void>> deletePosting(
+    int communityName,
+    int postId,
+  ) =>
+      handleRequest(() async {
+        return await _apiCuteShrew.deleteComment(
+          communityName,
+          _hiveHelper.loginToken,
+        );
+      });
 }

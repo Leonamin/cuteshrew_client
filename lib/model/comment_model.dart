@@ -1,64 +1,71 @@
+import 'package:cuteshrew/data/hive/hive_helper.dart';
 import 'package:cuteshrew/data/network_result.dart';
+import 'package:cuteshrew/data/remote/api_cuteshrew.dart';
+import 'package:cuteshrew/data/remote/comment/comment_req.dart';
+import 'package:cuteshrew/data/remote/comment/comment_res.dart';
 import 'package:cuteshrew/model/dto/comment_dto.dart';
-import 'package:cuteshrew/model/dto/login_dto.dart';
 
-abstract class CommentModel {
-  Future<NetworkResult<CommentDetailInfo>> getComment({
-    required int postId,
-    required int commentId,
-    String? password,
-  });
+class CommentModel {
+  final ApiCuteShrew _apiCuteShrew = ApiCuteShrew();
+  final HiveHelper _hiveHelper = HiveHelper();
 
-  // 페이지 별로 받는다
-  Future<NetworkResult<List<CommentDetailInfo>>> getCommentPage({
-    required int postId,
-    required int pageNum,
-    required int commentCount,
-    String? password,
-  });
-
-  // 유저 아이디로 댓글 가져오기
-  // userId는 필수
-  // startAtId는 순서에 따라 (지금은 순서를 정하는게 없으니 최신순) 지정 아이디부터 혹은 순서 처음부터(지금은 가장 최신부터)
-  // loadCount는 한번에 가져올 때 얼마나 가져올지 정하기
-  Future<NetworkResult<List<CommentDetailInfo>>> getCommentsByUser({
-    required int userId,
-    int? startOffset,
+  Future<NetworkResult<List<CommentDetailInfo>>> getCommentList(
+    int postId,
+    int commentId, [
     int? loadCount,
-  });
+  ]) =>
+      handleRequest(() async {
+        final result = await _apiCuteShrew.getCommentList(
+            postId, commentId, loadCount ?? 10);
+        return result.map((e) => e.toDetailInfo()).toList();
+      });
 
-  // 댓글 생성 분기
-  Future<NetworkResult<void>> createComment({
-    required int postId,
-    required CommentCreateForm newComment,
-    String? password,
-    required LoginToken loginToken,
-  });
+  Future<NetworkResult<List<CommentSummaryInfo>>> getCommentListAboutUser(
+    String userName,
+    int startToOffset, [
+    int? loadCount,
+  ]) =>
+      handleRequest(() async {
+        final result = await _apiCuteShrew.searchComments(
+            userName, startToOffset, loadCount ?? 10);
+        return result.map((e) => e.toSummaryInfo()).toList();
+      });
 
-  // 답글 생성 분기
-  Future<NetworkResult<void>> createReply({
-    required int postId,
-    required int groupId,
-    required int commentClass,
-    required CommentCreateForm newComment,
-    String? password,
-    required LoginToken loginToken,
-  });
+  Future<NetworkResult<void>> createComment(
+    int postId,
+    CommentCreateForm newComment,
+  ) =>
+      handleRequest(() async {
+        return await _apiCuteShrew.uploadComment(
+          postId,
+          _hiveHelper.loginToken,
+          CommentReq(
+            comment: newComment.comment,
+          ),
+        );
+      });
 
-  // 댓글, 답글 공통 수정
-  Future<NetworkResult<void>> updateComment({
-    required int postId,
-    required int commentId,
-    required CommentCreateForm newComment,
-    String? password,
-    required LoginToken loginToken,
-  });
+  Future<NetworkResult<void>> updateComment(
+    int commentId,
+    CommentCreateForm newComment,
+  ) =>
+      handleRequest(() async {
+        return await _apiCuteShrew.updateComment(
+          commentId,
+          _hiveHelper.loginToken,
+          CommentReq(
+            comment: newComment.comment,
+          ),
+        );
+      });
 
-  // 댓글, 답글 공통 삭제
-  Future<NetworkResult<void>> deleteComment({
-    required int postId,
-    required int commentId,
-    String? password,
-    required LoginToken loginToken,
-  });
+  Future<NetworkResult<void>> deleteComment(
+    int commentId,
+  ) =>
+      handleRequest(() async {
+        return await _apiCuteShrew.deleteComment(
+          commentId,
+          _hiveHelper.loginToken,
+        );
+      });
 }

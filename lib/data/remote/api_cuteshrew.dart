@@ -74,7 +74,7 @@ class ApiCuteShrew {
   }
 
   // Posting
-  Future<PostingRes> getPosting(String communityName, String postingId,
+  Future<PostingRes> getPosting(String communityName, int postingId,
       [String? password]) async {
     Map<String, dynamic> queryParameters = {};
     _setQueryParam(queryParameters, 'password', password);
@@ -161,7 +161,6 @@ class ApiCuteShrew {
   // Comment
 
   Future<List<CommentRes>> getCommentList(
-    String communityName,
     int postId,
     int pageNum,
     int commentCount,

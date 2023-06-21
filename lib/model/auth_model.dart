@@ -11,10 +11,10 @@ class AuthModel {
   final HiveHelper _hiveHelper = HiveHelper();
 
   // 새로운 토큰 가져오기
-  Future<NetworkResult<LoginToken>> requestLogin({
-    required String nickname,
-    required String password,
-  }) =>
+  Future<NetworkResult<LoginToken>> requestLogin(
+    String nickname,
+    String password,
+  ) =>
       handleRequest(() async {
         final result = await _apiCuteShrew.requestLogin(nickname, password);
         return result.toDto();
@@ -23,13 +23,13 @@ class AuthModel {
   // 로그인된 유저 정보 가져오기
   Future<NetworkResult<SignedUserInfo>> getSignedUser() =>
       handleRequest(() async {
-        LoginTokenHive result = await _hiveHelper.getToken();
+        LoginTokenHive result = _hiveHelper.getToken();
         return result.toSignedUser();
       });
 
   // 로그인된 유저 정보 저장하기
   Future<NetworkResult<SignedUserInfo>> setSignedUser(
-          {required SignedUserInfo signedUserinfo}) =>
+          SignedUserInfo signedUserinfo) =>
       handleRequest(() async {
         await _hiveHelper.setToken(
           authTokenDTO: LoginTokenHive(
