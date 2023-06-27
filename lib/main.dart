@@ -1,18 +1,15 @@
 import 'package:cuteshrew/common/build_config.dart';
 import 'package:cuteshrew/data/hive/hive_helper.dart';
-import 'package:cuteshrew/presentation/config/route/web_advanced_router.dart';
+import 'package:cuteshrew/view/home/home_view.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'package:cuteshrew/presentation/config/route/routes.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // usePathUrlStrategy();
   await HiveHelper.init();
-  runApp(MultiProvider(
-    providers: [],
-    child: const MyApp(),
+  runApp(const ProviderScope(
+    child: MyApp(),
   ));
 }
 
@@ -26,8 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      onGenerateRoute: generateRoute,
-      initialRoute: Routes.HomePageRoute,
+      home: const HomeView(),
     );
   }
 }
