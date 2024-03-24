@@ -1,4 +1,6 @@
-class UserDTO {
+import 'package:cuteshrew/1_model/entity/user/user_summary.dart';
+
+class UserSummaryRes {
   final String nickname;
   final String email;
   final String? password;
@@ -6,7 +8,7 @@ class UserDTO {
   final int? postingCount;
   final int? commentCount;
 
-  const UserDTO({
+  const UserSummaryRes({
     required this.nickname,
     required this.email,
     this.password,
@@ -15,8 +17,8 @@ class UserDTO {
     this.commentCount,
   });
 
-  factory UserDTO.fromJson(Map<String, dynamic> json) {
-    return UserDTO(
+  factory UserSummaryRes.fromJson(Map<String, dynamic> json) {
+    return UserSummaryRes(
       nickname: json['nickname'],
       email: json['email'],
       password: json['password'],
@@ -34,4 +36,11 @@ class UserDTO {
         'posting_count': postingCount,
         'comment_count': commentCount,
       };
+}
+
+extension UserSummaryResExt on UserSummaryRes {
+  UserSummary toEntity() => UserSummary(
+        nickname: nickname,
+        email: email,
+      );
 }

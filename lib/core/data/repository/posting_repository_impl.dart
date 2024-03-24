@@ -1,5 +1,5 @@
 import 'package:cuteshrew/core/data/datasource/remote/posting_remote_datasource.dart';
-import 'package:cuteshrew/core/data/dto/remote/posting_dto.dart';
+import 'package:cuteshrew/2_data/remote/posting/posting_summary_res.dart';
 import 'package:cuteshrew/core/data/mapper/login_token_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/posting_create_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/posting_mapper.dart';
@@ -60,7 +60,7 @@ class PostingRepositoryImpl extends PostingRepository {
     String? password,
   }) async {
     try {
-      PostingDTO postingDTO = await _postingRemoteDataSource.getPosting(
+      PostingSummaryRes postingDTO = await _postingRemoteDataSource.getPosting(
           communityPath, postId, password);
       PostingDetailMapper mapper = PostingDetailMapper();
       PostingEntity result = mapper.map(postingDTO);
@@ -79,7 +79,7 @@ class PostingRepositoryImpl extends PostingRepository {
     required int loadCount,
   }) async {
     try {
-      List<PostingDTO> postingDTOList = await _postingRemoteDataSource
+      List<PostingSummaryRes> postingDTOList = await _postingRemoteDataSource
           .getPostings(communityPath, pageNum, loadCount);
       PostingPreviewMapper mapper = PostingPreviewMapper();
       List<PostingPreviewEntity> result = [
@@ -98,7 +98,7 @@ class PostingRepositoryImpl extends PostingRepository {
     int? loadCount,
   }) async {
     try {
-      List<PostingDTO> postingDTOList = await _postingRemoteDataSource
+      List<PostingSummaryRes> postingDTOList = await _postingRemoteDataSource
           .searchPostings(userName, startAtId, loadCount);
       PostingPreviewMapper mapper = PostingPreviewMapper();
       List<PostingPreviewEntity> result = [

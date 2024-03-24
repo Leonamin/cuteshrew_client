@@ -1,15 +1,16 @@
-import 'package:cuteshrew/core/data/dto/remote/community_dto.dart';
-import 'package:cuteshrew/core/data/dto/remote/posting_dto.dart';
-import 'package:cuteshrew/core/data/dto/remote/user_dto.dart';
+import 'package:cuteshrew/2_data/remote/community/community_summary_res.dart';
+import 'package:cuteshrew/2_data/remote/posting/posting_summary_res.dart';
+import 'package:cuteshrew/2_data/remote/user/user_summary_res.dart';
 import 'package:cuteshrew/core/data/mapper/community_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/user_mapper.dart';
 import 'package:cuteshrew/core/domain/entity/posting_preview_entity.dart';
 
 import 'mapper.dart';
 
-class PostingPreviewMapper extends Mapper<PostingDTO, PostingPreviewEntity> {
+class PostingPreviewMapper
+    extends Mapper<PostingSummaryRes, PostingPreviewEntity> {
   @override
-  PostingPreviewEntity map(PostingDTO object) {
+  PostingPreviewEntity map(PostingSummaryRes object) {
     UserDetailMapper userMapper = UserDetailMapper();
     CommunityMapper communityMapper = CommunityMapper();
     /**
@@ -28,9 +29,9 @@ class PostingPreviewMapper extends Mapper<PostingDTO, PostingPreviewEntity> {
       publishedAt: object.publishedAt ?? 0,
       updatedAt: object.updatedAt ?? 0,
       writer: userMapper.map(object.writerInfo ??
-          const UserDTO(nickname: "nickname", email: "email")),
+          const UserSummaryRes(nickname: "nickname", email: "email")),
       ownCommunity: communityMapper.map(
-        object.ownCommunity ?? const CommunityDTO(id: 1),
+        object.ownCommunity ?? const CommunitySummaryRes(id: 1),
       ),
       commentCount: object.commnetCount ?? 0,
     );

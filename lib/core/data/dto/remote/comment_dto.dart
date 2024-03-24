@@ -1,5 +1,5 @@
-import 'package:cuteshrew/core/data/dto/remote/posting_dto.dart';
-import 'package:cuteshrew/core/data/dto/remote/user_dto.dart';
+import 'package:cuteshrew/2_data/remote/posting/posting_summary_res.dart';
+import 'package:cuteshrew/2_data/remote/user/user_summary_res.dart';
 
 class CommentDTO {
   final int commentId;
@@ -10,8 +10,8 @@ class CommentDTO {
   final int? commentClass;
   final int? order;
   final int? groupId;
-  final UserDTO? writerInfo;
-  final PostingDTO? posting;
+  final UserSummaryRes? writerInfo;
+  final PostingSummaryRes? posting;
 
   const CommentDTO({
     required this.commentId,
@@ -36,10 +36,11 @@ class CommentDTO {
       commentClass: json['comment_class'],
       order: json['order'],
       groupId: json['group_id'],
-      writerInfo:
-          (json['creator'] != null) ? UserDTO.fromJson(json['creator']) : null,
+      writerInfo: (json['creator'] != null)
+          ? UserSummaryRes.fromJson(json['creator'])
+          : null,
       posting: (json['posting'] != null)
-          ? PostingDTO.fromJson(json['posting'])
+          ? PostingSummaryRes.fromJson(json['posting'])
           : null,
     );
   }

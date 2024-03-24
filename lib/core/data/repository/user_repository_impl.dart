@@ -1,5 +1,5 @@
 import 'package:cuteshrew/core/data/datasource/remote/user_remote_datasource.dart';
-import 'package:cuteshrew/core/data/dto/remote/user_dto.dart';
+import 'package:cuteshrew/2_data/remote/user/user_summary_res.dart';
 import 'package:cuteshrew/core/data/mapper/user_create_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/user_mapper.dart';
 import 'package:cuteshrew/core/domain/entity/user_detail_entity.dart';
@@ -31,7 +31,8 @@ class UserRepositoryImpl extends UserRepository {
   Future<Either<Failure, UserDetailEntity>> getUser(
       {required String userName}) async {
     try {
-      UserDTO userDTO = await _userRemoteDataSource.getUserDetail(userName);
+      UserSummaryRes userDTO =
+          await _userRemoteDataSource.getUserDetail(userName);
       UserDetailMapper mapper = UserDetailMapper();
       return Right(mapper.map(userDTO));
     } catch (e) {

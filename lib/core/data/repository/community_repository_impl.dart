@@ -1,5 +1,5 @@
 import 'package:cuteshrew/core/data/datasource/remote/community_remote_datasource.dart';
-import 'package:cuteshrew/core/data/dto/remote/community_dto.dart';
+import 'package:cuteshrew/2_data/remote/community/community_summary_res.dart';
 import 'package:cuteshrew/core/data/mapper/community_mapper.dart';
 import 'package:cuteshrew/core/domain/entity/community_entity.dart';
 import 'package:cuteshrew/core/domain/repository/community_repository.dart';
@@ -18,7 +18,7 @@ class CommunityRepositoryImpl extends CommunityRepository {
   Future<Either<Failure, CommunityEntity>> getCommunity(
       {required String communityName}) async {
     try {
-      CommunityDTO communityDTO =
+      CommunitySummaryRes communityDTO =
           await _communityRemoteDataSource.getCommunityPage(communityName);
       CommunityMapper mapper = CommunityMapper();
       CommunityEntity result = mapper.map(communityDTO);
@@ -33,7 +33,7 @@ class CommunityRepositoryImpl extends CommunityRepository {
   Future<Either<Failure, List<CommunityEntity>>> getCommunityList(
       {required int loadCount}) async {
     try {
-      List<CommunityDTO> communityDTO =
+      List<CommunitySummaryRes> communityDTO =
           await _communityRemoteDataSource.getCommunities(loadCount);
       CommunityMapper mapper = CommunityMapper();
       List<CommunityEntity> result =
@@ -48,7 +48,7 @@ class CommunityRepositoryImpl extends CommunityRepository {
   @override
   Future<Either<Failure, List<CommunityEntity>>> getMainCommunityList() async {
     try {
-      List<CommunityDTO> communityDTO =
+      List<CommunitySummaryRes> communityDTO =
           await _communityRemoteDataSource.getMainCommunities();
       CommunityMapper mapper = CommunityMapper();
       List<CommunityEntity> result =

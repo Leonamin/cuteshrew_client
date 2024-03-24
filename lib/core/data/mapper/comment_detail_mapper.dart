@@ -1,5 +1,5 @@
 import 'package:cuteshrew/core/data/dto/remote/comment_dto.dart';
-import 'package:cuteshrew/core/data/dto/remote/user_dto.dart';
+import 'package:cuteshrew/2_data/remote/user/user_summary_res.dart';
 import 'package:cuteshrew/core/data/mapper/mapper.dart';
 import 'package:cuteshrew/core/data/mapper/posting_preview_mapper.dart';
 import 'package:cuteshrew/core/data/mapper/user_mapper.dart';
@@ -53,7 +53,7 @@ class CommentDetailMapper extends Mapper<CommentDTO, CommentDetailEntity> {
                   postings: [])),
       writer: userMapper.map(
         object.writerInfo ??
-            const UserDTO(nickname: "nickname", email: "email"),
+            const UserSummaryRes(nickname: "nickname", email: "email"),
       ),
     );
   }

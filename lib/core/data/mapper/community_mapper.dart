@@ -1,12 +1,12 @@
-import 'package:cuteshrew/core/data/dto/remote/community_dto.dart';
+import 'package:cuteshrew/2_data/remote/community/community_summary_res.dart';
 import 'package:cuteshrew/core/data/mapper/mapper.dart';
 import 'package:cuteshrew/core/data/mapper/posting_preview_mapper.dart';
 import 'package:cuteshrew/core/domain/entity/community_entity.dart';
 import 'package:cuteshrew/core/domain/entity/community_preview_entity.dart';
 
-class CommunityMapper extends Mapper<CommunityDTO, CommunityEntity> {
+class CommunityMapper extends Mapper<CommunitySummaryRes, CommunityEntity> {
   @override
-  CommunityEntity map(CommunityDTO object) {
+  CommunityEntity map(CommunitySummaryRes object) {
     PostingPreviewMapper postingMapper = PostingPreviewMapper();
     /*
       기본처리
