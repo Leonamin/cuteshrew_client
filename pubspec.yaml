@@ -39,6 +39,7 @@ dependencies:
   
   html: ^0.15.4
   flutter_svg: ^0.23.0+1
+  avatar_glow: ^3.0.1
 
 
   # LEGACY
