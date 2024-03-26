@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:cuteshrew/0_foundation/config/build_config.dart';
 import 'package:cuteshrew/2_data/remote/posting/posting_summary_res.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:http/http.dart' as http;
+
+final apiCuteShrewProvider = Provider<ApiCuteShrew>((ref) => ApiCuteShrew());
 
 class ApiCuteShrew {
   final String _baseUrl = BuildConfig.cuteshrewUrl;
