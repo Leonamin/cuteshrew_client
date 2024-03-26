@@ -4,15 +4,16 @@ import 'package:cuteshrew/3_view/0_component/badge/category_tag.dart';
 import 'package:cuteshrew/3_view/0_component/badge/update_badge.dart';
 import 'package:cuteshrew/3_view/0_component/circle_profile_widget.dart';
 import 'package:cuteshrew/4_util/ext/shrew_datetime_ext.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class PostingCardWidget extends StatelessWidget {
   final String? userThumbnailUrl;
   final String userName;
 
   final String title;
+  final String content;
+
   final DateTime createdAt;
 
   final String communityName;
@@ -22,6 +23,7 @@ class PostingCardWidget extends StatelessWidget {
     required this.userName,
     this.userThumbnailUrl,
     required this.title,
+    required this.content,
     required this.createdAt,
     required this.communityName,
   });
@@ -32,6 +34,7 @@ class PostingCardWidget extends StatelessWidget {
     return PostingCardWidget(
       userName: postingSummary.writerName,
       title: postingSummary.title,
+      content: postingSummary.shortContent,
       createdAt: postingSummary.createdAt,
       communityName: postingSummary.communityName,
     );
@@ -70,11 +73,33 @@ class PostingCardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: Text(
-                title,
-                style: TextStyles.h3,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+              child: SelectionArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: title,
+                            style: TextStyles.h3,
+                          ),
+                        ],
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Html(
+                      data: content,
+                      style: {
+                        "body": Style(
+                          padding: HtmlPaddings.zero,
+                          margin: Margins.zero,
+                        )
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(width: 32),

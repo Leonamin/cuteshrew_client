@@ -4,6 +4,7 @@ import 'package:cuteshrew/3_view/0_component/base/init_wrap.dart';
 import 'package:cuteshrew/3_view/0_component/logo.dart';
 import 'package:cuteshrew/3_view/home/0_component/posting_card_widget.dart';
 import 'package:cuteshrew/3_view/home/home_view_model.dart';
+import 'package:cuteshrew/4_util/ext/list_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,22 +26,20 @@ class HomeView extends ConsumerWidget {
           body: Consumer(
             builder: (context, ref, child) {
               final viewModel = ref.watch(homeViewModelProvider);
-              return ListView.separated(
-                shrinkWrap: true,
+              return SingleChildScrollView(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                itemBuilder: (context, index) {
-                  return Consumer(builder: (context, ref, child) {
-                    final viewModel = ref.watch(homeViewModelProvider);
-                    return PostingCardWidget.fromPostingSummary(
-                      viewModel.popularPostings[index],
-                    );
-                  });
-                },
-                separatorBuilder: (context, index) => const Divider(
-                  color: ColorPaletts.grayscale2,
+                child: Column(
+                  children: <Widget>[
+                    for (final posting in viewModel.popularPostings)
+                      PostingCardWidget.fromPostingSummary(posting),
+                  ].insertBetween(
+                    const Divider(
+                      color: ColorPaletts.grayscale2,
+                      height: 32,
+                    ),
+                  ),
                 ),
-                itemCount: viewModel.popularPostings.length,
               );
             },
           ),
