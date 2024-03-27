@@ -5,7 +5,7 @@ param(
 )
 
 # Flutter 빌드
-# flutter build web --release --no-tree-shake-icons
+flutter build web --release --no-tree-shake-icons
 
 ssh ${RemoteUser}@${RemoteHost} "rm -r ${RemotePath}/web"
 
